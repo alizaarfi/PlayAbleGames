@@ -1,11 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import HomePage from './components/HomePage';
-import './style.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import GamePage from "./GamePage.jsx";
+import "./style.css";
 
-// Render the homepage component
-ReactDOM.createRoot(document.getElementById('app')).render(
+/**
+ * /games/:id Route, which displays a game's page.
+ */
+ReactDOM.createRoot(document.getElementById("app")).render(
     <React.StrictMode>
-        <HomePage />
+        <BrowserRouter>
+            <Routes>
+                {/* Load GamePage for any /games/:id */}
+                <Route path="/games/:id" element={<GamePage />} />
+            </Routes>
+        </BrowserRouter>
     </React.StrictMode>
 );
