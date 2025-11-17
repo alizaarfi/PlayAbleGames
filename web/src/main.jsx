@@ -1,17 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
+
 import "./style.css";
 
-/**
- * /games/:id Route, which displays a game's page.
- */
 ReactDOM.createRoot(document.getElementById("app")).render(
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
-                {/* Load GamePage for any /games/:id */}
+                {/* Homepage */}
+                <Route path="/" element={<HomePage />} />
+
+                {/* Game detail page */}
                 <Route path="/games/:id" element={<GamePage />} />
             </Routes>
         </BrowserRouter>
