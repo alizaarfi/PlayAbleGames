@@ -141,6 +141,7 @@ const games = [
 
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [favorites, setFavorites] = useState([]);
     const [filters, setFilters] = useState({
         visionSupport: false,
         hearingSupport: false,
@@ -153,6 +154,14 @@ function HomePage() {
         strategy: false,
         casual: false
     });
+
+    const toggleFavorite = (gameId) => {
+        setFavorites(prev =>
+            prev.includes(gameId)
+                ? prev.filter(id => id !== gameId)
+                : [...prev, gameId]
+        );
+    };
 
     const handleFilterChange = (filterName) => {
         setFilters(prev => ({
@@ -317,6 +326,19 @@ function HomePage() {
                                 <div className="card-content">
                                     <div className="card-header">
                                         <h3>{game.title}</h3>
+                                        <button
+                                            className="favorite-btn"
+                                            aria-label="Add to favorites"
+                                            onClick={() => toggleFavorite(game.id)}
+                                        >
+                                            <svg viewBox="0 0 24 24" fill={favorites.includes(game.id) ? "#ff3b30" : "none"}>
+                                                <path
+                                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                    stroke={favorites.includes(game.id) ? "#ff3b30" : "currentColor"}
+                                                    strokeWidth="2"
+                                                />
+                                            </svg>
+                                        </button>
                                     </div>
                                     <p className="game-description">{game.description}</p>
                                     <div className="game-meta">
@@ -333,10 +355,20 @@ function HomePage() {
                                         ))}
                                     </div>
                                 </div>
+                                <button className="more-btn" aria-label="Expand game details">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M21 11V3h-8l3.29 3.29-10 10L3 13v8h8l-3.29-3.29 10-10z"/>
+                                    </svg>
+                                </button>
                             </article>
                         ))}
                     </section>
                 </div>
+
+                <footer className="page-footer">
+                    <p>Making Games Accessible for Every Player</p>
+                    <p>PlayAble Games is committed to accessible design and inclusive gaming.</p>
+                </footer>
             </main>
         </div>
     );

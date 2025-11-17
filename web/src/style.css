@@ -936,3 +936,63 @@ html {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
+
+/* Favorite Button */
+.favorite-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  background-color: transparent !important;
+  cursor: pointer !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.2s !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+}
+
+.favorite-btn:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+.favorite-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  color: var(--text-secondary) !important;
+  transition: all 0.2s !important;
+}
+
+.favorite-btn:hover svg {
+  color: #ff3b30 !important;
+}
+
+/* Expand/More Button */
+.more-btn {
+  position: absolute !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  background-color: var(--hover-bg) !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--text-secondary) !important;
+  transition: all 0.2s !important;
+  padding: 0 !important;
+}
+
+.more-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.more-btn:hover {
+  background-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
