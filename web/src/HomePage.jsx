@@ -3,6 +3,25 @@ import "./style.css";
 
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [filters, setFilters] = useState({
+        visionSupport: false,
+        hearingSupport: false,
+        speechSupport: false,
+        motorSupport: false,
+        cognitiveSupport: false,
+        action: false,
+        adventure: false,
+        puzzle: false,
+        strategy: false,
+        casual: false
+    });
+
+    const handleFilterChange = (filterName) => {
+        setFilters(prev => ({
+            ...prev,
+            [filterName]: !prev[filterName]
+        }));
+    };
 
     return (
         <div className="app">
@@ -54,6 +73,104 @@ function HomePage() {
                             </svg>
                         </button>
                     </div>
+                </div>
+
+                <div className="content-layout">
+                    <aside className="filters-sidebar">
+                        <h3>Filters</h3>
+
+                        <div className="filter-group">
+                            <h4>Accessibility Features</h4>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.visionSupport}
+                                    onChange={() => handleFilterChange('visionSupport')}
+                                />
+                                <span>Vision Support</span>
+                            </label>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.hearingSupport}
+                                    onChange={() => handleFilterChange('hearingSupport')}
+                                />
+                                <span>Hearing Support</span>
+                            </label>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.speechSupport}
+                                    onChange={() => handleFilterChange('speechSupport')}
+                                />
+                                <span>Speech Support</span>
+                            </label>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.motorSupport}
+                                    onChange={() => handleFilterChange('motorSupport')}
+                                />
+                                <span>Motor Support</span>
+                            </label>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.cognitiveSupport}
+                                    onChange={() => handleFilterChange('cognitiveSupport')}
+                                />
+                                <span>Cognitive Support</span>
+                            </label>
+                        </div>
+
+                        <div className="filter-group">
+                            <h4>Genres</h4>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.action}
+                                    onChange={() => handleFilterChange('action')}
+                                />
+                                <span>Action</span>
+                            </label>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.adventure}
+                                    onChange={() => handleFilterChange('adventure')}
+                                />
+                                <span>Adventure</span>
+                            </label>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.puzzle}
+                                    onChange={() => handleFilterChange('puzzle')}
+                                />
+                                <span>Puzzle</span>
+                            </label>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.strategy}
+                                    onChange={() => handleFilterChange('strategy')}
+                                />
+                                <span>Strategy</span>
+                            </label>
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={filters.casual}
+                                    onChange={() => handleFilterChange('casual')}
+                                />
+                                <span>Casual</span>
+                            </label>
+                        </div>
+                    </aside>
+
+                    <section className="games-grid">
+                        {/* Games will go here */}
+                    </section>
                 </div>
             </main>
         </div>
