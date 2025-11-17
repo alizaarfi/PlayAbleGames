@@ -1,6 +1,144 @@
 import React, { useState } from 'react';
 import "./style.css";
 
+const games = [
+    {
+        id: 1,
+        title: "Minecraft",
+        image: "https://www.minecraft.net/content/dam/minecraftnet/games/badger/key-art/Homepage_Discover-our-games_MC-Legends-KeyArt_864x864.jpg",
+        description: "Game Description",
+        rating: 4.5,
+        reviews: 1231,
+        tags: ["Sandbox", "Adventure"]
+    },
+    {
+        id: 2,
+        title: "Monument Valley",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.monumentvalleygame.com%2F&psig=AOvVaw15jcWRDg7wiixJ86mp8Lb0&ust=1762973067161000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCIDYxc7g6pADFQAAAAAdAAAAABAE",
+        description: "Game Description",
+        rating: 4.9,
+        reviews: 3205,
+        tags: ["Puzzle", "Casual"]
+    },
+    {
+        id: 3,
+        title: "Among Us",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.innersloth.com%2Fgames%2Famong-us%2F&psig=AOvVaw3i-cOXIxjTE-HZPdFFBv5p&ust=1762973459028000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCOC7ioji6pADFQAAAAAdAAAAABAE",
+        description: "Game Description",
+        rating: 4.6,
+        reviews: 2456,
+        tags: ["Multiplayer", "Strategy"]
+    },
+    {
+        id: 4,
+        title: "Candy Crush Saga",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2Fcandy-crush-saga-iphone-gameplay-19-youtube--630926229032214580%2F&psig=AOvVaw2U76qOflQa-1ei2sGLbK2K&ust=1762974456409000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCOig3-fl6pADFQAAAAAdAAAAABAS",
+        description: "Game Description",
+        rating: 4.8,
+        reviews: 1504,
+        tags: ["Puzzle", "Casual"]
+    },
+    {
+        id: 5,
+        title: "Call Of Duty®: Mobile",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.indiatoday.in%2Ftechnology%2Ffeatures%2Fstory%2Fcall-of-duty-mobile-launches-tomorrow-new-gameplay-modes-better-graphics-and-why-pubg-players-should-try-it-1604723-2019-09-30&psig=AOvVaw16SkNR8-RtOKl8vmYq9V9O&ust=1762974813178000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCODJ7Y7n6pADFQAAAAAdAAAAABAE",
+        description: "Game Description",
+        rating: 4.5,
+        reviews: 2721,
+        tags: ["Action", "Multiplayer"]
+    },
+    {
+        id: 6,
+        title: "Pokemon Go",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Ftechcrunch.com%2F2017%2F12%2F06%2Fpokemon-go-weather%2F&psig=AOvVaw33z4DCnfS0qZmzIQSxOOIq&ust=1762975099900000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCNjzsZbo6pADFQAAAAAdAAAAABAE",
+        description: "Game Description",
+        rating: 4.7,
+        reviews: 1832,
+        tags: ["Adventure", "RPG"]
+    },
+    {
+        id: 7,
+        title: "Subway Surfers",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fmarksangryreview.com%2Fsubway-surfers-guide%2F&psig=AOvVaw0CV7Fm0llw_dLlIZ2F7-wO&ust=1762975282259000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLiBle7o6pADFQAAAAAdAAAAABAE",
+        description: "Game Description",
+        rating: 4.8,
+        reviews: 3642,
+        tags: ["Arcade", "Casual"]
+    },
+    {
+        id: 8,
+        title: "Clash of Clans",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.reddit.com%2Fr%2FClashOfClans%2Fcomments%2Fyhb6b8%2Finsane_coc_gameplay%2F&psig=AOvVaw0KuWDGiUvehXeHohTQOxZ5&ust=1762975521276000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLC16OHp6pADFQAAAAAdAAAAABAE",
+        description: "Game Description",
+        rating: 4.6,
+        reviews: 2100,
+        tags: ["Strategy", "Multiplayer"]
+    },
+    {
+        id: 9,
+        title: "Jigsawscapes® - Jigsaw Puzzles",
+        image: "https://play.google.com/store/apps/details/Jigsawscapes+-+Jigsaw+Puzzles?id=jigsaw.puzzle.game.banana&hl=en_CA",
+        description: "Game Description",
+        rating: 4.9,
+        reviews: 5200,
+        tags: ["Puzzle", "Casual"]
+    },
+    {
+        id: 10,
+        title: "My Oasis: Relaxing, Satisfying",
+        image: "https://play.google.com/store/apps/details?id=com.buffstudio.myoasis",
+        description: "Game Description",
+        rating: 4.7,
+        reviews: 3100,
+        tags: ["Simulation", "Casual"]
+    },
+    {
+        id: 11,
+        title: "Alto's Odyssey",
+        image: "https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.hardcoregaming101.net%2Faltos-odyssey%2F&psig=AOvVaw3kZQYhU_b0sefLyHveD8gf&ust=1762976465534000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCICS7q_t6pADFQAAAAAdAAAAABAE",
+        description: "Game Description",
+        rating: 4.8,
+        reviews: 2800,
+        tags: ["Action", "Casual"]
+    },
+    {
+        id: 12,
+        title: "KAMI 2",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.appunwrapper.com%2F2017%2F03%2F31%2Fkami-2-walkthrough-guide-and-solutions%2F&psig=AOvVaw10OEE9bl47ZJjateQEB3lF&ust=1762976182187000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJCF9Z7s6pADFQAAAAAdAAAAABAE",
+        description: "Game Description",
+        rating: 4.6,
+        reviews: 1900,
+        tags: ["Puzzle", "Casual"]
+    },
+    {
+        id: 13,
+        title: "Sky: Children of the Light",
+        image: "https://play.google.com/store/apps/details?id=com.tgc.sky.android",
+        description: "Game Description",
+        rating: 4.9,
+        reviews: 4500,
+        tags: ["Adventure", "Multiplayer"]
+    },
+    {
+        id: 14,
+        title: "Stardew Valley",
+        image: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley&hl=en_GB",
+        description: "Game Description",
+        rating: 4.8,
+        reviews: 3800,
+        tags: ["Simulation", "RPG"]
+    },
+    {
+        id: 15,
+        title: "A Blind Legend",
+        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Frawg.io%2Fgames%2Fa-blind-legend&psig=AOvVaw1yed98RHXORnbe4xwEjcoy&ust=1762977130248000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCKCN1d_v6pADFQAAAAAdAAAAABAL",
+        description: "Game Description",
+        rating: 4.7,
+        reviews: 2200,
+        tags: ["Action", "Adventure"]
+    }
+];
+
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [filters, setFilters] = useState({
@@ -21,6 +159,10 @@ function HomePage() {
             ...prev,
             [filterName]: !prev[filterName]
         }));
+    };
+
+    const renderStars = (rating) => {
+        return '★★★★★';
     };
 
     return (
@@ -169,7 +311,30 @@ function HomePage() {
                     </aside>
 
                     <section className="games-grid">
-                        {/* Games will go here */}
+                        {games.map(game => (
+                            <article key={game.id} className="game-card">
+                                <img src={game.image} alt={`${game.title} game cover`} />
+                                <div className="card-content">
+                                    <div className="card-header">
+                                        <h3>{game.title}</h3>
+                                    </div>
+                                    <p className="game-description">{game.description}</p>
+                                    <div className="game-meta">
+                                        <div className="rating">
+                                            <div className="stars" aria-label={`Rating: ${game.rating} out of 5 stars`}>
+                                                {renderStars(game.rating)}
+                                            </div>
+                                            <span>{game.rating} ({game.reviews.toLocaleString()})</span>
+                                        </div>
+                                    </div>
+                                    <div className="tags">
+                                        {game.tags.map(tag => (
+                                            <span key={tag} className="tag">{tag}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
                     </section>
                 </div>
             </main>
