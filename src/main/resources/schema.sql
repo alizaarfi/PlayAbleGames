@@ -242,3 +242,10 @@ CREATE TABLE Blog(
 );
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create Views
+
+CREATE view user_authentication AS
+SELECT u.userid, r.name AS role
+FROM users u
+JOIN user_roles ur ON u.UserID = ur.UserID
+JOIN roles r ON ur.RoleID = r.RoleID;
+
