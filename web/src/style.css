@@ -94,3 +94,378 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* ------------------------------ */
+/* GLOBAL PAGE STYLES            */
+/* ------------------------------ */
+
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  color: #fff;
+  background-color: #000;
+}
+
+body {
+  margin: 0;
+  background: #000;
+}
+
+.page {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 32px 64px;
+}
+
+/* Force all main content left-aligned */
+.page,
+.content,
+.section-block,
+.section-heading,
+.section-subheading,
+.body-text,
+.accessibility-card,
+.review-card,
+.review-form,
+.gallery-grid {
+  text-align: left !important;
+}
+
+/* ------------------------------ */
+/* HEADER: TITLE + RATING + DOWNLOAD */
+/* ------------------------------ */
+
+.hero-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  gap: 24px;
+}
+
+.game-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.top-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.rating-number {
+  font-size: 18px;
+}
+
+/* Rating stars */
+.star-row {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 18px;
+  color: #4b5563;
+}
+
+.star.filled {
+  color: #22c55e;
+}
+
+/* Download button */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-size: 15px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* ------------------------------ */
+/* JUMP NAVIGATION                */
+/* ------------------------------ */
+
+.jump-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  font-size: 14px;
+  margin: 16px 0 32px;
+}
+
+.jump-label {
+  color: #e5e5e5;
+}
+
+.jump-link {
+  background: none;
+  border: none;
+  color: #e5e5e5;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ------------------------------ */
+/* SECTION HEADERS + TEXT         */
+/* ------------------------------ */
+
+.section-block {
+  margin-bottom: 40px;
+}
+
+.section-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.section-heading {
+  font-size: 24px;
+  margin: 0;
+}
+
+.section-heading.underline {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.up-arrow {
+  font-size: 18px;
+}
+
+.section-subheading {
+  font-size: 20px;
+  margin: 18px 0 6px;
+}
+
+.body-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #e5e5e5;
+  margin: 0 0 8px;
+}
+
+/* Dividers */
+.divider {
+  border: none;
+  border-bottom: 1px solid #333;
+  margin: 24px 0;
+}
+
+.divider.thin {
+  margin: 12px 0;
+}
+
+/* ------------------------------ */
+/* ACCESSIBILITY CARDS            */
+/* ------------------------------ */
+
+.accessibility-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.accessibility-card {
+  border: 1px solid #5b5b5b;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.accessibility-title {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.accessibility-text {
+  font-size: 14px;
+  color: #e5e5e5;
+  margin: 0;
+}
+
+/* ------------------------------ */
+/* REVIEWS (LEFT + RIGHT SIDES)   */
+/* ------------------------------ */
+
+.reviews-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 900px) {
+  .reviews-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left-side */
+.reviews-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-card {
+  background: #000;
+  border: 1px solid #f9fafb;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.review-username {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.review-date {
+  font-size: 12px;
+  color: #a1a1aa;
+}
+
+.review-ratings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: #e5e5e5;
+}
+
+.review-text {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Report (flag) button */
+.report-btn {
+  padding: 4px 12px;
+  font-size: 13px;
+  border-radius: 999px;
+  border: 1px solid #d4d4d4;
+  background: #000;
+  color: #e5e5e5;
+  cursor: pointer;
+}
+
+.report-btn.active {
+  color: #ff0000;
+  border-color: #ff0000;
+}
+
+/* Right-side form */
+.review-form {
+  background: #000;
+  border: 1px solid #d4d4d4;
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-hint {
+  font-size: 14px;
+  color: #e5e5e5;
+  margin: 0;
+}
+
+.login-btn {
+  padding: 6px 20px;
+  background: #9ca3af;
+  border: none;
+  color: #111827;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.rating-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #e5e5e5;
+}
+
+.star-row.interactive .star {
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.star-row.interactive .star.filled {
+  color: #22c55e;
+}
+
+.review-textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #9ca3af;
+  background: #000;
+  color: #e5e5e5;
+  resize: vertical;
+}
+
+.submit-btn {
+  align-self: flex-end;
+  padding: 8px 18px;
+  background: #9ca3af;
+  border: none;
+  color: #111827;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ------------------------------ */
+/* GALLERY                        */
+/* ------------------------------ */
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+/* ------------------------------ */
+/* LOADING + ERROR BOXES          */
+/* ------------------------------ */
+
+.loading,
+.error {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 16px 20px;
+  background: #111827;
+  border: 1px solid #4b5563;
+  border-radius: 10px;
+  text-align: center;
+}
