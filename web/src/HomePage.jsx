@@ -367,8 +367,20 @@ function HomePage() {
 
                 <footer className="page-footer">
                     <p>Making Games Accessible for Every Player</p>
-                    <p>PlayAble Games is committed to accessible design and inclusive gaming.</p>
+                    <p>
+                        Platform designed with{' '}
+                        <a
+                            href="https://accessibility-manual.dwp.gov.uk/accessibility-law/web-content-accessibility-guidelines"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: 'underline' }}
+                        >
+                            WCAG 2.1 Level AA
+                        </a>{' '}
+                        compliance in mind
+                    </p>
                 </footer>
+
             </main>
         </div>
     );
