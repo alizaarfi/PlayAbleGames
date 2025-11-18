@@ -14,7 +14,7 @@ const games = [
     {
         id: 2,
         title: "Monument Valley",
-        image: "https://cdn.mobygames.com/covers/20016682-monument-valley-nintendo-switch-front-cover.jpg",
+        image: "https://cdn1.epicgames.com/spt-assets/e56a7411805046d3b5b7253a6e4e0faa/monument-valley-1e2yy.jpg",
         description: "A relaxing puzzle game with simple tap controls, clean visuals, and minimal text, making it accessible to a wide range of players.",
         rating: 4.9,
         reviews: 3205,
@@ -23,7 +23,7 @@ const games = [
     {
         id: 3,
         title: "Among Us",
-        image: "https://cdn.mobygames.com/covers/9699387-among-us-nintendo-switch-front-cover.jpg",
+        image: "https://i.ytimg.com/vi/0YKjFoGxbec/maxresdefault.jpg",
         description: "A social deduction game with colorblind mode, clear UI, and simple movement controls, supporting accessible team play.",
         rating: 4.6,
         reviews: 2456,
@@ -32,7 +32,7 @@ const games = [
     {
         id: 4,
         title: "Candy Crush Saga",
-        image: "https://images6.alphacoders.com/900/900929.jpg",
+        image: "https://store-images.s-microsoft.com/image/apps.52397.13510798882606697.1816f804-e7fd-4295-9275-23dec3563baf.2ef7ec2d-2e37-489e-b6ac-b5f5e44d429c?q=90&w=480&h=270",
         description: "A match-3 puzzle game with one-touch controls, optional hints, and bright visuals for easy, accessible play at any pace.",
         rating: 4.8,
         reviews: 1504,
@@ -50,7 +50,7 @@ const games = [
     {
         id: 6,
         title: "Pokemon Go",
-        image: "https://images6.alphacoders.com/638/638835.jpg",
+        image: "https://assets.nintendo.eu/image/upload/f_auto,q_auto/v1624945924/NAL/Mobile/Pok%C3%A9mon%20GO/H2x1_SmartDevice_PokemonGo_London_enGB_image1600w.jpg",
         description: "An outdoor adventure game offering large UI icons, vibration cues, and simplified controls to support diverse physical abilities.",
         rating: 4.7,
         reviews: 1832,
@@ -59,7 +59,7 @@ const games = [
     {
         id: 7,
         title: "Subway Surfers",
-        image: "https://parentalapp.net/wp-content/uploads/2024/11/Subway-Surfers-Cover-1024x576.jpg",
+        image: "https://calendar.cx/wp-content/uploads/2025/05/subwaysurfers.png",
         description: "A quick-reaction runner with simple swipe controls, strong color contrast, and optional assist features for ease of play.",
         rating: 4.8,
         reviews: 3642,
@@ -77,7 +77,7 @@ const games = [
     {
         id: 9,
         title: "Jigsawscapes® - Jigsaw Puzzles",
-        image: "https://tse2.mm.bing.net/th/id/OIP.MP0lKwcRegSZt5vzUVYv_gHaDn?rs=1&pid=ImgDetMain&o=7&rm=3",
+        image: "https://m.media-amazon.com/images/I/A1bxq4y1RXL.png",
         description: "A relaxing jigsaw puzzle app with zoom options, piece outlines, and soothing visuals designed for stress-free, accessible play.",
         rating: 4.9,
         reviews: 5200,
@@ -86,7 +86,7 @@ const games = [
     {
         id: 10,
         title: "My Oasis: Relaxing, Satisfying",
-        image: "https://play-lh.googleusercontent.com/jOgxx4JNkbsX3V7A01aYGVhHxOGCxTzcoovVZXB-6jSyEHpfybhmMyvs-VkOsBYgIME=w526-h296",
+        image: "https://cdn.aptoide.com/imgs/6/f/2/6f234be40d6930c031f8bcc99275416c_fgraphic.png",
         description: "A calming idle game with soft visuals, minimal input, and gentle soundscapes that support relaxation and low-pressure interaction.",
         rating: 4.7,
         reviews: 3100,
@@ -95,7 +95,7 @@ const games = [
     {
         id: 11,
         title: "Alto's Odyssey",
-        image: "https://upload.wikimedia.org/wikipedia/en/4/4c/Alto's_Odyssey_cover.png",
+        image: "https://i.ytimg.com/vi/GcB7c1eHb6M/hqdefault.jpg",
         description: "A serene endless-runner with one-touch mechanics, high-contrast visuals, and an optional zen mode for stress-free play.",
         rating: 4.8,
         reviews: 2800,
@@ -104,7 +104,7 @@ const games = [
     {
         id: 12,
         title: "KAMI 2",
-        image: "https://games.lol/wp-content/uploads/2022/06/kami-2-pc-pc-full-version.jpg",
+        image: "https://images.squarespace-cdn.com/content/v1/57b5d1f0d482e93404415213/1490788832173-0RY3VJV0MOS89WICFOGB/image-asset.jpeg",
         description: "A visually clean puzzle game with simple tap interactions and color-based challenges designed with calm, focused gameplay in mind.",
         rating: 4.6,
         reviews: 1900,
@@ -122,7 +122,7 @@ const games = [
     {
         id: 14,
         title: "Stardew Valley",
-        image: "https://www.mobygames.com/images/covers/l/536910-stardew-valley-playstation-4-front-cover.jpg",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzag19Vq5eT2IZPNZZYU-PxjM1xLc6mEJEnQ&s",
         description: "A peaceful farming RPG offering remappable controls, no strict time pressure, and a play-at-your-own-pace structure ideal for accessibility.",
         rating: 4.8,
         reviews: 3800,
@@ -131,7 +131,7 @@ const games = [
     {
         id: 15,
         title: "A Blind Legend",
-        image: "https://img.hype.games/cdn/39bbf4a5-a185-4e90-867a-1727660010fcabl-cover-600.jpg",
+        image: "https://images.launchbox-app.com/4580cd6a-d441-4745-ac9d-4cc3df4df468.png",
         description: "A fully audio-based adventure designed for blind and visually impaired players, using binaural sound for navigation instead of visuals.",
         rating: 4.7,
         reviews: 2200,
