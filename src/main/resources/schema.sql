@@ -1,7 +1,7 @@
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create Database Schema
-Drop Database if exists appdb;
-Create Database appdb;
-USE appdb;
+Drop Database if exists AppDB;
+Create Database AppDB;
+USE AppDB;
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create Tables
 -- -- This is the users table, this holds all the user information for both
@@ -14,13 +14,13 @@ USE appdb;
 -- ProfilePictureURL stores the URL of the user's profile picture.
 
 CREATE TABLE users (
-                       UserID BIGINT AUTO_INCREMENT NOT NULL,
-                       Username VARCHAR(50) NOT NULL,
-                       Email VARCHAR(100) NOT NULL UNIQUE,
-                       EncryptedPassword VARCHAR(255) NOT NULL,
-                       Enabled BOOLEAN DEFAULT TRUE,
-                       ProfilePictureURL TEXT,
-                       PRIMARY KEY (UserID)
+    UserID BIGINT AUTO_INCREMENT NOT NULL,
+    Username VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    EncryptedPassword VARCHAR(255) NOT NULL,
+    Enabled BOOLEAN DEFAULT TRUE,
+    ProfilePictureURL TEXT,
+    PRIMARY KEY (UserID)
 );
 
 -- -- This is the roles table, this holds all the roles available in the system.
@@ -29,9 +29,9 @@ CREATE TABLE users (
 --  be changed if more roles/permissions are needed.
 
 CREATE TABLE roles (
-                       RoleID int NOT NULL AUTO_INCREMENT,
-                       name ENUM('ADMIN', 'BASIC') NOT NULL UNIQUE,
-                       PRIMARY KEY (RoleID)
+    RoleID int NOT NULL AUTO_INCREMENT,
+    name ENUM('ADMIN', 'BASIC') NOT NULL UNIQUE,
+    PRIMARY KEY (RoleID)
 );
 
 -- -- This is the user_roles table, this holds the mapping between users and their
@@ -41,12 +41,12 @@ CREATE TABLE roles (
 -- RoleID is a foreign key referencing the roles table.
 
 CREATE TABLE user_roles (
-                            id bigint AUTO_INCREMENT NOT NULL,
-                            UserID BIGINT NOT NULL,
-                            RoleID int NOT NULL,
-                            PRIMARY KEY (id),
-                            FOREIGN KEY (UserID) REFERENCES users(UserID),
-                            FOREIGN KEY (RoleID) REFERENCES roles(RoleID)
+    id bigint AUTO_INCREMENT NOT NULL,
+    UserID BIGINT NOT NULL,
+    RoleID int NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (UserID) REFERENCES users(UserID),
+    FOREIGN KEY (RoleID) REFERENCES roles(RoleID)
 );
 
 -- -- This is the games table, this holds all the information about the games
@@ -64,21 +64,21 @@ CREATE TABLE user_roles (
 --  accessibility information related to different disabilities.
 
 CREATE TABLE games(
-                      GameID BIGINT AUTO_INCREMENT NOT NULL,
-                      GameName VARCHAR(200) NOT NULL,
-                      Developer VARCHAR(100) NOT NULL,
-                      AgeRating VARCHAR(10) NOT NULL,
-                      LinkToStore TEXT NOT NULL,
-                      GameIconURL TEXT NOT NULL,
-                      GameDescription TEXT NOT NULL,
-                      ReleaseDate DATE NOT NULL,
-                      VersionNumber VARCHAR(30) NOT NULL,
-                      AboutVision TEXT,
-                      AboutHearing TEXT,
-                      AboutCognitive TEXT,
-                      AboutSpeech TEXT,
-                      AboutMotor TEXT,
-                      PRIMARY KEY (GameID)
+    GameID BIGINT AUTO_INCREMENT NOT NULL,
+    GameName VARCHAR(200) NOT NULL,
+    Developer VARCHAR(100) NOT NULL,
+    AgeRating VARCHAR(10) NOT NULL,
+    LinkToStore TEXT NOT NULL,
+    GameIconURL TEXT NOT NULL,
+    GameDescription TEXT NOT NULL,
+    ReleaseDate DATE NOT NULL,
+    VersionNumber VARCHAR(30) NOT NULL,
+    AboutVision TEXT,
+    AboutHearing TEXT,
+    AboutCognitive TEXT,
+    AboutSpeech TEXT,
+    AboutMotor TEXT,
+    PRIMARY KEY (GameID)
 );
 
 -- -- This is the gallery table, this holds all the images related to different
@@ -89,12 +89,12 @@ CREATE TABLE games(
 -- AltText is the alternative text for the image for accessibility.
 
 CREATE TABLE gallery(
-                        ImageID BIGINT AUTO_INCREMENT NOT NULL,
-                        GameID BIGINT NOT NULL,
-                        ImageURL TEXT NOT NULL,
-                        AltText TEXT,
-                        PRIMARY KEY (ImageID),
-                        FOREIGN KEY (GameID) REFERENCES games(GameID)
+    ImageID BIGINT AUTO_INCREMENT NOT NULL,
+    GameID BIGINT NOT NULL,
+    ImageURL TEXT NOT NULL,
+    AltText TEXT,
+    PRIMARY KEY (ImageID),
+    FOREIGN KEY (GameID) REFERENCES games(GameID)
 );
 
 -- -- This is the reviews table, this holds all the reviews made by users
@@ -111,22 +111,22 @@ CREATE TABLE gallery(
 -- Removed indicates whether the review has been removed from public view.
 
 CREATE TABLE reviews(
-                        ReviewID BIGINT AUTO_INCREMENT NOT NULL,
-                        UserID BIGINT NOT NULL,
-                        GameID BIGINT NOT NULL,
-                        HearingRating INT,
-                        VisualRating INT,
-                        CognitiveRating INT,
-                        SpeechRating INT,
-                        MotorRating INT,
-                        GameplayRating INT,
-                        ReviewText TEXT,
-                        ReviewDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        Flagged BOOLEAN DEFAULT FALSE,
-                        Removed BOOLEAN DEFAULT FALSE,
-                        PRIMARY KEY (ReviewID),
-                        FOREIGN KEY (UserID) REFERENCES users(UserID),
-                        FOREIGN KEY (GameID) REFERENCES games(GameID)
+    ReviewID BIGINT AUTO_INCREMENT NOT NULL,
+    UserID BIGINT NOT NULL,
+    GameID BIGINT NOT NULL,
+    HearingRating INT,
+    VisionRating INT,
+    CognitiveRating INT,
+    SpeechRating INT,
+    MotorRating INT,
+    GameplayRating INT,
+    ReviewText TEXT,
+    ReviewDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Flagged BOOLEAN DEFAULT FALSE,
+    Removed BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (ReviewID),
+    FOREIGN KEY (UserID) REFERENCES users(UserID),
+    FOREIGN KEY (GameID) REFERENCES games(GameID)
 );
 
 -- -- This is the user_favorites table, this holds the mapping between users
@@ -136,12 +136,12 @@ CREATE TABLE reviews(
 -- GameID is a foreign key referencing the games table.
 
 CREATE TABLE user_favorites(
-                               id BIGINT AUTO_INCREMENT NOT NULL,
-                               UserID BIGINT NOT NULL,
-                               GameID BIGINT NOT NULL,
-                               PRIMARY KEY (id),
-                               FOREIGN KEY (UserID) REFERENCES users(UserID),
-                               FOREIGN KEY (GameID) REFERENCES games(GameID)
+    id BIGINT AUTO_INCREMENT NOT NULL,
+    UserID BIGINT NOT NULL,
+    GameID BIGINT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (UserID) REFERENCES users(UserID),
+    FOREIGN KEY (GameID) REFERENCES games(GameID)
 );
 
 -- -- This is the tags table, this holds all the tags that can be associated
@@ -152,10 +152,10 @@ CREATE TABLE user_favorites(
 --  or genre.
 
 CREATE TABLE tags(
-                     TagID INT AUTO_INCREMENT NOT NULL,
-                     TagName VARCHAR(50) NOT NULL UNIQUE,
-                     Type ENUM('ACCESSIBILITY', 'GENRE') NOT NULL,
-                     PRIMARY KEY (TagID)
+    TagID INT AUTO_INCREMENT NOT NULL,
+    TagName VARCHAR(50) NOT NULL UNIQUE,
+    Type ENUM('ACCESSIBILITY', 'GENRE') NOT NULL,
+    PRIMARY KEY (TagID)
 );
 
 -- -- This is the game_tags table, this holds the mapping between games
@@ -165,12 +165,12 @@ CREATE TABLE tags(
 -- TagID is a foreign key referencing the tags table.
 
 CREATE TABLE game_tags(
-                          id BIGINT AUTO_INCREMENT NOT NULL,
-                          GameID BIGINT NOT NULL,
-                          TagID INT NOT NULL,
-                          PRIMARY KEY (id),
-                          FOREIGN KEY (GameID) REFERENCES games(GameID),
-                          FOREIGN KEY (TagID) REFERENCES tags(TagID)
+    id BIGINT AUTO_INCREMENT NOT NULL,
+    GameID BIGINT NOT NULL,
+    TagID INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (GameID) REFERENCES games(GameID),
+    FOREIGN KEY (TagID) REFERENCES tags(TagID)
 );
 
 -- -- This is the discussions table, this holds all the discussion threads
@@ -182,13 +182,13 @@ CREATE TABLE game_tags(
 -- DiscussionText is the main content of the discussion.
 
 CREATE TABLE discussions(
-                            DiscussionID BIGINT AUTO_INCREMENT NOT NULL,
-                            UserID BIGINT NOT NULL,
-                            DiscussionTitle VARCHAR(200) NOT NULL,
-                            DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
-                            DiscussionText TEXT NOT NULL,
-                            PRIMARY KEY (DiscussionID),
-                            FOREIGN KEY (UserID) REFERENCES users(UserID)
+    DiscussionID BIGINT AUTO_INCREMENT NOT NULL,
+    UserID BIGINT NOT NULL,
+    DiscussionTitle VARCHAR(200) NOT NULL,
+    DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    DiscussionText TEXT NOT NULL,
+    PRIMARY KEY (DiscussionID),
+    FOREIGN KEY (UserID) REFERENCES users(UserID)
 );
 
 -- -- This is the replies table, this holds all the replies made by users
@@ -200,14 +200,14 @@ CREATE TABLE discussions(
 -- DateCreated is the date and time when the reply was made.
 
 CREATE TABLE replies(
-                        ReplyID BIGINT AUTO_INCREMENT NOT NULL,
-                        UserID BIGINT NOT NULL,
-                        DiscussionID BIGINT NOT NULL,
-                        ReplyText TEXT NOT NULL,
-                        DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        PRIMARY KEY (ReplyID),
-                        FOREIGN KEY (UserID) REFERENCES users(UserID),
-                        FOREIGN KEY (DiscussionID) REFERENCES discussions(DiscussionID)
+    ReplyID BIGINT AUTO_INCREMENT NOT NULL,
+    UserID BIGINT NOT NULL,
+    DiscussionID BIGINT NOT NULL,
+    ReplyText TEXT NOT NULL,
+    DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (ReplyID),
+    FOREIGN KEY (UserID) REFERENCES users(UserID),
+    FOREIGN KEY (DiscussionID) REFERENCES discussions(DiscussionID)
 );
 
 -- -- This is the faq table, this holds all the frequently asked questions
@@ -217,10 +217,10 @@ CREATE TABLE replies(
 -- Answer is the answer to the frequently asked question.
 
 CREATE TABLE faq(
-                    FaqID BIGINT AUTO_INCREMENT NOT NULL,
-                    Question TEXT NOT NULL,
-                    Answer TEXT NOT NULL,
-                    PRIMARY KEY (FaqID)
+    FaqID BIGINT AUTO_INCREMENT NOT NULL,
+    Question TEXT NOT NULL,
+    Answer TEXT NOT NULL,
+    PRIMARY KEY (FaqID)
 );
 
 -- -- This is the blog table, this holds all the blog posts.
@@ -232,13 +232,19 @@ CREATE TABLE faq(
 -- ReadTime is the estimated read time for the blog post in minutes.
 
 CREATE TABLE Blog(
-                     BlogId BIGINT AUTO_INCREMENT NOT NULL,
-                     BlogTitle VARCHAR(200) NOT NULL,
-                     DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
-                     LinkToBlog TEXT NOT NULL,
-                     BlogDescription TEXT NOT NULL,
-                     ReadTime INT NOT NULL,
-                     PRIMARY KEY (BlogId)
+    BlogId BIGINT AUTO_INCREMENT NOT NULL,
+    BlogTitle VARCHAR(200) NOT NULL,
+    DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    LinkToBlog TEXT NOT NULL,
+    BlogDescription TEXT NOT NULL,
+    ReadTime INT NOT NULL,
+    PRIMARY KEY (BlogId)
 );
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create Views
+
+CREATE view user_authentication AS
+SELECT u.userid, r.name AS role
+FROM users u
+JOIN user_roles ur ON u.UserID = ur.UserID
+JOIN roles r ON ur.RoleID = r.RoleID;
