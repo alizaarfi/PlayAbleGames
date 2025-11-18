@@ -165,7 +165,7 @@ function HomePage() {
     };
 
     const handleCardClick = (gameId) => {
-        console.log(`Navigating to game ${gameId}`);
+        window.location.href = `/games/${gameId}`;
     };
 
     const handleFilterChange = (filterName) => {
