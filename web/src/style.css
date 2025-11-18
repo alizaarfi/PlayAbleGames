@@ -997,3 +997,21 @@ html {
   background-color: var(--border-color) !important;
   color: var(--text-primary) !important;
 }
+
+/* Make game cards clickable */
+.game-card {
+  cursor: pointer;
+}
+
+.game-card:active {
+  transform: translateY(-2px);
+}
+
+.page-footer a {
+  text-decoration: underline;
+  color: var(--text-secondary);
+}
+
+.page-footer a:hover {
+  color: var(--primary-color);
+}

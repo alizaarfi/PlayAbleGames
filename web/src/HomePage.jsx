@@ -5,7 +5,7 @@ const games = [
     {
         id: 1,
         title: "Minecraft",
-        image: "https://cdn.mobygames.com/covers/9056432-minecraft-nintendo-switch-front-cover.jpg",
+        image: "https://play-lh.googleusercontent.com/gfNz1N2GNi5piz24IB08RQ4ZGfUnN_kOH8Edhh7uCiotI2P7IBWBXdHzR8gC01ppNnU=w720-h405-rw",
         description: "A creative sandbox game with flexible controls, adjustable difficulty, visual accessibility options, and a calm mode that reduces hostile mobs.",
         rating: 4.5,
         reviews: 1231,
@@ -14,7 +14,7 @@ const games = [
     {
         id: 2,
         title: "Monument Valley",
-        image: "https://cdn1.epicgames.com/spt-assets/e56a7411805046d3b5b7253a6e4e0faa/monument-valley-1e2yy.jpg",
+        image: "https://www.nintendo-insider.com/wp-content/uploads/2025/03/monument_valley_banner-1160x653.jpg",
         description: "A relaxing puzzle game with simple tap controls, clean visuals, and minimal text, making it accessible to a wide range of players.",
         rating: 4.9,
         reviews: 3205,
@@ -155,12 +155,17 @@ function HomePage() {
         casual: false
     });
 
-    const toggleFavorite = (gameId) => {
+    const toggleFavorite = (gameId, event) => {
+        event.stopPropagation();
         setFavorites(prev =>
             prev.includes(gameId)
                 ? prev.filter(id => id !== gameId)
                 : [...prev, gameId]
         );
+    };
+
+    const handleCardClick = (gameId) => {
+        console.log(`Navigating to game ${gameId}`);
     };
 
     const handleFilterChange = (filterName) => {
@@ -321,7 +326,11 @@ function HomePage() {
 
                     <section className="games-grid">
                         {games.map(game => (
-                            <article key={game.id} className="game-card">
+                            <article
+                                key={game.id}
+                                className="game-card"
+                                onClick={() => handleCardClick(game.id)}
+                            >
                                 <img src={game.image} alt={`${game.title} game cover`} />
                                 <div className="card-content">
                                     <div className="card-header">
@@ -329,7 +338,7 @@ function HomePage() {
                                         <button
                                             className="favorite-btn"
                                             aria-label="Add to favorites"
-                                            onClick={() => toggleFavorite(game.id)}
+                                            onClick={(e) => toggleFavorite(game.id, e)}
                                         >
                                             <svg viewBox="0 0 24 24" fill={favorites.includes(game.id) ? "#ff3b30" : "none"}>
                                                 <path
@@ -355,11 +364,6 @@ function HomePage() {
                                         ))}
                                     </div>
                                 </div>
-                                <button className="more-btn" aria-label="Expand game details">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M21 11V3h-8l3.29 3.29-10 10L3 13v8h8l-3.29-3.29 10-10z"/>
-                                    </svg>
-                                </button>
                             </article>
                         ))}
                     </section>
@@ -373,7 +377,6 @@ function HomePage() {
                             href="https://accessibility-manual.dwp.gov.uk/accessibility-law/web-content-accessibility-guidelines"
                             target="_blank"
                             rel="noopener noreferrer"
-                            style={{ textDecoration: 'underline' }}
                         >
                             WCAG 2.1 Level AA
                         </a>{' '}
@@ -382,8 +385,8 @@ function HomePage() {
                 </footer>
 
             </main>
-        </div>
-    );
+</div>
+);
 }
 
 export default HomePage;
