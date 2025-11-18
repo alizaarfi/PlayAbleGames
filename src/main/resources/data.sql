@@ -509,11 +509,11 @@ INSERT INTO faq (Question, Answer)
 VALUES ('How do I navigate the PlayAble website using the voice command system?', 'To navigate the PlayAble website using the voice command system, simply activate the voice command feature and speak your desired action, such as "Go to Games" or "Search for Puzzle Games." The system will interpret your commands and take you to the appropriate section of the website. For best results, speak clearly and use simple phrases. If you encounter any issues, refer to the help section for troubleshooting tips.');
 
 -- -- populating blogs table
-INSERT INTO blogs (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
+INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
 VALUES ('Blog title placeholder','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
-INSERT INTO blogs (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
+INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
 VALUES ('Blog title placeholder 2','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
-INSERT INTO blogs (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
+INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
 VALUES ('Blog title placeholder 3','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
 
 
