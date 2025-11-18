@@ -5,8 +5,8 @@ const games = [
     {
         id: 1,
         title: "Minecraft",
-        image: "https://www.minecraft.net/content/dam/minecraftnet/games/badger/key-art/Homepage_Discover-our-games_MC-Legends-KeyArt_864x864.jpg",
-        description: "Game Description",
+        image: "https://cdn.mobygames.com/covers/9056432-minecraft-nintendo-switch-front-cover.jpg",
+        description: "A creative sandbox game with flexible controls, adjustable difficulty, visual accessibility options, and a calm mode that reduces hostile mobs.",
         rating: 4.5,
         reviews: 1231,
         tags: ["Sandbox", "Adventure"]
@@ -14,8 +14,8 @@ const games = [
     {
         id: 2,
         title: "Monument Valley",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.monumentvalleygame.com%2F&psig=AOvVaw15jcWRDg7wiixJ86mp8Lb0&ust=1762973067161000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCIDYxc7g6pADFQAAAAAdAAAAABAE",
-        description: "Game Description",
+        image: "https://cdn.mobygames.com/covers/20016682-monument-valley-nintendo-switch-front-cover.jpg",
+        description: "A relaxing puzzle game with simple tap controls, clean visuals, and minimal text, making it accessible to a wide range of players.",
         rating: 4.9,
         reviews: 3205,
         tags: ["Puzzle", "Casual"]
@@ -23,8 +23,8 @@ const games = [
     {
         id: 3,
         title: "Among Us",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.innersloth.com%2Fgames%2Famong-us%2F&psig=AOvVaw3i-cOXIxjTE-HZPdFFBv5p&ust=1762973459028000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCOC7ioji6pADFQAAAAAdAAAAABAE",
-        description: "Game Description",
+        image: "https://cdn.mobygames.com/covers/9699387-among-us-nintendo-switch-front-cover.jpg",
+        description: "A social deduction game with colorblind mode, clear UI, and simple movement controls, supporting accessible team play.",
         rating: 4.6,
         reviews: 2456,
         tags: ["Multiplayer", "Strategy"]
@@ -32,8 +32,8 @@ const games = [
     {
         id: 4,
         title: "Candy Crush Saga",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2Fcandy-crush-saga-iphone-gameplay-19-youtube--630926229032214580%2F&psig=AOvVaw2U76qOflQa-1ei2sGLbK2K&ust=1762974456409000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCOig3-fl6pADFQAAAAAdAAAAABAS",
-        description: "Game Description",
+        image: "https://images6.alphacoders.com/900/900929.jpg",
+        description: "A match-3 puzzle game with one-touch controls, optional hints, and bright visuals for easy, accessible play at any pace.",
         rating: 4.8,
         reviews: 1504,
         tags: ["Puzzle", "Casual"]
@@ -41,8 +41,8 @@ const games = [
     {
         id: 5,
         title: "Call Of Duty®: Mobile",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.indiatoday.in%2Ftechnology%2Ffeatures%2Fstory%2Fcall-of-duty-mobile-launches-tomorrow-new-gameplay-modes-better-graphics-and-why-pubg-players-should-try-it-1604723-2019-09-30&psig=AOvVaw16SkNR8-RtOKl8vmYq9V9O&ust=1762974813178000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCODJ7Y7n6pADFQAAAAAdAAAAABAE",
-        description: "Game Description",
+        image: "https://tse2.mm.bing.net/th/id/OIP.R2HC-iT8-hP3fA85MOzMAwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
+        description: "A fast-paced shooter with customizable controls, aim assist, adjustable sensitivity, and UI scaling for improved accessibility.",
         rating: 4.5,
         reviews: 2721,
         tags: ["Action", "Multiplayer"]
@@ -50,8 +50,8 @@ const games = [
     {
         id: 6,
         title: "Pokemon Go",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Ftechcrunch.com%2F2017%2F12%2F06%2Fpokemon-go-weather%2F&psig=AOvVaw33z4DCnfS0qZmzIQSxOOIq&ust=1762975099900000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCNjzsZbo6pADFQAAAAAdAAAAABAE",
-        description: "Game Description",
+        image: "https://images6.alphacoders.com/638/638835.jpg",
+        description: "An outdoor adventure game offering large UI icons, vibration cues, and simplified controls to support diverse physical abilities.",
         rating: 4.7,
         reviews: 1832,
         tags: ["Adventure", "RPG"]
@@ -59,8 +59,8 @@ const games = [
     {
         id: 7,
         title: "Subway Surfers",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fmarksangryreview.com%2Fsubway-surfers-guide%2F&psig=AOvVaw0CV7Fm0llw_dLlIZ2F7-wO&ust=1762975282259000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLiBle7o6pADFQAAAAAdAAAAABAE",
-        description: "Game Description",
+        image: "https://parentalapp.net/wp-content/uploads/2024/11/Subway-Surfers-Cover-1024x576.jpg",
+        description: "A quick-reaction runner with simple swipe controls, strong color contrast, and optional assist features for ease of play.",
         rating: 4.8,
         reviews: 3642,
         tags: ["Arcade", "Casual"]
@@ -68,8 +68,8 @@ const games = [
     {
         id: 8,
         title: "Clash of Clans",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.reddit.com%2Fr%2FClashOfClans%2Fcomments%2Fyhb6b8%2Finsane_coc_gameplay%2F&psig=AOvVaw0KuWDGiUvehXeHohTQOxZ5&ust=1762975521276000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLC16OHp6pADFQAAAAAdAAAAABAE",
-        description: "Game Description",
+        image: "https://tse1.mm.bing.net/th/id/OIP.p4-VI-iEejx8YhFbnWopkwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
+        description: "A strategy game with slow-paced, tap-based controls and adjustable UI elements, making gameplay manageable for many players.",
         rating: 4.6,
         reviews: 2100,
         tags: ["Strategy", "Multiplayer"]
@@ -77,8 +77,8 @@ const games = [
     {
         id: 9,
         title: "Jigsawscapes® - Jigsaw Puzzles",
-        image: "https://play.google.com/store/apps/details/Jigsawscapes+-+Jigsaw+Puzzles?id=jigsaw.puzzle.game.banana&hl=en_CA",
-        description: "Game Description",
+        image: "https://tse2.mm.bing.net/th/id/OIP.MP0lKwcRegSZt5vzUVYv_gHaDn?rs=1&pid=ImgDetMain&o=7&rm=3",
+        description: "A relaxing jigsaw puzzle app with zoom options, piece outlines, and soothing visuals designed for stress-free, accessible play.",
         rating: 4.9,
         reviews: 5200,
         tags: ["Puzzle", "Casual"]
@@ -86,8 +86,8 @@ const games = [
     {
         id: 10,
         title: "My Oasis: Relaxing, Satisfying",
-        image: "https://play.google.com/store/apps/details?id=com.buffstudio.myoasis",
-        description: "Game Description",
+        image: "https://play-lh.googleusercontent.com/jOgxx4JNkbsX3V7A01aYGVhHxOGCxTzcoovVZXB-6jSyEHpfybhmMyvs-VkOsBYgIME=w526-h296",
+        description: "A calming idle game with soft visuals, minimal input, and gentle soundscapes that support relaxation and low-pressure interaction.",
         rating: 4.7,
         reviews: 3100,
         tags: ["Simulation", "Casual"]
@@ -95,8 +95,8 @@ const games = [
     {
         id: 11,
         title: "Alto's Odyssey",
-        image: "https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.hardcoregaming101.net%2Faltos-odyssey%2F&psig=AOvVaw3kZQYhU_b0sefLyHveD8gf&ust=1762976465534000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCICS7q_t6pADFQAAAAAdAAAAABAE",
-        description: "Game Description",
+        image: "https://upload.wikimedia.org/wikipedia/en/4/4c/Alto's_Odyssey_cover.png",
+        description: "A serene endless-runner with one-touch mechanics, high-contrast visuals, and an optional zen mode for stress-free play.",
         rating: 4.8,
         reviews: 2800,
         tags: ["Action", "Casual"]
@@ -104,8 +104,8 @@ const games = [
     {
         id: 12,
         title: "KAMI 2",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.appunwrapper.com%2F2017%2F03%2F31%2Fkami-2-walkthrough-guide-and-solutions%2F&psig=AOvVaw10OEE9bl47ZJjateQEB3lF&ust=1762976182187000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJCF9Z7s6pADFQAAAAAdAAAAABAE",
-        description: "Game Description",
+        image: "https://games.lol/wp-content/uploads/2022/06/kami-2-pc-pc-full-version.jpg",
+        description: "A visually clean puzzle game with simple tap interactions and color-based challenges designed with calm, focused gameplay in mind.",
         rating: 4.6,
         reviews: 1900,
         tags: ["Puzzle", "Casual"]
@@ -113,8 +113,8 @@ const games = [
     {
         id: 13,
         title: "Sky: Children of the Light",
-        image: "https://play.google.com/store/apps/details?id=com.tgc.sky.android",
-        description: "Game Description",
+        image: "https://wallpaperaccess.com/full/5017316.jpg",
+        description: "An emotional adventure with gentle controls, scalable visuals, cooperative play, and accessibility-friendly social mechanics.",
         rating: 4.9,
         reviews: 4500,
         tags: ["Adventure", "Multiplayer"]
@@ -122,8 +122,8 @@ const games = [
     {
         id: 14,
         title: "Stardew Valley",
-        image: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley&hl=en_GB",
-        description: "Game Description",
+        image: "https://www.mobygames.com/images/covers/l/536910-stardew-valley-playstation-4-front-cover.jpg",
+        description: "A peaceful farming RPG offering remappable controls, no strict time pressure, and a play-at-your-own-pace structure ideal for accessibility.",
         rating: 4.8,
         reviews: 3800,
         tags: ["Simulation", "RPG"]
@@ -131,8 +131,8 @@ const games = [
     {
         id: 15,
         title: "A Blind Legend",
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Frawg.io%2Fgames%2Fa-blind-legend&psig=AOvVaw1yed98RHXORnbe4xwEjcoy&ust=1762977130248000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCKCN1d_v6pADFQAAAAAdAAAAABAL",
-        description: "Game Description",
+        image: "https://img.hype.games/cdn/39bbf4a5-a185-4e90-867a-1727660010fcabl-cover-600.jpg",
+        description: "A fully audio-based adventure designed for blind and visually impaired players, using binaural sound for navigation instead of visuals.",
         rating: 4.7,
         reviews: 2200,
         tags: ["Action", "Adventure"]
