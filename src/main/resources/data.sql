@@ -113,81 +113,85 @@ INSERT INTO gallery (GameID, ImageURL, AltText)
 VALUES (6, 'https://studio.uxpincdn.com/studio/wp-content/uploads/2016/07/image08.jpg.webp', 'Split-screen image showing Pokémon GO gameplay. Left: Growlithe on a sidewalk. Center: Voltorb on grass. Right: Nidoran♂ near a street. Bright, sunny day.');
 -- subway surfers images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (7, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fmarksangryreview.com%2Fsubway-surfers-guide%2F&psig=AOvVaw0CV7Fm0llw_dLlIZ2F7-wO&ust=1762975282259000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLiBle7o6pADFQAAAAAdAAAAABAE', 'Colorful game scene of a character running on train tracks, collecting coins. A red tunnel and greenery are in the background, with an approaching train.');
+VALUES (7, 'https://marksangryreview.com/wp-content/uploads/2018/12/Gameplay-of-Subway-Surfers.jpg', 'Colorful game scene of a character running on train tracks, collecting coins. A red tunnel and greenery are in the background, with an approaching train.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (7, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.revid.ai%2Ftools%2Fsubway-surfers-video-generator&psig=AOvVaw0CV7Fm0llw_dLlIZ2F7-wO&ust=1762975282259000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLiBle7o6pADFQAAAAAdAAAAABAS', 'A skateboarder rides along train tracks in a spooky, Halloween-themed village. Glowing pumpkins line the path, and houses have lit windows.');
+VALUES (7, 'https://cdn.revid.ai/subway_surfers/green_surfer_poster.webp', 'A skateboarder rides along train tracks in a spooky, Halloween-themed village. Glowing pumpkins line the path, and houses have lit windows.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (7, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fsubway-surfers.fileion.com%2F&psig=AOvVaw0CV7Fm0llw_dLlIZ2F7-wO&ust=1762975282259000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLiBle7o6pADFQAAAAAdAAAAABAZ', 'A video game scene shows a character named Jake snowboarding along train tracks in a festive city, with snow falling and bright lights glowing.');
+VALUES (7, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSllPja2FGrlbtBtcTbBvmlX-g7be6JSZ0LDw&s', 'A video game scene shows a character named Jake snowboarding along train tracks in a festive city, with snow falling and bright lights glowing.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (7, 'https://chromewebstore.google.com/detail/subway-surfers-offline/khollmcaijfbchfecahodpcmbeajkjgd', 'A character runs along train tracks between two moving trains in a vibrant, colorful cityscape. A police officer and dog chase behind. Energetic, action-packed scene.');
+VALUES (7, 'https://bbsstatic.oppo.com/upload/image/front/thread/20240828/0586081860521903321/1673021720803409924/1673021720803409924.jpg', 'placeholder');
 -- clash of clans images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (8, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.reddit.com%2Fr%2FClashOfClans%2Fcomments%2Fyhb6b8%2Finsane_coc_gameplay%2F&psig=AOvVaw0KuWDGiUvehXeHohTQOxZ5&ust=1762975521276000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLC16OHp6pADFQAAAAAdAAAAABAE', 'A mobile game interface showing a player''s village layout. Six cannons lined up on grass, countdown timers above each. Resource icons and menu options visible.');
+VALUES (8, 'https://static1.squarespace.com/static/58af450eb3db2b0582612f1d/t/58af55d99a6bf733a4094091/1487885785148/1000w/', 'placeholder');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (8, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.deconstructoroffun.com%2Fblog%2F%2F2012%2F09%2Fclash-of-clans-winning-formula.html&psig=AOvVaw0KuWDGiUvehXeHohTQOxZ5&ust=1762975521276000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLC16OHp6pADFQAAAAAdAAAAABAL', 'A vibrant village scene from a mobile strategy game showing small buildings, cannons, resources, and character icons on a grassy grid layout.');
+VALUES (8, 'https://en.docs.balancy.dev/game_templates/clash_of_clans_base.jpg', 'A vibrant village scene from a mobile strategy game showing small buildings, cannons, resources, and character icons on a grassy grid layout.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (8, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.easyfun.gg%2Fcloud-games%2Fclash-of-clans.html&psig=AOvVaw0KuWDGiUvehXeHohTQOxZ5&ust=1762975521276000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLC16OHp6pADFQAAAAAdAAAAABAS', 'A vibrant battle scene in a mobile strategy game shows troops assaulting a fortress. Bright visuals, stats at the top, and a 50% damage indicator convey victory.');
+VALUES (8, 'https://miro.medium.com/1*KP_tGPqayAmu1oqPRRoc8Q.png', 'placeholder');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (8, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.docs.balancy.dev%2Fgame_templates%2Fclash_of_clans%2F&psig=AOvVaw0KuWDGiUvehXeHohTQOxZ5&ust=1762975521276000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCLC16OHp6pADFQAAAAAdAAAAABAZ', 'A strategic "Clash of Clans" village layout with defensive structures and resources; includes purple elixir storages and a fortified town hall.');
+VALUES (8, 'https://static0.gamerantimages.com/wordpress/wp-content/uploads/2025/01/battles-in-clash-of-clans.jpg?q=49&fit=contain&w=750&h=422&dpr=2', 'placeholder');
 -- jigsawscapes images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (9, 'https://play.google.com/store/apps/details/Jigsawscapes+-+Jigsaw+Puzzles?id=jigsaw.puzzle.game.banana&hl=en_CA', 'A colorful puzzle depicting a rooster and hen with chicks in a vibrant farm scene. Sunflowers, blue pots, and a scenic river are visible. Title reads ''Puzzle Game for Adults.'' Some pieces are missing, adding an interactive feel.');
+VALUES (9, 'https://files.backbon3.com/cdn-cgi/image/width=1920,height=1080,fit=scale-down/content/2024/jigsawscapes-wallpaper-1080.jpg', 'A colorful puzzle depicting a rooster and hen with chicks in a vibrant farm scene. Sunflowers, blue pots, and a scenic river are visible. Title reads Puzzle Game for Adults. Some pieces are missing, adding an interactive feel.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (9, 'https://play.google.com/pc-store/games/details?id=jigsaw.puzzle.game.banana', 'Jigsaw puzzle of a serene landscape with a windmill by a river, red and pink tulips in the foreground, blue sky. Text reads ''Immersive Experiences.');
+VALUES (9, 'https://play-lh.googleusercontent.com/4cYkmmaPpuHZmviWi5XaaCVMM1bdv2IoYcgtMj6naawSIIZdGbNeJVQQ-2k1DW2lpq8=w526-h296-rw', 'Jigsaw puzzle of a serene landscape with a windmill by a river, red and pink tulips in the foreground, blue sky. Text reads Immersive Experiences.');
+INSERT INTO gallery (GameID, ImageURL, AltText)
+VALUES (9, 'https://img.tapimg.net/market/images/57fafcad06a84af27e4d95ffae491772.jpg?imageView2/2/w/720/h/720/q/80/format/jpg/interlace/1/ignore-error/1&t=1', 'placeholder');
+INSERT INTO gallery (GameID, ImageURL, AltText)
+VALUES (9, 'https://games.lol/wp-content/uploads/2023/03/jigsawscapes-for-pc.jpg', 'placeholder');
 -- my oasis images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (10, 'https://play.google.com/store/apps/details?id=com.buffstudio.myoasis', 'Low-poly scenic landscape with pink trees, a pond with lily pads, a panda, and floating island under sun rays. Text reads My Oasis.');
+VALUES (10, 'https://play-lh.googleusercontent.com/_tA4d47ZXTaj7TDrM5Beb6kNcbPVsAnF1CFT8D7UvRkV5EH1v_QWz2Dr7p2R4909NlY=w526-h296-rw', 'Low-poly scenic landscape with pink trees, a pond with lily pads, a panda, and floating island under sun rays. Text reads My Oasis.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (10, 'https://play.google.com/store/apps/details?id=com.buffstudio.myoasis', 'A serene, colorful landscape features a lush green island with a central waterfall, surrounded by diverse trees and soft rolling hills. A bright rainbow arcs across the clear blue sky. The screen displays playful icons and musical notes, suggesting an interactive, game-like environment. The mood is peaceful and whimsical.');
+VALUES (10, 'https://play-lh.googleusercontent.com/mKyzCp_tBtWF94vp0nDN5UhImNWpy-vnGfro4ZXWz4Ud8Vd1rDTKNqPOSbY0yvvQqLc=w526-h296-rw', 'A serene, colorful landscape features a lush green island with a central waterfall, surrounded by diverse trees and soft rolling hills. A bright rainbow arcs across the clear blue sky. The screen displays playful icons and musical notes, suggesting an interactive, game-like environment. The mood is peaceful and whimsical.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (10, 'https://play.google.com/store/apps/details?id=com.buffstudio.myoasis', 'A stylized, low-poly desert oasis with animals by a pond, surrounded by cacti and palm trees. Hot air balloons and a whale in the colorful sky.');
+VALUES (10, 'https://play-lh.googleusercontent.com/_tqXZhaWrRyyZnm0asI0Du5-B5S8ZAkiTX4OKleh4suhTTH7IUqTatlz89RjNLiiIos=w526-h296-rw', 'A stylized, low-poly desert oasis with animals by a pond, surrounded by cacti and palm trees. Hot air balloons and a whale in the colorful sky.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (10, 'https://play.google.com/store/apps/details?id=com.buffstudio.myoasis&hl=en_GB', 'Colorful game interface showing animated hearts over a virtual oasis landscape with desert hills, palm trees, and calm water. Icons and notes appear at the bottom.');
+VALUES (10, 'https://play-lh.googleusercontent.com/iwISgD7JdB2z9X_3c6t32tRFSK4noH0tWA6x2CL0NVgm1oAbtKBzLV9Q-s9IpWleNw=w526-h296-rw', 'Colorful game interface showing animated hearts over a virtual oasis landscape with desert hills, palm trees, and calm water. Icons and notes appear at the bottom.');
 -- altos odyssey images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (11, 'https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.hardcoregaming101.net%2Faltos-odyssey%2F&psig=AOvVaw3kZQYhU_b0sefLyHveD8gf&ust=1762976465534000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCICS7q_t6pADFQAAAAAdAAAAABAE', 'Desert landscape at sunset with silhouettes of huts, cacti, and hot air balloons against a glowing sun. Warm, serene atmosphere conveyed.');
+VALUES (11, 'https://lh5.googleusercontent.com/proxy/QJLjIeFGQaWrSb1E5dGJmIJ2P4qCbVvTa1MieRdl5HEXfDBVZCt7t1Ojzk0iGvIaAEr_md217tDDxgZp22zK_Q6u-Hvo3cTYcJ1wCXIxIWhOfXrCM3foHJ5jPzXa1uBFhw', 'Desert landscape at sunset with silhouettes of huts, cacti, and hot air balloons against a glowing sun. Warm, serene atmosphere conveyed.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (11, 'https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.hardcoregaming101.net%2Faltos-odyssey%2F&psig=AOvVaw3kZQYhU_b0sefLyHveD8gf&ust=1762976465534000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCICS7q_t6pADFQAAAAAdAAAAABAL', 'A desert landscape in a video game, with hot air balloons, a setting sun, and distant mountains. A character and lights adorn a cable. Calm and adventurous.');
+VALUES (11, 'https://lh5.googleusercontent.com/proxy/-GQOUKkc5gELrs5cDy6DBnigFuZoBaVRwEGHbY5E133RWFEl3JS8qcfJLU3ysHFXSFyeHgnjcBSoWtp9VlTsDHEZVj-gadZ8ymN0dLaGSyXmFHNym5aH9TisCtBafjYzOw', 'A desert landscape in a video game, with hot air balloons, a setting sun, and distant mountains. A character and lights adorn a cable. Calm and adventurous.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (11, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imore.com%2Faltos-odyssey-review&psig=AOvVaw3kZQYhU_b0sefLyHveD8gf&ust=1762976465534000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCICS7q_t6pADFQAAAAAdAAAAABAS', 'A silhouetted landscape at sunset with mountains, trees, balloons, and an owl. Game elements include score and distance, creating a serene yet adventurous tone.');
+VALUES (11, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUdD5wefQqfEpWyQKVftMraJoqAJjhd3Lpdw&s', 'placeholder');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (11, 'https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey', 'Minimalist landscape with a glowing sun, rolling hills, and silhouetted structures. A waterboarder glides, creating splashes. Calm, adventure vibe.');
+VALUES (11, 'https://play-lh.googleusercontent.com/jH3s-0No7pqOtHW81UEoqJ4qpafdhRJSdDXLyuz9KoCLAMJVZ8A_n61dxU6xaRWQ-Xk=w526-h296-rw', 'Minimalist landscape with a glowing sun, rolling hills, and silhouetted structures. A waterboarder glides, creating splashes. Calm, adventure vibe.');
 -- kami 2 images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (12, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.appunwrapper.com%2F2017%2F03%2F31%2Fkami-2-walkthrough-guide-and-solutions%2F&psig=AOvVaw10OEE9bl47ZJjateQEB3lF&ust=1762976182187000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJCF9Z7s6pADFQAAAAAdAAAAABAE', 'Colorful hexagonal and geometric patterns arranged in three sets of four, each topped by Journey. Each set has a Perfect badge below.');
+VALUES (12, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF1fsdr36vWQdORCcu_IEjzPgp3lFXJMISjQ&s', 'Colorful hexagonal and geometric patterns arranged in three sets of four, each topped by Journey. Each set has a Perfect badge below.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (12, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fnoodlecake.com%2Fgames%2Fkami-2%2F&psig=AOvVaw10OEE9bl47ZJjateQEB3lF&ust=1762976182187000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJCF9Z7s6pADFQAAAAAdAAAAABAL', 'Colorful geometric pattern with overlapping green and yellow hexagons on a light blue background. The pattern is dynamic and abstract, with a playful tone.');
+VALUES (12, 'https://noodlecake.com/wp-content/uploads/2025/07/Kami2_Screenshots_1920x1080_3.png', 'Colorful geometric pattern with overlapping green and yellow hexagons on a light blue background. The pattern is dynamic and abstract, with a playful tone.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (12, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fnoodlecake.com%2Fgames%2Fkami-2%2F&psig=AOvVaw10OEE9bl47ZJjateQEB3lF&ust=1762976182187000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJCF9Z7s6pADFQAAAAAdAAAAABAS', 'Abstract geometric pattern with pink, yellow, and white triangular shapes. A small yellow star-like shape is centered on a diagonal pink strip.');
+VALUES (12, 'https://noodlecake.com/wp-content/uploads/2025/07/Kami2_Screenshots_1920x1080_2.png', 'Abstract geometric pattern with pink, yellow, and white triangular shapes. A small yellow star-like shape is centered on a diagonal pink strip.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (12, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fgames.lol%2Fkami-2%2F&psig=AOvVaw10OEE9bl47ZJjateQEB3lF&ust=1762976182187000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJCF9Z7s6pADFQAAAAAdAAAAABAZ', 'Geometric puzzle game interface with two abstract designs, one marked "Perfect!" in gold. The scene conveys an achievement or success.');
+VALUES (12, 'https://games.lol/wp-content/uploads/2022/06/kami-2-pc-gameplay-on-pc-500x279.jpg', 'Geometric puzzle game interface with two abstract designs, one marked "Perfect!" in gold. The scene conveys an achievement or success.');
 -- sky children of the light images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (13, 'https://play.google.com/store/apps/details?id=com.tgc.sky.android', 'Four stylized characters with glowing features sit around a bright campfire on a grassy field under a starry night, creating a cozy, magical atmosphere.');
+VALUES (13, 'https://play-lh.googleusercontent.com/WBIFZVGLEFruDldtY5hNZtzXGj_lESdG432F_bkYaIJLFRIMQCzZB9tmVeQFnX0skQ=w526-h296-rw', 'Four stylized characters with glowing features sit around a bright campfire on a grassy field under a starry night, creating a cozy, magical atmosphere.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (13, 'https://play.google.com/store/apps/details?id=com.tgc.sky.android', 'A figure in a red cape stands on a platform surrounded by clouds, facing a towering, illuminated structure with arches. The scene conveys wonder and adventure.');
+VALUES (13, 'https://www.gamespot.com/a/uploads/original/1575/15759911/3565917-img_5237.jpg', 'placeholder');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (13, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fthatgamecompany.helpshift.com%2Fhc%2Fen%2F17-sky-children-of-the-light%2Ffaq%2F484-how-can-i-capture-video-of-the-game%2F&psig=AOvVaw244xCZdlHHGXh7LmXIvmDL&ust=1762976716838000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJC0jJru6pADFQAAAAAdAAAAABAS', 'A character in a blue cape approaches two mystical portals set in rocky structures, with one glowing blue and the other emitting a pink light. The scene is tranquil.');
+VALUES (13, 'https://d2duuy9yo5pldo.cloudfront.net/thatgamecompany/5724faa2-266a-41ef-932a-4ca8da0bdcf3-2t.png', 'A character in a blue cape approaches two mystical portals set in rocky structures, with one glowing blue and the other emitting a pink light. The scene is tranquil.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (13, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fmvcurrent.com%2F9401%2Fopinions%2Fsky-children-of-the-light-is-the-best-game-ever%2F&psig=AOvVaw244xCZdlHHGXh7LmXIvmDL&ust=1762976716838000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJC0jJru6pADFQAAAAAdAAAAABAZ', 'A character in a flowing cape stands on a grassy hilltop overlooking misty valleys and towering structures, conveying a sense of adventure and serenity.');
+VALUES (13, 'https://play-lh.googleusercontent.com/gCZKFl5YILlxnGme9gYG3VChiQ68hbLoWJkBP1DGGaCrgrGRu4Ihydj_91Pqxm6RQg=w526-h296-rw', 'placeholder');
 -- stardew valley images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (14, 'https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley&hl=en_GB', 'A pixel-art scene from a farming RPG game shows characters on a wooden dock with a house and purple boat. Overlay reads, The smash hit farming RPG comes to Mobile.');
+VALUES (14, 'https://play-lh.googleusercontent.com/K3iTDHZUEWPARrou2r_30gaXIoKXZfirTkNpY2I6YvGGoNfPLhXDIvJGd1cGQ-9UxA=w526-h296-rw', 'A pixel-art scene from a farming RPG game shows characters on a wooden dock with a house and purple boat. Overlay reads, The smash hit farming RPG comes to Mobile.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (14, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.indiegamewebsite.com%2F2018%2F10%2F29%2Fstardew-valley-mobile-review%2F&psig=AOvVaw0nEUZ7rSd7Jbt9SunsA5QY&ust=1762976973870000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCPilxpTv6pADFQAAAAAdAAAAABAL', 'Pixel art of a character standing outside a wooden cottage in a farm setting from a game. Grass and a mailbox are visible. The visual has a cozy feel.');
+VALUES (14, 'https://www.indiegamewebsite.com/wp-content/uploads/2018/10/unnamed.png', 'Pixel art of a character standing outside a wooden cottage in a farm setting from a game. Grass and a mailbox are visible. The visual has a cozy feel.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (14, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.stardewvalley.net%2Fstardew-valley-coming-to-mobile%2F&psig=AOvVaw0nEUZ7rSd7Jbt9SunsA5QY&ust=1762976973870000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCPilxpTv6pADFQAAAAAdAAAAABAS', 'Pixel art scene from a game: A person in a hat fishes next to a pond in a fall setting, with mushrooms and a cabin nearby. Autumn leaves float in the water.');
+VALUES (14, 'https://www.stardewvalley.net/wp-content/uploads/2018/10/SDV_iPhone_10_half.png', 'Pixel art scene from a game: A person in a hat fishes next to a pond in a fall setting, with mushrooms and a cabin nearby. Autumn leaves float in the water.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (14, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Ftasta.me%2Fpros-and-cons-of-stardew-valley-mobile-96020f36a4b1&psig=AOvVaw0nEUZ7rSd7Jbt9SunsA5QY&ust=1762976973870000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCPilxpTv6pADFQAAAAAdAAAAABAg', 'Pixelated farm scene from a video game shows two farmers in hats tending crops near a wooden house, well, and beehives. The setting is bright and cheerful.');
+VALUES (14, 'https://miro.medium.com/v2/resize:fit:1400/1*jxWtCZIrOXxTnQUT52u-kQ.jpeg', 'Pixelated farm scene from a video game shows two farmers in hats tending crops near a wooden house, well, and beehives. The setting is bright and cheerful.');
 -- a blind legend images
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (15, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Frawg.io%2Fgames%2Fa-blind-legend&psig=AOvVaw1yed98RHXORnbe4xwEjcoy&ust=1762977130248000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCKCN1d_v6pADFQAAAAAdAAAAABAL', 'A character with long hair stands on a stone path facing a grand, illuminated building surrounded by trees. The scene conveys an adventurous, mysterious tone.');
+VALUES (15, 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/437530/header.jpg?t=1750429962', 'placeholder');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (15, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fid.techinasia.com%2Fa-blind-legend-game-smartphone-untuk-orang-tunanetra&psig=AOvVaw1yed98RHXORnbe4xwEjcoy&ust=1762977130248000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCKCN1d_v6pADFQAAAAAdAAAAABAf', 'Illustrated instructions on using a smartphone game: 1) Move, 2) Turn, 3) Strike, 4) Block, 5) Repel, 6) Ouch! Gestures guide interactive actions.');
+VALUES (15, 'https://www.showmetech.com.br/wp-content/uploads/2014/08/A-Blind-Legend-como-funciona.png', 'Illustrated instructions on using a smartphone game: 1) Move, 2) Turn, 3) Strike, 4) Block, 5) Repel, 6) Ouch! Gestures guide interactive actions.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (15, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fstore.steampowered.com%2Fapp%2F437530%2FA_Blind_Legend%2F&psig=AOvVaw1yed98RHXORnbe4xwEjcoy&ust=1762977130248000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCKCN1d_v6pADFQAAAAAdAAAAABAn', 'A person wearing headphones and holding a phone appears immersed in music, eyes closed. Mysterious shadowy figures move through a dark, foggy environment. Mood is enigmatic and introspective.');
+VALUES (15, 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/437530/page_bg_raw.jpg?t=1750429962', 'A person wearing headphones and holding a phone appears immersed in music, eyes closed. Mysterious shadowy figures move through a dark, foggy environment. Mood is enigmatic and introspective.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (15, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fkotaku.com%2Fgames%2Fa-blind-legend&psig=AOvVaw1yed98RHXORnbe4xwEjcoy&ust=1762977130248000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCKCN1d_v6pADFQAAAAAdAAAAABAu', 'Two hooded figures stand in a desert landscape with futuristic vehicles and windmills. Flying ships and a colossal artifact loom under a dramatic sky.');
+VALUES (15, 'https://gpstatic.com/acache/29/92/1/uk/s1-3aba7a53bca1f519c1b1e1494c1f1e89.jpg', 'placeholder');
 
 -- -- populating reviews table
 INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
