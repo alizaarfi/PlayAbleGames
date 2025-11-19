@@ -551,8 +551,8 @@ html {
 }
 
 .controller-icon {
-  width: 40px;
-  height: 40px;
+  width: 70px;
+  height: 55px;
   color: var(--text-primary);
   flex-shrink: 0;
 }
