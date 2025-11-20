@@ -16,6 +16,9 @@ function AccessibilityPage() {
                 <div className="accessibility-cards-list">
                     {/* Hearing Impairments */}
                     <div className="accessibility-card-horizontal">
+                        <div className="icon-box">
+                            <span className="card-emoji">👂</span>
+                        </div>
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Hearing</span> Impairments</h3>
                             <ul className="feature-checklist">
@@ -37,6 +40,9 @@ function AccessibilityPage() {
 
                     {/* Vision Impairments */}
                     <div className="accessibility-card-horizontal">
+                        <div className="icon-box">
+                            <span className="card-emoji">👁️</span>
+                        </div>
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Vision</span> Impairments</h3>
                             <ul className="feature-checklist">
@@ -58,6 +64,9 @@ function AccessibilityPage() {
 
                     {/* Dexterity Impairments */}
                     <div className="accessibility-card-horizontal">
+                        <div className="icon-box">
+                            <span className="card-emoji">✋</span>
+                        </div>
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Dexterity</span> Impairments</h3>
                             <ul className="feature-checklist">
@@ -79,6 +88,9 @@ function AccessibilityPage() {
 
                     {/* Cognitive Impairments */}
                     <div className="accessibility-card-horizontal">
+                        <div className="icon-box">
+                            <span className="card-emoji">🧠</span>
+                        </div>
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Cognitive</span> Impairments</h3>
                             <ul className="feature-checklist">
@@ -100,6 +112,9 @@ function AccessibilityPage() {
 
                     {/* Speech Impairments */}
                     <div className="accessibility-card-horizontal">
+                        <div className="icon-box">
+                            <span className="card-emoji">🔊</span>
+                        </div>
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Speech</span> Impairments</h3>
                             <ul className="feature-checklist">
