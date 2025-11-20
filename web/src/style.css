@@ -550,11 +550,30 @@ html {
   padding: 0 !important;
 }
 
+.logo-link-wrapper {
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.logo-link-wrapper:hover {
+  transform: scale(1.05);
+}
+
 .controller-icon {
   width: 80px;
-  height: 65px;
+  height: 60px;
   color: var(--text-primary);
   flex-shrink: 0;
+  display: block;
+}
+
+/* Mobile size */
+@media (max-width: 480px) {
+  .controller-icon {
+    width: 48px;
+    height: 36px;
+  }
 }
 
 .logo-text {

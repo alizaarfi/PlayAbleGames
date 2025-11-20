@@ -24,17 +24,19 @@ function Navbar() {
         <header className="main-header">
             <div className="container">
                 <div className="header-content">
-                    <Link to="/" className="logo" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <img
-                            src="/gamecontroller.png"
-                            alt="Game controller icon"
-                            className="controller-icon"
-                        />
+                    <div className="logo">
+                        <Link to="/" className="logo-link-wrapper">
+                            <img
+                                src="/gamecontroller.png"
+                                alt="Game controller icon - Click to go home"
+                                className="controller-icon"
+                            />
+                        </Link>
                         <div className="logo-text">
                             <h1>PlayAble Games</h1>
                             <p className="logo-subtitle">All players welcome</p>
                         </div>
-                    </Link>
+                    </div>
 
                     <div className="header-nav">
                         <button className="nav-btn accessibility-btn">
