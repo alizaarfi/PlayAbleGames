@@ -97,7 +97,7 @@ VALUES (4, 'https://joywikia-ccs.weebly.com/uploads/2/1/2/5/21259908/1163467_ori
 INSERT INTO gallery (GameID, ImageURL, AltText)
 VALUES (5, 'https://images.squarespace-cdn.com/content/v1/58af450eb3db2b0582612f1d/1574235600878-89O2J69L16OZAKSH60DO/Screenshot+2019-11-20+at+9.39.42.png', 'First-person shooter game scene with a rifle aimed at a street lined with houses and parked cars. Game HUD displays objectives and controls.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (5, 'https://static0.thegamerimages.com/wordpress/wp-content/uploads/2019/09/COD-Mobile.jpg?q=50&fit=crop&w=825&dpr=1.5', 'placeholder');
+VALUES (5, 'https://www.gamespot.com/a/uploads/original/172/1720905/3545065-br%20001%20logo.jpg', 'Video game scene from Call of Duty Mobile showing soldiers in combat amidst a cherry blossom landscape, with helicopters and gunfire. Energetic and intense mood.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
 VALUES (5, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj3ev3iHcUemu8IiUSMUy-2Te01-G6Ibu77g&s', 'Intense battle scene from Call of Duty Mobile. Soldiers engage in a firefight near a yellow house, with a drone overhead and explosions in the background, creating a dynamic and action-packed atmosphere.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
@@ -128,7 +128,7 @@ VALUES (8, 'https://en.docs.balancy.dev/game_templates/clash_of_clans_base.jpg',
 INSERT INTO gallery (GameID, ImageURL, AltText)
 VALUES (8, 'https://miro.medium.com/1*KP_tGPqayAmu1oqPRRoc8Q.png', 'A character with red hair warns of a goblin attack in a grassy village scene. She urges building a cannon. Icons show resources and a shop button.');
 INSERT INTO gallery (GameID, ImageURL, AltText)
-VALUES (8, 'https://static0.gamerantimages.com/wordpress/wp-content/uploads/2025/01/battles-in-clash-of-clans.jpg?q=49&fit=contain&w=750&h=422&dpr=2', 'placeholder');
+VALUES (8, 'https://assets.newsweek.com/wp-content/uploads/2025/08/674748-clash-clans-2.png', 'A vibrant fantasy village scene from a game, features a green goblin in front, a large armored figure, and buildings surrounded by troops and resources.');
 -- jigsawscapes images
 INSERT INTO gallery (GameID, ImageURL, AltText)
 VALUES (9, 'https://files.backbon3.com/cdn-cgi/image/width=1920,height=1080,fit=scale-down/content/2024/jigsawscapes-wallpaper-1080.jpg', 'A colorful puzzle depicting a rooster and hen with chicks in a vibrant farm scene. Sunflowers, blue pots, and a scenic river are visible. Title reads Puzzle Game for Adults. Some pieces are missing, adding an interactive feel.');
