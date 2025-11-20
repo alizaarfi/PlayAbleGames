@@ -469,3 +469,741 @@ body {
   border-radius: 10px;
   text-align: center;
 }
+
+
+body {
+  background: #f8f9fa !important;
+  display: block !important;
+  place-items: unset !important;
+}
+
+/* Reset root background */
+html {
+  background-color: #f8f9fa !important;
+}
+
+/* Override any black backgrounds */
+#root {
+  background-color: #f8f9fa !important;
+}
+
+/* HomePage specific styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #5856d6;
+  --secondary-color: #6c757d;
+  --background: #f8f9fa;
+  --card-bg: #ffffff;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #dee2e6;
+  --hover-bg: #f1f3f5;
+  --star-color: #34c759;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.app {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+.main-header {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+  padding: 0 24px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: auto !important;
+  padding: 0 !important;
+}
+
+.controller-icon {
+  width: 70px;
+  height: 55px;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logo h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.logo-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Header Navigation */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+.nav-btn:hover {
+  background-color: var(--hover-bg);
+  border-color: var(--text-secondary);
+  transform: translateY(-1px);
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.accessibility-btn {
+  padding: 10px;
+  background-color: #111827;
+  border: 1px solid #111827;
+}
+
+.accessibility-btn .nav-icon {
+  color: white;
+}
+
+.accessibility-btn:hover {
+  background-color: #374151;
+  border-color: #374151;
+}
+
+/* Profile Button and Dropdown */
+.profile-dropdown-wrapper {
+  position: relative;
+}
+
+.profile-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background-color: #e5e7eb;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.profile-btn:hover {
+  background-color: #d1d5db;
+  transform: scale(1.05);
+}
+
+.profile-icon {
+  width: 24px;
+  height: 24px;
+  color: #374151;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  overflow: hidden;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.dropdown-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.dropdown-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 4px 0;
+}
+
+.logout-item {
+  color: #dc2626;
+}
+
+.logout-item .dropdown-icon {
+  color: #dc2626;
+}
+
+.logout-item:hover {
+  background-color: #fee2e2;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 48px 24px 32px 24px;
+}
+
+.hero h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.hero p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Search Section */
+.search-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding: 0 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 300px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 48px 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.2s;
+  background-color: white;
+  color: var(--text-primary);
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.search-box button {
+  position: absolute;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.search-box button:hover {
+  background-color: var(--hover-bg);
+  border-color: transparent;
+}
+
+.search-box button svg {
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+}
+
+.sort-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sort-btn,
+.dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+.sort-btn:hover,
+.dropdown-btn:hover {
+  background-color: var(--hover-bg);
+  border-color: var(--text-secondary);
+}
+
+.sort-btn svg,
+.dropdown-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Content Layout */
+.content-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  margin-bottom: 48px;
+  padding: 0 24px;
+}
+
+/* Filters Sidebar */
+.filters-sidebar {
+  background-color: var(--card-bg);
+  padding: 16px;
+  border-radius: 12px;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.filters-sidebar h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.filter-group h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+  transition: color 0.2s;
+  color: var(--text-primary);
+}
+
+.checkbox-label:hover {
+  color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+
+/* Games Grid - 2 columns */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* Game Card */
+.game-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
+}
+
+.game-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.card-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.game-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.game-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars {
+  color: var(--star-color);
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.rating span {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  padding: 4px 12px;
+  background-color: var(--hover-bg);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.page-footer {
+  text-align: center;
+  padding: 48px 24px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 48px;
+  background-color: var(--card-bg);
+}
+
+.page-footer p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.page-footer p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .content-layout {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+  .content-layout {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
+
+  .filters-sidebar {
+    position: static;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header-nav .nav-btn span {
+    display: none;
+  }
+
+  .nav-btn {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero h2 {
+    font-size: 28px;
+  }
+
+  .search-section {
+    flex-direction: column;
+    padding: 0 16px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .sort-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-nav {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 32px 16px 24px;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  .hero h2 {
+    font-size: 24px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  .controller-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .game-card,
+  .checkbox-label,
+  .sort-btn,
+  .dropdown-btn,
+  .nav-btn,
+  .profile-btn {
+    transition: none !important;
+  }
+
+  .profile-dropdown {
+    animation: none !important;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+.sort-btn:focus-visible,
+.dropdown-btn:focus-visible,
+.search-box input:focus-visible,
+.checkbox-label:focus-within,
+.nav-btn:focus-visible,
+.profile-btn:focus-visible,
+.dropdown-item:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Favorite Button */
+.favorite-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  background-color: transparent !important;
+  cursor: pointer !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.2s !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+}
+
+.favorite-btn:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+.favorite-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  color: var(--text-secondary) !important;
+  transition: all 0.2s !important;
+}
+
+.favorite-btn:hover svg {
+  color: #ff3b30 !important;
+}
+
+/* Expand/More Button */
+.more-btn {
+  position: absolute !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  background-color: var(--hover-bg) !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--text-secondary) !important;
+  transition: all 0.2s !important;
+  padding: 0 !important;
+}
+
+.more-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.more-btn:hover {
+  background-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Make game cards clickable */
+.game-card {
+  cursor: pointer;
+}
+
+.game-card:active {
+  transform: translateY(-2px);
+}
+
+.page-footer a {
+  text-decoration: underline;
+  color: var(--text-secondary);
+}
+
+.page-footer a:hover {
+  color: var(--primary-color);
+}
