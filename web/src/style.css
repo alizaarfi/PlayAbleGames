@@ -535,9 +535,11 @@ html {
 
 .header-content {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  padding: 30px 0;
+  padding: 20px 0;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 .logo {
@@ -549,9 +551,16 @@ html {
 }
 
 .controller-icon {
-  width: 32px;
-  height: 32px;
+  width: 70px;
+  height: 55px;
   color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .logo h1 {
@@ -559,6 +568,163 @@ html {
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.2;
+  margin: 0;
+}
+
+.logo-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Header Navigation */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+.nav-btn:hover {
+  background-color: var(--hover-bg);
+  border-color: var(--text-secondary);
+  transform: translateY(-1px);
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.accessibility-btn {
+  padding: 10px;
+  background-color: #111827;
+  border: 1px solid #111827;
+}
+
+.accessibility-btn .nav-icon {
+  color: white;
+}
+
+.accessibility-btn:hover {
+  background-color: #374151;
+  border-color: #374151;
+}
+
+/* Profile Button and Dropdown */
+.profile-dropdown-wrapper {
+  position: relative;
+}
+
+.profile-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background-color: #e5e7eb;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.profile-btn:hover {
+  background-color: #d1d5db;
+  transform: scale(1.05);
+}
+
+.profile-icon {
+  width: 24px;
+  height: 24px;
+  color: #374151;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  overflow: hidden;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.dropdown-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.dropdown-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 4px 0;
+}
+
+.logout-item {
+  color: #dc2626;
+}
+
+.logout-item .dropdown-icon {
+  color: #dc2626;
+}
+
+.logout-item:hover {
+  background-color: #fee2e2;
 }
 
 /* Hero Section */
@@ -875,6 +1041,14 @@ html {
   .games-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .header-nav .nav-btn span {
+    display: none;
+  }
+
+  .nav-btn {
+    padding: 10px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -899,6 +1073,10 @@ html {
   .games-grid {
     grid-template-columns: 1fr;
   }
+
+  .header-nav {
+    gap: 8px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -917,6 +1095,11 @@ html {
   .hero p {
     font-size: 14px;
   }
+
+  .controller-icon {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 /* Accessibility */
@@ -924,8 +1107,14 @@ html {
   .game-card,
   .checkbox-label,
   .sort-btn,
-  .dropdown-btn {
+  .dropdown-btn,
+  .nav-btn,
+  .profile-btn {
     transition: none !important;
+  }
+
+  .profile-dropdown {
+    animation: none !important;
   }
 }
 
@@ -933,7 +1122,10 @@ html {
 .sort-btn:focus-visible,
 .dropdown-btn:focus-visible,
 .search-box input:focus-visible,
-.checkbox-label:focus-within {
+.checkbox-label:focus-within,
+.nav-btn:focus-visible,
+.profile-btn:focus-visible,
+.dropdown-item:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
