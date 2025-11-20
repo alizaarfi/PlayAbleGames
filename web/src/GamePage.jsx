@@ -35,7 +35,6 @@ export default function GamePage() {
 
     /**
      * Local UI state to record which reviews the user has marked as “reported”.
-     * This is currently only visual and not persisted to the backend.
      */
     const [flagged, setFlagged] = useState({});
 
@@ -95,7 +94,6 @@ export default function GamePage() {
 
     /**
      * Toggles the reported status for a given review in local UI state.
-     * This is only a front-end effect at present (no backend update).
      */
     const toggleFlag = (reviewId) => {
         setFlagged((prev) => ({ ...prev, [reviewId]: !prev[reviewId] }));
@@ -122,8 +120,6 @@ export default function GamePage() {
 
     /**
      * Handles submission of a new review to the backend.
-     * At this stage the system does not use real authentication,
-     * so the backend temporarily associates the review with a fixed test user.
      */
     const handleSubmitReview = async () => {
 
