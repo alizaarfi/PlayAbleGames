@@ -18,6 +18,20 @@ function AccessibilityPage() {
                     <div className="accessibility-card-horizontal">
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Hearing</span> Impairments</h3>
+                            <ul className="feature-checklist">
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>All audio content has visual alternatives</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>No audio-only interactions required</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Text-based communication in community features</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
@@ -25,6 +39,20 @@ function AccessibilityPage() {
                     <div className="accessibility-card-horizontal">
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Vision</span> Impairments</h3>
+                            <ul className="feature-checklist">
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Full screen reader support</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Greyscale interface; colour only in images and icons where necessary</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>High contrast mode</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
@@ -32,6 +60,20 @@ function AccessibilityPage() {
                     <div className="accessibility-card-horizontal">
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Dexterity</span> Impairments</h3>
+                            <ul className="feature-checklist">
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Full voice command support</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>No time-sensitive interactions</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Large clickable targets</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
@@ -39,6 +81,20 @@ function AccessibilityPage() {
                     <div className="accessibility-card-horizontal">
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Cognitive</span> Impairments</h3>
+                            <ul className="feature-checklist">
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Clear, simple language throughout</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Consistent navigation and layout</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>No flashing or distracting content</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
@@ -46,6 +102,20 @@ function AccessibilityPage() {
                     <div className="accessibility-card-horizontal">
                         <div className="card-content-horizontal">
                             <h3>For Users with <span className="category-name">Speech</span> Impairments</h3>
+                            <ul className="feature-checklist">
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>No speech input required</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Text-based alternatives for all interactions</span>
+                                </li>
+                                <li>
+                                    <span className="checkmark">✓</span>
+                                    <span>Voice commands are optional</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
