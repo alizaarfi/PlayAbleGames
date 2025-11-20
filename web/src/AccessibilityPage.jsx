@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from './Navbar';
 import './style.css';
 
 function AccessibilityPage() {
+    useEffect(() => {
+        // Scroll animation observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-visible');
+                }
+            });
+        }, observerOptions);
+
+        const cards = document.querySelectorAll('.fade-in-scroll');
+        cards.forEach(card => observer.observe(card));
+
+        return () => {
+            cards.forEach(card => observer.unobserve(card));
+        };
+    }, []);
+
     return (
         <div className="app">
             <Navbar />
@@ -15,7 +38,7 @@ function AccessibilityPage() {
 
                 <div className="accessibility-cards-list">
                     {/* Hearing Impairments */}
-                    <div className="accessibility-card-horizontal">
+                    <div className="accessibility-card-horizontal fade-in-scroll">
                         <div className="icon-box">
                             <span className="card-emoji">👂</span>
                         </div>
@@ -39,7 +62,7 @@ function AccessibilityPage() {
                     </div>
 
                     {/* Vision Impairments */}
-                    <div className="accessibility-card-horizontal">
+                    <div className="accessibility-card-horizontal fade-in-scroll">
                         <div className="icon-box">
                             <span className="card-emoji">👁️</span>
                         </div>
@@ -63,7 +86,7 @@ function AccessibilityPage() {
                     </div>
 
                     {/* Dexterity Impairments */}
-                    <div className="accessibility-card-horizontal">
+                    <div className="accessibility-card-horizontal fade-in-scroll">
                         <div className="icon-box">
                             <span className="card-emoji">✋</span>
                         </div>
@@ -87,7 +110,7 @@ function AccessibilityPage() {
                     </div>
 
                     {/* Cognitive Impairments */}
-                    <div className="accessibility-card-horizontal">
+                    <div className="accessibility-card-horizontal fade-in-scroll">
                         <div className="icon-box">
                             <span className="card-emoji">🧠</span>
                         </div>
@@ -111,7 +134,7 @@ function AccessibilityPage() {
                     </div>
 
                     {/* Speech Impairments */}
-                    <div className="accessibility-card-horizontal">
+                    <div className="accessibility-card-horizontal fade-in-scroll">
                         <div className="icon-box">
                             <span className="card-emoji">🔊</span>
                         </div>
