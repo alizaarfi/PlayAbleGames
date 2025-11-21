@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
+import FavoritesPage from "./FavoritesPage.jsx";
+
 
 import "./style.css";
 
@@ -16,6 +18,9 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                 {/* Game detail page */}
                 <Route path="/games/:id" element={<GamePage />} />
+
+                {/* Favourites page */}
+                <Route path="/favorites" element={<FavoritesPage />} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

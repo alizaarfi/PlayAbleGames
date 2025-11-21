@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import "./style.css";
 
-const games = [
+// TODO: replace with the real logged-in user ID when you have auth
+const USER_ID = 1;
+
+
+export const games = [
     {
         id: 1,
         title: "Minecraft",
@@ -140,6 +144,7 @@ const games = [
     }
 ];
 
+
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [favorites, setFavorites] = useState([]);
@@ -156,14 +161,52 @@ function HomePage() {
         casual: false
     });
 
-    const toggleFavorite = (gameId, event) => {
+    // Load favourites from backend when the page loads
+    useEffect(() => {
+        const loadFavorites = async () => {
+            try {
+                const res = await fetch(`/api/users/${USER_ID}/favorites`, {
+                    credentials: "include",
+                });
+                if (!res.ok) return;
+                const data = await res.json(); // [gameId, ...]
+                setFavorites(data);
+            } catch (err) {
+                console.error("Failed to load favorites", err);
+            }
+        };
+
+        loadFavorites();
+    }, []);
+
+
+    const toggleFavorite = async (gameId, event) => {
         event.stopPropagation();
+        const isFav = favorites.includes(gameId);
+
         setFavorites(prev =>
-            prev.includes(gameId)
+            isFav
                 ? prev.filter(id => id !== gameId)
                 : [...prev, gameId]
         );
+
+        try {
+            const method = isFav ? "DELETE" : "POST";
+            const res = await fetch(`/api/users/${USER_ID}/favorites/${gameId}`, {
+                method,
+                credentials: "include",
+            });
+
+            console.log("favorite response", method, res.status, res.ok);
+
+            if (!res.ok) {
+                console.error("Favorite API returned non-OK status");
+            }
+        } catch (err) {
+            console.error("Failed to update favorites (network error?)", err);
+        }
     };
+
 
     const handleCardClick = (gameId) => {
         window.location.href = `/games/${gameId}`;
