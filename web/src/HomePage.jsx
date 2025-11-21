@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Navbar from './Navbar';
+import Navbar from './NavBar.jsx';
 import "./style.css";
+import AccessibilityPage from './AccessibilityPage';
 
 const games = [
     {
