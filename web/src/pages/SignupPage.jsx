@@ -10,8 +10,16 @@ export default function SignupPage(){
         password:""
     });
 
+    const [loading, setLoading]=useState(false);
     const[message,setMessage] = useState(null);
     const[error, setError]= useState(null);
+
+    const handleChange = (e) =>{
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        });
+    };
 
     const validateForm =() => {
         if (!form.email || !form.username|| !form.password){
@@ -23,8 +31,15 @@ export default function SignupPage(){
             return "Please enter a valid email address.";
         }
 
-        if (form.password.length <6 ){
-            return "Password must be at least 6 characters.";
+        if (form.password.length <8 ){
+            return "Password must be at least 8 characters.";
+        }
+        if (!/[A-Z]/.test(form.password)) {
+            return "Password must contain at least one uppercase letter.";
+        }
+
+        if (!/[0-9]/.test(form.password)) {
+            return "Password must contain at least one number.";
         }
         return null
     }
@@ -32,8 +47,8 @@ export default function SignupPage(){
         e.preventDefault();
         setError(null);
         setMessage(null);
-        //frontend validation first
 
+        //frontend validation first
         const validationError = validateForm();
         if (validationError){
             setError(validationError);
@@ -41,44 +56,82 @@ export default function SignupPage(){
         }
 
         try{
+            setLoading(true)
             const result =await signup(form);
-            setMessage(result.message);
+            if(result.error){
+                setError(result.error);
+            } else{
+                setMessage(result.message || "Registration Successful!" );
+            }
         } catch (e){
-            setError("Registration failed");
-        }
+            const backendError = e.response?.data?.error || "Registration failed";
+            setError(backendError);
 
+        } finally{
+            setLoading(false);
+        }
     };
 
     return(
-        <div style={{maxWidth: 400, margin:"50px auto"}}>
-            <h2>Create an Account</h2>
+        <div className="signup-page">
+            <div className="signup-card">
+                <h2>Create an Account</h2>
+                <p className="signup-subtitle">
+                    Join the community and start exploring games, reviews, and more.
+                </p>
+                <form onSubmit={handleSubmit} className="signup-form">
 
-            {error && <p style={{color:"red"}}>{error}</p>}
-            {message && <p style={{ color: "green" }}>{message}</p>}
+                    <div className="form-group">
+                        <label>Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Enter your username"
+                            value={form.username}
+                            onChange={handleChange}
+                        />
+                    </div>
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    placeholder="Email"
-                    type="email"
-                    value={form.email}
-                    onChange={e=> setForm({...form, email:e.target.value})}/>
-                <br/>
-                <input
-                placeholder="Username"
-                value={form.username}
-                onChange={e=> setForm({...form,username:e.target.value})}/>
-                <br/>
+                    <div className="form-group">
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="you@example.com"
+                            value={form.email}
+                            onChange={handleChange}
+                        />
+                    </div>
 
-                <input
-                placeholder="Password"
-                type="password"
-                value={form.password}
-                onChange={e=> setForm({...form, password:e.target.value})}
-                />
-                <br/>
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="••••••••"
+                            value={form.password}
+                            onChange={handleChange}
+                        />
+                    </div>
 
-                <button type="submit">Sign Up!</button>
-            </form>
+                    {error && <p className="error-msg">{error}</p>}
+                    {message && <p className="success-msg">{message}</p>}
+
+                    <button
+                        type="submit"
+                        className={`signup-btn ${loading ? "loading" : ""}`}
+                        disabled={loading}
+                    >
+                        {loading ? "Creating Account..." : "Sign Up"}
+                    </button>
+
+                    <p className="login-redirect">
+                        Already have an account?{" "}
+                        <a href="/login" className="login-link">Log in</a>
+                    </p>
+                </form>
+            </div>
         </div>
+
     );
 }
