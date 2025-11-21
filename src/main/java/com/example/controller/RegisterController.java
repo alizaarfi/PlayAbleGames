@@ -21,7 +21,11 @@ public class RegisterController {
 
     @Post("/register")
     public HttpResponse<RegistrationResponse> register(@Body @Valid RegistrationRequest request) {
-        userService.register(request.getUsername(), request.getEmail(), request.getPassword());
-        return HttpResponse.ok(new RegistrationResponse("User registered successfully"));
+        try{
+            userService.register(request.getUsername(), request.getEmail(), request.getPassword());
+            return HttpResponse.ok(new RegistrationResponse("User registered successfully"));
+        } catch (Exception e){
+            return HttpResponse.badRequest(new RegistrationResponse(e.getMessage()));
+        }
     }
 }

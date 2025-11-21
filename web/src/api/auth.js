@@ -5,7 +5,8 @@ export async function signup(data){
         body: JSON.stringify(data)});
 
     if (!res.ok){
-        throw new Error("Signup Failed");
+        const text = await res.text();
+        throw new Error( text || "Signup Failed");
     }
 
     return res.json();

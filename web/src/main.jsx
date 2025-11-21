@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
+import AccessibilityPage from "./AccessibilityPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 
 
@@ -21,6 +22,9 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                 {/*signup page*/}
                 <Route path="/signup" element={<SignupPage/>} />
+
+                {/* Accessibility page */}
+                <Route path="/accessibility" element={<AccessibilityPage />} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

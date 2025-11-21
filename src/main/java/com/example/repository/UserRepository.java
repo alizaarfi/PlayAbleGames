@@ -9,8 +9,8 @@ import java.util.Optional;
 
 @JdbcRepository(dialect = Dialect.MYSQL)
 public interface UserRepository extends CrudRepository<User, Long>{
-        User findByUsername(String username);
-        User findByEmail(String email);
+        Optional<User> findByUsername(String username);
+        Optional<User> findByEmail(String email);
 }
 
 
