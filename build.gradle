@@ -25,8 +25,8 @@ dependencies {
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("jakarta.validation:jakarta.validation-api")
     //sphinx4 dependencies for speech recognition
-    compile group: 'edu.cmu.sphinx', name: 'sphinx4-core', version:'5prealpha-SNAPSHOT'
-    compile group: 'edu.cmu.sphinx', name: 'sphinx4-data', version:'5prealpha-SNAPSHOT'
+    implementation("edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT")
+    implementation("edu.cmu.sphinx:sphinx4-data:5prealpha-SNAPSHOT")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
