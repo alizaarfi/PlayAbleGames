@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import "./style.css";
+import "./Dashboard.css"
 
 const API_BASE = "http://localhost:8081/api";
 
@@ -47,23 +49,23 @@ export default function AdminDashboard(){
     return(
         <div className="page">
             <div className="content">
-                <h1> Welcome back admin</h1>
+                <h1 className="title"> Welcome back admin</h1>
                 <div className="dashboard">
                         <div className="dashboard-item">
-                            <h2> Flagged items </h2>
-                            <p> {dashboard.totalFlaggedItems} </p>
+                            <h2 className="black-text"> Flagged items </h2>
+                            <p className="black-text"> {dashboard.totalFlaggedItems} </p>
                         </div>
                         <div className="dashboard-item">
-                            <h2> Live Games </h2>
-                            <p> {dashboard.totalLiveGames} </p>
+                            <h2 className="black-text"> Live Games </h2>
+                            <p className="black-text"> {dashboard.totalLiveGames} </p>
                         </div>
                         <div className="dashboard-item">
-                            <h2> Users </h2>
-                            <p> {dashboard.totalUsers} </p>
+                            <h2 className="black-text"> Users </h2>
+                            <p className="black-text"> {dashboard.totalUsers} </p>
                         </div>
                 </div>
                 <div className="signOut">
-                    <button> Sign Out </button>
+                    <button className="sign-out-button"> Sign Out </button>
                 </div>
             </div>
         </div>
