@@ -186,31 +186,31 @@ INSERT INTO gallery (GameID, ImageURL, AltText)
 VALUES (15, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fkotaku.com%2Fgames%2Fa-blind-legend&psig=AOvVaw1yed98RHXORnbe4xwEjcoy&ust=1762977130248000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCKCN1d_v6pADFQAAAAAdAAAAABAu', 'Two hooded figures stand in a desert landscape with futuristic vehicles and windmills. Flying ships and a colossal artifact loom under a dramatic sky.');
 
 -- -- populating reviews table
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (2,1,5,3,4,4,5,'Minecraft offers a fantastic sensory experience with its blocky visuals and immersive sound design. The gameplay is engaging and allows for creativity. The customisable control features allowed me to adapt the game to my needs, making it accessible and enjoyable.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (2,15, 0,5,4,4,5,'A Blind Legend provides an exceptional auditory experience, making it accessible for visually impaired players. The sound design is immersive, and the gameplay is intuitive. The game effectively combines audio cues with engaging mechanics, creating a unique adventure. The motor controls are manageable, allowing for an enjoyable experience.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (2, 6, 5,3, 4,3,3,'Pokemon Go offers a fun and interactive experience with its augmented reality features. The sound effects enhance the gameplay, and the visual design is appealing. I struggled a bit with the motor controls, but overall, it was an enjoyable game that encouraged outdoor activity.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (2, 9,5,3,5,4,4,'Jigsawscapes provides a relaxing and enjoyable puzzle experience. The sound effects are soothing, and the visual design is clear. The gameplay is straightforward, and the motor controls are easy to manage. It''s a great game for unwinding and stimulating the mind.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (2, 5, 4,2,2,3,3,'Call of Duty Mobile delivers an intense gaming experience with its realistic sound effects and graphics. I found the speed and complexity of the gameplay challenging, particularly with the motor controls. However, the game is engaging and offers a variety of modes to keep players interested.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (2, 13, 2,2,2,3,2,'Sky Children of the Light offers a visually stunning experience with its beautiful landscapes and calming soundscapes. However , I found the gameplay to be slow-paced and the motor controls somewhat challenging. While the game is visually appealing, it may not provide enough stimulation for all players.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (3, 15,0,0,2,2, 1,'I could not fully enjoy A Blind Legend due to its heavy reliance on auditory cues, as someone with hearing loss this presented significant challenges.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (3, 13, 2,5,3,4,3,'The visual design of Sky Children of the Light is stunning, however, the auditory elements were difficult for me to engage with due to my hearing impairment. The gameplay was enjoyable, but I found some of the controls challenging.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (3, 3, 5,5,4,4,5,'Really fun game! There is no reliance on audio cues, making it accessible for players with hearing impairments.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (3, 7, 5,4,4,5,5,'No reliance on audio cues, making it accessible for players with hearing impairments. The vibrant visuals and engaging gameplay make Subway Surfers a great choice for all players.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (4,14, 5,5,5,4,5,'Stardew Valley is an excellent game that offers a rich sensory experience. The gameplay is engaging and allows for creativity. The motor controls are manageable, making it accessible for players, like myself, with motor impairments.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (4, 3, 5,5,4,3,3,'Gameplay was fun and engaging, but I found some of the motor controls challenging due to my disability. However, the game is still enjoyable and offers a great multiplayer experience, even without audio.');
-INSERT INTO reviews (UserID, GameID, HearingRating, VisualRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (4,13,3,5,4,2,3,'I struggled to play this game due to the motor controls and audio cues for dangerous situations. However, the visual design is stunning.');
 
 -- -- populating user_favorites table
@@ -501,11 +501,11 @@ INSERT INTO faq (Question, Answer)
 VALUES ('How do I navigate the PlayAble website using the voice command system?', 'To navigate the PlayAble website using the voice command system, simply activate the voice command feature and speak your desired action, such as "Go to Games" or "Search for Puzzle Games." The system will interpret your commands and take you to the appropriate section of the website. For best results, speak clearly and use simple phrases. If you encounter any issues, refer to the help section for troubleshooting tips.');
 
 -- -- populating blogs table
-INSERT INTO blogs (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
+INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
 VALUES ('Blog title placeholder','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
-INSERT INTO blogs (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
+INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
 VALUES ('Blog title placeholder 2','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
-INSERT INTO blogs (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
+INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
 VALUES ('Blog title placeholder 3','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
 
 

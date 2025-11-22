@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -17,14 +18,17 @@ public class AdminDashboardRepository {
         this.dataSource = dataSource;
     }
 
+    @Transactional
     public int getTotalFlagged() {
         return callProcedureWithOutParam("totalFlaggedReviews");
     }
 
+    @Transactional
     public int getTotalUsers() {
         return callProcedureWithOutParam("totalUsers");
     }
 
+    @Transactional
     public int getTotalGames() {
         return callProcedureWithOutParam("totalGames");
     }

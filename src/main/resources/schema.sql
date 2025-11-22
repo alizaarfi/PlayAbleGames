@@ -231,7 +231,7 @@ CREATE TABLE faq(
 -- BlogDescription is a brief description of the blog post.
 -- ReadTime is the estimated read time for the blog post in minutes.
 
-CREATE TABLE Blog(
+CREATE TABLE blog(
     BlogId BIGINT AUTO_INCREMENT NOT NULL,
     BlogTitle VARCHAR(200) NOT NULL,
     DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
