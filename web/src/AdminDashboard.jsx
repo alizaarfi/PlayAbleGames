@@ -1,9 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 
-const API_BASE = "http://localhost:8081";
+const API_BASE = "http://localhost:8081/api";
 
 export default function AdminDashboard(){
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [dashboard, setDashboard] = useState({
+        totalFlaggedItems: 0,
+        totalLiveGames: 0,
+        totalUsers: 0
+    })
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        async function fetchDashboard() {
+            setLoading(true);
+            setError(null);
+            try {
+                const res = await fetch(`${API_BASE}/admin`, {
+                    signal: controller.signal,
+                });
+                if (!res.ok) throw new Error('Failed to fetch admin dashboard data.');
+                const data = await res.json();
+                setDashboard({
+                    totalFlaggedItems: data.dashboard.totalFlaggedItems ?? 0,
+                    totalLiveGames: data.dashboard.totalGames ?? 0,
+                    totalUsers: data.dashboard.totalUsers ?? 0,
+                });
+            } catch (e) {
+                if (e.name !== 'AbortError') setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchDashboard();
+        return () => controller.abort();
+    }, []);
+
+    if (loading) return <div className="page"> <div className="content"> Loading... </div></div>;
+    if (error) return <div className="page"> <div className="content">  Error: {error} </div> </div>;
+
 
     // Admin Dashboard Page html code here
     return(
@@ -11,49 +49,18 @@ export default function AdminDashboard(){
             <div className="content">
                 <h1> Welcome back admin</h1>
                 <div className="dashboard">
-                    <div className="topRow">
                         <div className="dashboard-item">
                             <h2> Flagged items </h2>
-                            <p> 5 </p> // Example data
+                            <p> {dashboard.totalFlaggedItems} </p>
                         </div>
                         <div className="dashboard-item">
                             <h2> Live Games </h2>
-                            <p> 12 </p> // Example data
+                            <p> {dashboard.totalLiveGames} </p>
                         </div>
                         <div className="dashboard-item">
                             <h2> Users </h2>
-                            <p> 3 </p> // Example data
+                            <p> {dashboard.totalUsers} </p>
                         </div>
-                    </div>
-                    <div className="lowerRow">
-                        <div className="dashboard-item">
-                            <h2> Flagged Items </h2>
-                            <h4> Today </h4>
-                            <p> 2 </p> // Example data
-                            <h4> In the last week </h4>
-                            <p> 5 </p> // Example data
-                            <h4> In the last month </h4>
-                            <p> 20 </p> // Example data
-                        </div>
-                        <div className="dashboard-item">
-                            <h2> Games added </h2>
-                            <h4> Today </h4>
-                            <p> 2 </p> // Example data
-                            <h4> In the last week </h4>
-                            <p> 5 </p> // Example data
-                            <h4> In the last month </h4>
-                            <p> 20 </p> // Example data
-                        </div>
-                        <div className="dashboard-item">
-                            <h2> Users added </h2>
-                            <h4> Today </h4>
-                            <p> 2 </p> // Example data
-                            <h4> In the last week </h4>
-                            <p> 5 </p> // Example data
-                            <h4> In the last month </h4>
-                            <p> 20 </p> // Example data
-                        </div>
-                    </div>
                 </div>
                 <div className="signOut">
                     <button> Sign Out </button>

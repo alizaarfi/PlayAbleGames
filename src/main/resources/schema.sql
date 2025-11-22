@@ -243,9 +243,44 @@ CREATE TABLE Blog(
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create Views
 
+--  This view combines user information with their roles for easy access
+--  to user authentication and authorization data.
 CREATE view user_authentication AS
 SELECT u.userid, r.name AS role
 FROM users u
 JOIN user_roles ur ON u.UserID = ur.UserID
 JOIN roles r ON ur.RoleID = r.RoleID;
 
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create procedures
+
+-- This procedure calculates the total number of flagged reviews
+-- and returns the count as an output parameter.
+DELIMITER //
+CREATE PROCEDURE totalFlaggedReviews (OUT total INT)
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM reviews
+    WHERE Flagged = TRUE;
+END //
+DELIMITER ;
+
+-- This procedure calculates the total number of games
+-- and returns the count as an output parameter.
+DELIMITER //
+CREATE PROCEDURE totalGames (OUT total INT)
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM games;
+END //
+DELIMITER ;
+
+-- This procedure calculates the total number of users
+-- and returns the count as an output parameter.
+DELIMITER //
+CREATE PROCEDURE totalUsers (OUT total INT)
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM users;
+END //
+DELIMITER ;
