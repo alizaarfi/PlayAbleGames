@@ -1,25 +1,53 @@
-// Game details page.
-// This component is reused for all games (1–15) based on the :id URL param.
+// GamePage.jsx
+// -------------------------------
+// Game details page with reviews, accessibility sections, and gallery.
+// This component is reused for all games (1–15) based on the :id URL parameter.
+// -------------------------------
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+/**
+ * Base URL for the Micronaut backend API.
+ * The backend is currently running on port 8081.
+ */
 const API_BASE = "http://localhost:8081";
 
 export default function GamePage() {
-    // Read the game id from the URL: /games/:id
+    /**
+     * The game id is taken from the URL pattern /games/:id.
+     * If no id is present, we default to game 1.
+     */
     const { id } = useParams();
     const gameId = Number(id || 1);
 
-    // Remote data from the API
+    /**
+     * Data retrieved from the backend for this game.
+     * This includes: basic game details, reviews, and gallery images.
+     */
     const [data, setData] = useState(null);
+
+    /**
+     * Simple loading and error states for basic user feedback.
+     */
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Local UI state for “Report” flagging per review
+    /**
+     * Local UI state to record which reviews the user has marked as “reported”.
+     */
     const [flagged, setFlagged] = useState({});
 
-    // Local UI state for interactive star ratings in the review form (no POST yet)
+    /**
+     * Local UI state for the text content of a review
+     * that the user is writing in the form.
+     */
+    const [reviewText, setReviewText] = useState("");
+
+    /**
+     * Local UI state for interactive star ratings in the review form.
+     * These values are later sent to the backend when submitting a review.
+     */
     const [formRatings, setFormRatings] = useState({
         hearing: 0,
         motor: 0,
@@ -29,8 +57,9 @@ export default function GamePage() {
     });
 
     // ---------------------------------------------------------------------------
-    // Fetch game details (Micronaut API) whenever the game id changes
+    // Fetch game details from the Micronaut backend when the game id changes
     // ---------------------------------------------------------------------------
+
     useEffect(() => {
         setLoading(true);
         setError(null);
@@ -49,28 +78,39 @@ export default function GamePage() {
     }, [gameId]);
 
     // ---------------------------------------------------------------------------
-    // Seed the “flagged” UI state from the reviews when data is loaded
+    // Seed the “flagged” state based on reviews returned from the backend
     // ---------------------------------------------------------------------------
+
     useEffect(() => {
         if (!data?.reviews) return;
         const initial = {};
         data.reviews.forEach((r) => {
-            if (r.id != null) initial[r.id] = !!r.flagged;
+            if (r.id != null) {
+                initial[r.id] = !!r.flagged;
+            }
         });
         setFlagged(initial);
     }, [data]);
 
-    // Toggle flag button for a specific review
-    const toggleFlag = (id) => {
-        setFlagged((prev) => ({ ...prev, [id]: !prev[id] }));
+    /**
+     * Toggles the reported status for a given review in local UI state.
+     */
+    const toggleFlag = (reviewId) => {
+        setFlagged((prev) => ({ ...prev, [reviewId]: !prev[reviewId] }));
     };
 
-    // Update local star rating values for the review form
+    /**
+     * Updates a single rating entry in the combined rating state
+     * used by the review submission form.
+     */
     const updateFormRating = (key, value) => {
         setFormRatings((prev) => ({ ...prev, [key]: value }));
     };
 
-    // Scroll helper for “Jump to” navigation
+    /**
+     * Simple scroll helper to allow “Jump to section” links to move
+     * the viewport to different semantic sections on the page.
+     */
     const scrollToId = (sectionId) => {
         const el = document.getElementById(sectionId);
         if (el) {
@@ -78,9 +118,78 @@ export default function GamePage() {
         }
     };
 
+    /**
+     * Handles submission of a new review to the backend.
+     */
+    const handleSubmitReview = async () => {
+
+        if (!reviewText.trim()) {
+            alert("Review text cannot be empty.");
+            return;
+        }
+
+        if (reviewText.length > 500) {
+            alert("Review text cannot exceed 500 characters.");
+            return;
+        }
+
+        //preventing HTML injections
+        const safeText = reviewText.replace(/[<>]/g, "");
+
+        const payload = {
+            hearingRating: formRatings.hearing || 0,
+            motorRating: formRatings.motor || 0,
+            cognitiveRating: formRatings.cognitive || 0,
+            visualRating: formRatings.vision || 0,
+            gameplayRating: formRatings.gameplay || 0,
+            reviewText: reviewText,
+        };
+
+        try {
+            const res = await fetch(`${API_BASE}/api/games/${gameId}/reviews`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    // In future work: include an authentication token here.
+                    // Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                console.error("Failed to submit review:", text);
+                alert("Could not submit review (server error).");
+                return;
+            }
+
+            const saved = await res.json();
+
+            // Update local state so that the new review appears immediately.
+            setData((prev) => ({
+                ...prev,
+                reviews: [...(prev.reviews || []), saved],
+            }));
+
+            // Reset the form state to give clear feedback to the user.
+            setFormRatings({
+                hearing: 0,
+                motor: 0,
+                cognitive: 0,
+                vision: 0,
+                gameplay: 0,
+            });
+            setReviewText("");
+        } catch (err) {
+            console.error("Failed to submit review:", err);
+            alert("Network error while submitting review.");
+        }
+    };
+
     // ---------------------------------------------------------------------------
-    // Loading / error states
+    // Loading and error feedback to the user
     // ---------------------------------------------------------------------------
+
     if (loading) {
         return (
             <div className="page">
@@ -97,14 +206,17 @@ export default function GamePage() {
         );
     }
 
-    // Destructure data returned from the Micronaut backend
+    // ---------------------------------------------------------------------------
+    // Destructure the domain-specific properties supplied by the backend
+    // ---------------------------------------------------------------------------
+
     const {
         name,
         developer,
         ageRating,
         description,
         releaseDate,
-        iconUrl, // kept for later use if needed in the hero section
+        iconUrl, // currently unused in the hero; retained for future enhancement
         linkToStore,
         aboutVision,
         aboutHearing,
@@ -116,16 +228,20 @@ export default function GamePage() {
         avgGameplayRating,
     } = data;
 
+    /**
+     * Overall rating is derived from the average gameplay rating.
+     */
     const overallRating = avgGameplayRating ?? 0;
 
     // ---------------------------------------------------------------------------
-    // Main render
+    // Main render of the game page
     // ---------------------------------------------------------------------------
+
     return (
         <div className="page">
             <main className="content">
                 {/* -------------------------------------------------------------------
-           TITLE + AVERAGE RATING + DOWNLOAD BUTTON
+             Section: title, overall rating, and download link
            ------------------------------------------------------------------- */}
                 <section className="hero-row">
                     <div className="hero-left">
@@ -156,7 +272,7 @@ export default function GamePage() {
                 </section>
 
                 {/* -------------------------------------------------------------------
-           JUMP NAVIGATION (scrolls to sections on the page)
+                    Jump Navigation Section
            ------------------------------------------------------------------- */}
                 <nav className="jump-nav">
                     <span className="jump-label">Jump to:</span>
@@ -184,7 +300,7 @@ export default function GamePage() {
                 </nav>
 
                 {/* -------------------------------------------------------------------
-           OVERVIEW: about this game, developer, release date
+                    Overview of the game, developer, and release date
            ------------------------------------------------------------------- */}
                 <section id="overview" className="section-block">
                     <h2 className="section-heading underline">Overview</h2>
@@ -206,7 +322,7 @@ export default function GamePage() {
                 </section>
 
                 {/* -------------------------------------------------------------------
-           ACCESSIBILITY FEATURES
+                    Accessibility information grouped by category
            ------------------------------------------------------------------- */}
                 <section id="accessibility" className="section-block">
                     <div className="section-heading-row">
@@ -224,10 +340,10 @@ export default function GamePage() {
                 </section>
 
                 {/* -------------------------------------------------------------------
-           REVIEWS: existing reviews + rating form
+                    Reviews list and review submission form
            ------------------------------------------------------------------- */}
                 <section id="reviews" className="section-block reviews-layout">
-                    {/* Existing reviews column */}
+                    {/* Column that displays existing reviews */}
                     <div className="reviews-column">
                         <div className="section-heading-row">
                             <h2 className="section-heading underline">Reviews</h2>
@@ -251,7 +367,7 @@ export default function GamePage() {
                                                 </div>
                                             </div>
 
-                                            {/* Report  */}
+                                            {/* Local “report” control for coursework demonstration */}
                                             <button
                                                 className={`report-btn ${isFlagged ? "active" : ""}`}
                                                 type="button"
@@ -281,12 +397,20 @@ export default function GamePage() {
                         )}
                     </div>
 
-                    {/* Review form  */}
+                    {/* Column that contains the review form for user input */}
                     <aside className="review-form">
-                        <p className="login-hint">Login to post a review…</p>
-                        <button className="login-btn" type="button">
+                        <p className="login-hint">
+                            You must be logged in to post a review.
+                        </p>
+
+                        <button
+                            className="login-btn"
+                            type="button"
+                            onClick={() => alert("Login system coming soon…")}
+                        >
                             Login
                         </button>
+
 
                         <div className="rating-input-row">
                             <span>Hearing</span>
@@ -331,16 +455,22 @@ export default function GamePage() {
                             className="review-textarea"
                             rows={6}
                             placeholder="Share details of your experience with this game"
+                            value={reviewText}
+                            onChange={(e) => setReviewText(e.target.value)}
                         />
 
-                        <button className="submit-btn" type="button">
+                        <button
+                            className="submit-btn"
+                            type="button"
+                            onClick={handleSubmitReview}
+                        >
                             Submit
                         </button>
                     </aside>
                 </section>
 
                 {/* -------------------------------------------------------------------
-           GALLERY: grid of images
+                    Gallery of images for the game
            ------------------------------------------------------------------- */}
                 <section id="gallery" className="section-block">
                     <div className="section-heading-row">
@@ -352,7 +482,10 @@ export default function GamePage() {
                         {gallery && gallery.length > 0 ? (
                             gallery.map((img) => (
                                 <figure key={img.id} className="gallery-item">
-                                    <img src={img.imageUrl} alt={img.altText} />
+                                    <img
+                                        src={img.imageUrl}
+                                        alt={img.altText || "Screenshot from the game"}
+                                    />
                                 </figure>
                             ))
                         ) : (
@@ -366,12 +499,9 @@ export default function GamePage() {
 }
 
 /* ---------------------------------------------------------------------------
-   Helper components
-   ------------------------------------------------------------------------- */
+   Helper component: AccessibilityCards
+--------------------------------------------------------------------------- */
 
-/**
- * AccessibilityCard
- */
 function AccessibilityCard({ title, text }) {
     if (!text) return null;
     return (
@@ -382,12 +512,10 @@ function AccessibilityCard({ title, text }) {
     );
 }
 
-/**
- * StarRating
- * - Displays a 5-star rating.
- * - When interactive=true, stars are clickable and report a value (1–5)
- *   via the onChange callback. Hover preview is handled with local state.
- */
+/* ---------------------------------------------------------------------------
+   Helper component: StarRating
+--------------------------------------------------------------------------- */
+
 function StarRating({ value, interactive = false, onChange }) {
     const [hovered, setHovered] = useState(null);
     const display = hovered ?? value ?? 0;
