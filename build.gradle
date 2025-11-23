@@ -10,6 +10,7 @@ group = "com.example"
 
 repositories {
     mavenCentral()
+    // dont need think for old sphinx4 library
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
@@ -27,6 +28,8 @@ dependencies {
     implementation 'com.alphacephei:vosk:0.3.45'
     implementation 'net.java.dev.jna:jna:5.13.0'
 
+    //for complex json
+    implementation("io.micronaut:micronaut-jackson-databind")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
