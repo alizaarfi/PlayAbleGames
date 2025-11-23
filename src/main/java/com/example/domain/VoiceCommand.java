@@ -2,8 +2,6 @@ package com.example.domain;
 
 // Domain layer handles business logic
 
-import java.time.LocalDateTime;
-
 //Voice Command entities
 // Speech recognition domain models
 // Business logic - what happens when '' is recognised
@@ -14,7 +12,8 @@ import java.time.Instant;
 public class VoiceCommand {
     private String id;
     private String transcribedText;
-    private String command;
+    private String command;              // NEW: Store command type
+    private String commandTarget;
     private double confidence;
     private Instant timestamp;
     private boolean processed;
@@ -37,6 +36,11 @@ public class VoiceCommand {
 
     public String getCommand() { return command; }
     public void setCommand(String command) { this.command = command; }
+
+    public String getCommandTarget() { return commandTarget; }
+    public void setCommandTarget(String commandTarget) {
+        this.commandTarget = commandTarget;
+    }
 
     public double getConfidence() { return confidence; }
     public void setConfidence(double confidence) { this.confidence = confidence; }
