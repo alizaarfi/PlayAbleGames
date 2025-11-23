@@ -30,6 +30,9 @@ dependencies {
 
     //for complex json
     implementation("io.micronaut:micronaut-jackson-databind")
+    // Jakarta annotations
+    implementation("jakarta.annotation:jakarta.annotation-api")
+
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

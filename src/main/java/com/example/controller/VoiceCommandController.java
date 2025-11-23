@@ -7,52 +7,50 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static io.micronaut.context.BeanResolutionTraceMode.LOG;
-
-@Controller
+// Controller class for HTTP endpoints for voice control
+// Leaves all business logic to VoiceControlService
+// Two parts: process and parse
+@Controller()
 public class VoiceCommandController {
 
-    // make this use micronauts DI stuff
+    private static final Logger LOG = LoggerFactory.getLogger(VoiceCommandController.class);
+
     private final VoiceControlService voiceControlService;
 
-    public VoiceControlController(VoiceControlService voiceCommandService) {
+    public VoiceCommandController(VoiceControlService voiceControlService) {
         this.voiceControlService = voiceControlService;
     }
 
-    /**
-     * Process audio and return parsed command
-     * POST /api/voice/process
-     * Content-Type: application/octet-stream
-     */
+
     @Post(value = "/process", consumes = MediaType.APPLICATION_OCTET_STREAM)
     public HttpResponse<ParsedCommand> processAudio(@Body byte[] audioData) {
         try {
+            LOG.info("Received audio data: {} bytes", audioData.length);
 
             ParsedCommand command = voiceControlService.processAudio(audioData);
 
             return HttpResponse.ok(command);
 
         } catch (Exception e) {
+            LOG.error("Error processing audio", e);
             return HttpResponse.serverError();
         }
     }
 
-    /**
-     * Test endpoint: parse text directly (for testing without audio)
-     * POST /api/voice/parse
-     * Content-Type: text/plain
-     */
     @Post(value = "/parse", consumes = MediaType.TEXT_PLAIN)
     public HttpResponse<ParsedCommand> parseText(@Body String text) {
         try {
+            LOG.info("Parsing text: '{}'", text);
 
-            ParsedCommand command = voiceControlService.processAudio(text);
+            ParsedCommand command = voiceControlService.parseCommand(text);
 
             return HttpResponse.ok(command);
 
         } catch (Exception e) {
-
+            LOG.error("Error parsing text", e);
             return HttpResponse.serverError();
         }
     }

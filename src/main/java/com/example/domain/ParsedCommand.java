@@ -1,8 +1,12 @@
 package com.example.domain;
 
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.Nullable;
 
-// a value object for when parsed voice commands are readt#
+import java.util.Objects;
+
+
+// a value object for when parsed voice commands are ready
 @Introspected
 public class ParsedCommand {
     private final CommandType type;

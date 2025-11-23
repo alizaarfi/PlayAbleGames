@@ -2,6 +2,7 @@ package com.example.domain;
 
 // Domain layer handles business logic
 
+
 //Voice Command entities
 // Speech recognition domain models
 // Business logic - what happens when '' is recognised

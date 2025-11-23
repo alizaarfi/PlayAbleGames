@@ -3,14 +3,17 @@ package com.example.service;
 import com.example.domain.CommandType;
 import com.example.domain.ParsedCommand;
 import com.example.domain.VoiceCommand;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.context.annotation.Value;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.serde.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vosk.Model;
 import org.vosk.Recognizer;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,18 +22,39 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+
+// Purpose: Business logic for for integrating with the Vosk speech recognition library
+//  and translating voice commands into actionable instructions for the application.
+
+//3 main tasks: speech-to-text transcription using Vosk library, natural language command
+// parsing using regex pattern matching and command mapping to application-specific actions
+
+//Lifecycle:
+// @PostConstruct: Loads Vosk model and initializes command patterns on startup
+// Runtime: Processes audio and text commands
+// @PreDestroy: Cleans up model resources on shutdown
+
+//Dependencies:
+// ObjectMapper: For parsing JSON responses from Vosk
+// Vosk Model: Pre-trained speech recognition model
+// Configuration: Model path and sample rate injected from application.yml
+
+
+@Singleton //Singleton to ensure only one Vosk model instance
 public class VoiceControlService {
 
+    // using logging
+    private static final Logger LOG = LoggerFactory.getLogger(VoiceControlService.class);
+
     private final ObjectMapper objectMapper;
-    private final Recognizer recognizer;
-    private final Model model;
+    private Model model;
     private final String modelPath;
     private final float sampleRate;
 
-    // Command patterns for mapping
-    private final Map<Pattern, VoiceCommand> commandPatterns = new HashMap<>();
+    private final Map<Pattern, ParsedCommand> commandPatterns = new HashMap<>();
 
-    // Constructor for dependency injection
+    /** Constructor injection is preferred over field injection in Micronaut for
+    better testability and immutability **/
     public VoiceControlService(
             ObjectMapper objectMapper,
             @Value("${vosk.model.path:/path/to/vosk-model}") String modelPath,
@@ -40,136 +64,149 @@ public class VoiceControlService {
         this.sampleRate = sampleRate;
     }
 
+    // Auto called by Micronaut after DI
+    // performs expensive one-time initialization that should not happen in constructor.
     @PostConstruct
     public void initialize() {
         try {
+            LOG.info("Initializing Vosk model from: {}", modelPath);
             this.model = new Model(modelPath);
             initializeCommandMappings();
+            LOG.info("Voice command service initialized successfully");
         } catch (IOException e) {
+            LOG.error("Failed to initialize Vosk model", e);
             throw new RuntimeException("Failed to initialize voice recognition", e);
         }
     }
 
+    // Auto called by Micronaut during graceful application shutdown
+    // Properly releases the Vosk model from memory to prevent resource leaks.
     @PreDestroy
     public void cleanup() {
         if (model != null) {
             model.close();
+            LOG.info("Vosk model closed");
         }
     }
 
-    // Converting audio to text
+    //Converts the raw audio chunks into a VoiceCommand domain entity with transcribed text.
     @NonNull
-    public String convertAudio(@NonNull byte[] audioData) {
-        try {
-            Recognizer recognizer = new Recognizer(model, sampleRate);
+    public VoiceCommand transcribeAudio(@NonNull byte[] audioData) {
+        try (Recognizer recognizer = new Recognizer(model, sampleRate)) {
 
-            // process audio data
             recognizer.acceptWaveForm(audioData, audioData.length);
             String result = recognizer.getFinalResult();
 
-            // Parse JSON result
             JsonNode jsonNode = objectMapper.readTree(result);
             String transcription = jsonNode.get("text").asText();
+            double confidence = jsonNode.has("confidence") ?
+                    jsonNode.get("confidence").asDouble() : 0.0;
 
+            LOG.debug("Transcribed audio: '{}' (confidence: {})", transcription, confidence);
 
-            return transcription;
-        } catch (IOException e){
+            VoiceCommand voiceCommand = new VoiceCommand(transcription);
+            voiceCommand.setConfidence(confidence);
+
+            return voiceCommand;
+
+        } catch (IOException e) {
+            LOG.error("Error transcribing audio", e);
             throw new RuntimeException("Audio transcription failed", e);
         }
     }
 
-    //convert text into a command action - create method
+    // converts the transcribed text into a parsed command
     @NonNull
     public ParsedCommand parseCommand(@NonNull String transcription) {
         String normalized = transcription.toLowerCase().trim();
 
-        // Try to match against known command patterns
         for (Map.Entry<Pattern, ParsedCommand> entry : commandPatterns.entrySet()) {
             Matcher matcher = entry.getKey().matcher(normalized);
             if (matcher.find()) {
                 ParsedCommand command = entry.getValue();
 
-                // Extract parameters if any
                 if (matcher.groupCount() > 0) {
                     command = command.withTarget(matcher.group(1));
                 }
 
+                LOG.info("Matched command: '{}' -> {}", transcription, command);
                 return command;
             }
         }
 
+        LOG.warn("No matching command found for: '{}'", transcription);
         return new ParsedCommand(CommandType.UNKNOWN, transcription);
     }
 
-    /**
-     * Full pipeline: transcribe audio and parse command
-     *
-     * @param audioData PCM audio data
-     * @return ParsedCommand ready for execution
-     */
+
+    // Accepts raw audio bytes and returns a parsed command
     @NonNull
     public ParsedCommand processAudio(@NonNull byte[] audioData) {
         VoiceCommand voiceCommand = transcribeAudio(audioData);
         ParsedCommand parsed = parseCommand(voiceCommand.getTranscribedText());
 
-        // Update domain entity with parsed info
         voiceCommand.setCommand(parsed.getType().name());
         voiceCommand.setCommandTarget(parsed.getTarget());
         voiceCommand.setProcessed(true);
 
+        LOG.info("Processed audio: {} -> {}", voiceCommand.getTranscribedText(), parsed);
+
         return parsed;
     }
 
-    // initilase mapping to the command patterns
-    private void initializeCommandMappings() {
-        // Navigation commands
-        commandPatterns.put(
-                Pattern.compile("(?:go to|open|navigate to)\\s+(\\w+(?:\\s+\\w+)?)\\s+page"),
-                new VoiceCommand(CommandType.NAVIGATE, null)
-        );
+//    Sets up the regex patterns that map natural language phrases to structured commands.
+//   - forms the vocabulary of voice commands
 
+    private void initializeCommandMappings() {
         commandPatterns.put(
                 Pattern.compile("go to accessibility page"),
-                new VoiceCommand(CommandType.NAVIGATE, "accessibility")
+                new ParsedCommand(CommandType.NAVIGATE, "accessibility")
         );
 
         commandPatterns.put(
-                Pattern.compile("go to home page"),
-                new VoiceCommand(CommandType.NAVIGATE, "home")
+                Pattern.compile("go to home\\s*(?:page)?"),
+                new ParsedCommand(CommandType.NAVIGATE, "home")
         );
 
         commandPatterns.put(
                 Pattern.compile("go to settings"),
-                new VoiceCommand(CommandType.NAVIGATE, "settings")
-        );
-
-        // Action commands
-        commandPatterns.put(
-                Pattern.compile("click (\\w+(?:\\s+\\w+)?)"),
-                new VoiceCommand(CommandType.CLICK, null)
+                new ParsedCommand(CommandType.NAVIGATE, "settings")
         );
 
         commandPatterns.put(
-                Pattern.compile("submit|send|save"),
-                new VoiceCommand(CommandType.SUBMIT, null)
+                Pattern.compile("(?:go to|open|navigate to)\\s+(\\w+(?:\\s+\\w+)?)\\s*(?:page)?"),
+                new ParsedCommand(CommandType.NAVIGATE, null)
         );
 
         commandPatterns.put(
-                Pattern.compile("cancel|close|back"),
-                new VoiceCommand(CommandType.CANCEL, null)
+                Pattern.compile("click\\s+(\\w+(?:\\s+\\w+)?)"),
+                new ParsedCommand(CommandType.CLICK, null)
         );
 
-        // Search commands
         commandPatterns.put(
-                Pattern.compile("search for (.+)"),
-                new VoiceCommand(CommandType.SEARCH, null)
+                Pattern.compile("(?:submit|send|save)"),
+                new ParsedCommand(CommandType.SUBMIT, null)
         );
 
-        // Scroll commands
         commandPatterns.put(
-                Pattern.compile("scroll (up|down|top|bottom)"),
-                new VoiceCommand(CommandType.SCROLL, null)
+                Pattern.compile("(?:cancel|close|back)"),
+                new ParsedCommand(CommandType.CANCEL, null)
         );
 
+        commandPatterns.put(
+                Pattern.compile("search\\s+(?:for\\s+)?(.+)"),
+                new ParsedCommand(CommandType.SEARCH, null)
+        );
+
+        commandPatterns.put(
+                Pattern.compile("scroll\\s+(up|down|top|bottom)"),
+                new ParsedCommand(CommandType.SCROLL, null)
+        );
+
+        LOG.info("Initialized {} command patterns", commandPatterns.size());
     }
-}
+
+//    public void addCommandPattern(String regex, ParsedCommand command) {
+//        commandPatterns.put(Pattern.compile(regex), command);
+//        LOG.debug("Added custom command pattern: {}", regex);
+    }
