@@ -7,6 +7,7 @@ import GamePage from "./GamePage.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
 import AccessibilityPage from "./AccessibilityPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
+import FlaggedReviews from "./FlaggedReviews.jsx";
 
 
 import "./style.css";
@@ -27,8 +28,11 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                 {/* Accessibility page */}
                 <Route path="/accessibility" element={<AccessibilityPage />} />
 
-                {/* Load AdminDashboard for /admin */}
+                {/* AdminDashboard */}
                 <Route path="/admin" element={<AdminDashboard />} />
+
+                {/* Flagged Reviews Page */}
+                <Route path="/flaggedReviews" element={<FlaggedReviews />} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
