@@ -31,3 +31,30 @@ export async function signup(data) {
         return {success: false, error: networkErr.message || String(networkErr)};
     }
 }
+
+
+export async function login(credentials){
+    const res = await fetch("http://localhost:8080/user/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(credentials)
+    });
+
+    if (!res.ok){
+        return { error: "Invalid username or password"};
+    }
+    return await res.json();
+}
+
+export async function logout(){
+    const token= localStorage.getItem("token");
+
+    const res = await fetch("http://localhost:8080/user/logout", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    localStrorage.removeItem("token");
+    return await res.json();
+}

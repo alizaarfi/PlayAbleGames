@@ -38,4 +38,14 @@ public class UserService {
 
         return userRepository.save(u);
     }
+
+    public Optional<User> authenticate(String username, String rawPassword){
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty()) return Optional.empty();
+
+        boolean matches = BCrypt.checkpw(rawPassword, user.get().getPassword());
+
+        return matches ? user : Optional.empty();
+    }
 }

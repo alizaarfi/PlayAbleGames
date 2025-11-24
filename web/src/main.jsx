@@ -7,7 +7,7 @@ import GamePage from "./GamePage.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
 import AccessibilityPage from "./AccessibilityPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
-
+import LoginPage from "./pages/LoginPage";
 
 import "./style.css";
 
@@ -29,6 +29,10 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                 {/* Load AdminDashboard for /admin */}
                 <Route path="/admin" element={<AdminDashboard />} />
+
+                {/*login page*/}
+                <Route path="/login" element={<LoginPage/>} />
+
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
