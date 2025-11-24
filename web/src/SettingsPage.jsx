@@ -5,7 +5,7 @@ import './settings_styles.css';
 function SettingsPage() {
     // Load settings from localStorage
     const [settings, setSettings] = useState({
-        lowSaturation: localStorage.getItem('lowSaturation') === 'true',
+        darkMode: localStorage.getItem('darkMode') === 'true',
         reduceMotion: localStorage.getItem('reduceMotion') === 'true',
         textToSpeech: localStorage.getItem('textToSpeech') === 'true',
         visualCaptions: localStorage.getItem('visualCaptions') === 'true',
@@ -13,11 +13,26 @@ function SettingsPage() {
         screenReader: localStorage.getItem('screenReader') === 'true'
     });
 
-    // Save settings to localStorage when they change
+    // Apply settings when they change
     useEffect(() => {
+        // Save to localStorage
         Object.keys(settings).forEach(key => {
             localStorage.setItem(key, settings[key]);
         });
+
+        // Apply dark mode
+        if (settings.darkMode) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+
+        // Apply reduced motion
+        if (settings.reduceMotion) {
+            document.body.classList.add('reduce-motion-mode');
+        } else {
+            document.body.classList.remove('reduce-motion-mode');
+        }
     }, [settings]);
 
     const toggleSetting = (settingName) => {
@@ -29,7 +44,7 @@ function SettingsPage() {
 
     const resetSettings = () => {
         const defaultSettings = {
-            lowSaturation: false,
+            darkMode: false,
             reduceMotion: false,
             textToSpeech: false,
             visualCaptions: false,
@@ -63,14 +78,14 @@ function SettingsPage() {
 
                         <div className="setting-item">
                             <div className="setting-info">
-                                <h3>Low Saturation Mode</h3>
-                                <p>Reduces the intensity of colours for better visibility</p>
+                                <h3>Dark Mode</h3>
+                                <p>Switch to a dark colour scheme to reduce eye strain</p>
                             </div>
                             <label className="toggle-switch">
                                 <input
                                     type="checkbox"
-                                    checked={settings.lowSaturation}
-                                    onChange={() => toggleSetting('lowSaturation')}
+                                    checked={settings.darkMode}
+                                    onChange={() => toggleSetting('darkMode')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -134,27 +149,28 @@ function SettingsPage() {
                         <div className="setting-item">
                             <div className="setting-info">
                                 <h3>Voice Commands</h3>
-                                <p>Microphone for hands-free navigation (always enabled)</p>
-                                <div className="voice-commands-info">
-                                    <svg viewBox="0 0 24 24" fill="currentColor" className="mic-icon-small">
-                                        <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-                                    </svg>
-                                    <div className="voice-commands-list">
-                                        <p>Click the microphone icon in the navigation bar to activate voice commands. Try saying:</p>
-                                        <ul>
-                                            <li>"Go home"</li>
-                                            <li>"Open community"</li>
-                                            <li>"Search puzzle games"</li>
-                                        </ul>
+                                <p>Microphone for hands-free navigation</p>
+                                {settings.voiceCommands && (
+                                    <div className="voice-commands-info">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" className="mic-icon-small">
+                                            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                        </svg>
+                                        <div className="voice-commands-list">
+                                            <p>Click the microphone icon in the navigation bar to activate voice commands. Try saying:</p>
+                                            <ul>
+                                                <li>"Go home"</li>
+                                                <li>"Open community"</li>
+                                                <li>"Search puzzle games"</li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                             <label className="toggle-switch">
                                 <input
                                     type="checkbox"
-                                    checked={true}
-                                    disabled
+                                    checked={settings.voiceCommands}
+                                    onChange={() => toggleSetting('voiceCommands')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -168,8 +184,8 @@ function SettingsPage() {
                             <label className="toggle-switch">
                                 <input
                                     type="checkbox"
-                                    checked={true}
-                                    disabled
+                                    checked={settings.screenReader}
+                                    onChange={() => toggleSetting('screenReader')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
