@@ -6,7 +6,7 @@ import java.time.Instant;
 
 // Voice Command Entity - complete record of a voice command interaction
 // Business logic - what happens when '' is recognised
-// For debugging, analytics, auditing and possible db storing when scaling or for GDPR
+// Mainly if we need to store in DB but also debugging at the moment
 @Serdeable // serialisation without runtime reflection needed for JSON serialization
 public class VoiceCommand {
     private String id;

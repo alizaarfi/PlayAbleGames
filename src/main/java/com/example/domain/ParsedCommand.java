@@ -2,22 +2,16 @@ package com.example.domain;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
-
 import java.util.Objects;
 
-
 // An immutable value object for voice commands that have been parsed and are ready for execution.
-
-//- Carries command parameters (target) extracted from user speech
+// Carries command parameters (target) extracted from user speech
 // Enables clean separation between parsing logic and execution logic
-
 
 @Introspected // compile-time checks, so that the properties/methods are accessible.
 public class ParsedCommand {
     private final CommandType type;
     private final String target;
-
-
 
     public ParsedCommand(CommandType type, @Nullable String target) {
         this.type = type;
