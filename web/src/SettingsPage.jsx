@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import './settings_styles.css';
 
 function SettingsPage() {
+    // Load settings from localStorage
     const [settings, setSettings] = useState({
-        lowSaturation: false,
-        reduceMotion: false,
-        textToSpeech: false,
-        visualCaptions: false,
-        voiceCommands: false,
-        screenReader: false
+        lowSaturation: localStorage.getItem('lowSaturation') === 'true',
+        reduceMotion: localStorage.getItem('reduceMotion') === 'true',
+        textToSpeech: localStorage.getItem('textToSpeech') === 'true',
+        visualCaptions: localStorage.getItem('visualCaptions') === 'true',
+        voiceCommands: localStorage.getItem('voiceCommands') === 'true',
+        screenReader: localStorage.getItem('screenReader') === 'true'
     });
+
+    // Save settings to localStorage when they change
+    useEffect(() => {
+        Object.keys(settings).forEach(key => {
+            localStorage.setItem(key, settings[key]);
+        });
+    }, [settings]);
 
     const toggleSetting = (settingName) => {
         setSettings(prev => ({
