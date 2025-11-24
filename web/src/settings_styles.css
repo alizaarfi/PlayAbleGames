@@ -1556,7 +1556,7 @@ html {
 /* Voice Commands Info */
 .voice-commands-info {
     margin-top: 12px;
-    padding: 12px;
+    padding: 16px;
     background: #f3f4f6;
     border-radius: 8px;
     display: flex;
@@ -1565,11 +1565,11 @@ html {
 }
 
 .mic-icon-small {
-    width: 20px;
-    height: 20px;
-    color: var(--primary-color);
+    width: 22px;
+    height: 22px;
+    color: #6c757d;
     flex-shrink: 0;
-    margin-top: 2px;
+    margin-top: 1px;
 }
 
 .voice-commands-list {
@@ -1579,18 +1579,33 @@ html {
 .voice-commands-list p {
     font-size: 13px;
     color: var(--text-primary);
-    margin: 0 0 8px 0;
+    margin: 0 0 12px 0;
 }
 
 .voice-commands-list ul {
     margin: 0;
-    padding-left: 20px;
+    padding-left: 0;
+    list-style: none;
 }
 
 .voice-commands-list li {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-secondary);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    padding-left: 16px;
+    position: relative;
+    text-align: left;
+}
+
+.voice-commands-list li:before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    color: var(--text-secondary);
+}
+
+.voice-commands-list li:last-child {
+    margin-bottom: 0;
 }
 
 /* Toggle Switch */
