@@ -27,6 +27,19 @@ function SettingsPage() {
         }));
     };
 
+    const resetSettings = () => {
+        const defaultSettings = {
+            lowSaturation: false,
+            reduceMotion: false,
+            textToSpeech: false,
+            visualCaptions: false,
+            voiceCommands: false,
+            screenReader: false
+        };
+        setSettings(defaultSettings);
+        localStorage.clear();
+    };
+
     return (
         <div className="app">
             <Navbar />
@@ -122,6 +135,21 @@ function SettingsPage() {
                             <div className="setting-info">
                                 <h3>Voice Commands</h3>
                                 <p>Microphone for hands-free navigation</p>
+                                {settings.voiceCommands && (
+                                    <div className="voice-commands-info">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" className="mic-icon-small">
+                                            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                        </svg>
+                                        <div className="voice-commands-list">
+                                            <p>Click the microphone icon in the navigation to activate voice commands. Try saying:</p>
+                                            <ul>
+                                                <li>"Go home"</li>
+                                                <li>"Open community"</li>
+                                                <li>"Search puzzle games"</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             <label className="toggle-switch">
                                 <input
@@ -147,6 +175,18 @@ function SettingsPage() {
                                 <span className="toggle-slider"></span>
                             </label>
                         </div>
+                    </div>
+
+                    {/* Reset Settings */}
+                    <div className="settings-section reset-section">
+                        <h2>Reset Settings</h2>
+                        <p>Restore default accessibility settings</p>
+                        <button className="reset-button" onClick={resetSettings}>
+                            <svg viewBox="0 0 24 24" fill="currentColor" className="reset-icon">
+                                <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                            </svg>
+                            Reset to Defaults
+                        </button>
                     </div>
                 </div>
             </main>
