@@ -1843,3 +1843,24 @@ body.dark-mode .nav-btn {
 body.dark-mode .nav-btn:hover {
     background-color: #3a3a3a;
 }
+
+body.dark-mode .reset-section {
+    background: #3a2020;
+    border-color: #6b2020;
+}
+
+body.dark-mode .reset-section h2,
+body.dark-mode .reset-section p {
+    color: #ffffff;
+}
+
+body.dark-mode .reset-button {
+    background: #2d2d2d;
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+body.dark-mode .reset-button:hover {
+    background: #ef4444;
+    color: white;
+}
