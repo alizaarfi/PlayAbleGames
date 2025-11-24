@@ -1580,6 +1580,8 @@ html {
     font-size: 13px;
     color: var(--text-primary);
     margin: 0 0 12px 0;
+    padding-left: 16px;
+    text-align: left;
 }
 
 .voice-commands-list ul {
@@ -1657,6 +1659,17 @@ html {
 
 .toggle-switch input:focus + .toggle-slider {
     box-shadow: 0 0 1px var(--primary-color);
+}
+
+/* Disabled toggle (always on) */
+.toggle-switch input:disabled + .toggle-slider {
+    background-color: var(--primary-color);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.toggle-switch input:disabled + .toggle-slider:before {
+    transform: translateX(24px);
 }
 
 /* Reset Section */

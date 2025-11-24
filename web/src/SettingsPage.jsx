@@ -134,29 +134,27 @@ function SettingsPage() {
                         <div className="setting-item">
                             <div className="setting-info">
                                 <h3>Voice Commands</h3>
-                                <p>Microphone for hands-free navigation</p>
-                                {settings.voiceCommands && (
-                                    <div className="voice-commands-info">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" className="mic-icon-small">
-                                            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-                                        </svg>
-                                        <div className="voice-commands-list">
-                                            <p>Click the microphone icon in the navigation to activate voice commands. Try saying:</p>
-                                            <ul>
-                                                <li>"Go home"</li>
-                                                <li>"Open community"</li>
-                                                <li>"Search puzzle games"</li>
-                                            </ul>
-                                        </div>
+                                <p>Microphone for hands-free navigation (always enabled)</p>
+                                <div className="voice-commands-info">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" className="mic-icon-small">
+                                        <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                    </svg>
+                                    <div className="voice-commands-list">
+                                        <p>Click the microphone icon in the navigation bar to activate voice commands. Try saying:</p>
+                                        <ul>
+                                            <li>"Go home"</li>
+                                            <li>"Open community"</li>
+                                            <li>"Search puzzle games"</li>
+                                        </ul>
                                     </div>
-                                )}
+                                </div>
                             </div>
                             <label className="toggle-switch">
                                 <input
                                     type="checkbox"
-                                    checked={settings.voiceCommands}
-                                    onChange={() => toggleSetting('voiceCommands')}
+                                    checked={true}
+                                    disabled
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -170,8 +168,8 @@ function SettingsPage() {
                             <label className="toggle-switch">
                                 <input
                                     type="checkbox"
-                                    checked={settings.screenReader}
-                                    onChange={() => toggleSetting('screenReader')}
+                                    checked={true}
+                                    disabled
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
