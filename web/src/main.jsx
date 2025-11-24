@@ -26,18 +26,11 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                 {/* Accessibility page */}
                 <Route path="/accessibility" element={<AccessibilityPage />} />
-            </Routes>
-        </BrowserRouter>
-    </React.StrictMode>
-);
 
-ReactDOM.createRoot(document.getElementById("app")).render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <Routes>
                 {/* Load AdminDashboard for /admin */}
                 <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
 );
+
