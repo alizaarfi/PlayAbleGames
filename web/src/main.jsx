@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
+import AdminDashboard from "./AdminDashboard.jsx";
 import AccessibilityPage from "./AccessibilityPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 
@@ -25,7 +26,11 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                 {/* Accessibility page */}
                 <Route path="/accessibility" element={<AccessibilityPage />} />
+
+                {/* Load AdminDashboard for /admin */}
+                <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
 );
+
