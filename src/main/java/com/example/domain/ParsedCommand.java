@@ -6,29 +6,39 @@ import io.micronaut.core.annotation.Nullable;
 import java.util.Objects;
 
 
-// a value object for when parsed voice commands are ready
-@Introspected
+// An immutable value object for voice commands that have been parsed and are ready for execution.
+
+//- Carries command parameters (target) extracted from user speech
+// Enables clean separation between parsing logic and execution logic
+
+
+@Introspected // compile-time checks, so that the properties/methods are accessible.
 public class ParsedCommand {
     private final CommandType type;
     private final String target;
+
+
 
     public ParsedCommand(CommandType type, @Nullable String target) {
         this.type = type;
         this.target = target;
     }
 
+    // Type is never null (set in enum CommandType)
+    // Returns the command type
     public CommandType getType() {
         return type;
     }
 
+    // Target is nullable to support commands that don't need parameters
+    // Returns the target (String) of the command e.g "go to home" for "home"
     @Nullable
     public String getTarget() {
         return target;
     }
 
-    /**
-     * Create a new ParsedCommand with a different target
-     */
+
+    // withTarget() - creates a new ParsedCommand with a different target
     public ParsedCommand withTarget(String target) {
         return new ParsedCommand(this.type, target);
     }

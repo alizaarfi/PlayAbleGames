@@ -21,24 +21,21 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+    VoiceControlService holds the business logic for:
+    - integrating with the Vosk speech recognition library
+    - translating voice commands into actionable instructions for the application.
 
+    Dependencies:
+    - ObjectMapper: For parsing JSON responses from Vosk
+    - Vosk Model: Pre-trained speech recognition model
+    - Configuration: Model path and sample rate injected from application.yml
 
-// Purpose: Business logic for for integrating with the Vosk speech recognition library
-//  and translating voice commands into actionable instructions for the application.
-
-//3 main tasks: speech-to-text transcription using Vosk library, natural language command
-// parsing using regex pattern matching and command mapping to application-specific actions
-
-//Lifecycle:
-// @PostConstruct: Loads Vosk model and initializes command patterns on startup
-// Runtime: Processes audio and text commands
-// @PreDestroy: Cleans up model resources on shutdown
-
-//Dependencies:
-// ObjectMapper: For parsing JSON responses from Vosk
-// Vosk Model: Pre-trained speech recognition model
-// Configuration: Model path and sample rate injected from application.yml
-
+    Understand the stages here:
+     - @PostConstruct loads Vosk model + initialises command patterns
+     - At Runtime audio and text commands are processed
+     - @PreDestroy cleans up model resources on shutdown
+**/
 
 @Singleton //Singleton to ensure only one Vosk model instance
 public class VoiceControlService {
@@ -53,7 +50,7 @@ public class VoiceControlService {
 
     private final Map<Pattern, ParsedCommand> commandPatterns = new HashMap<>();
 
-    /** Constructor injection is preferred over field injection in Micronaut for
+    /* Constructor injection is preferred over field injection in Micronaut for
     better testability and immutability **/
     public VoiceControlService(
             ObjectMapper objectMapper,
@@ -89,12 +86,16 @@ public class VoiceControlService {
         }
     }
 
-    //Converts the raw audio chunks into a VoiceCommand domain entity with transcribed text.
+    // Step 1: Converts the raw audio chunks into a VoiceCommand Entity with transcribed text.
     @NonNull
     public VoiceCommand transcribeAudio(@NonNull byte[] audioData) {
-        try (Recognizer recognizer = new Recognizer(model, sampleRate)) {
 
+        try {
+            // New instance of the Vosk Recognizer
+            Recognizer recognizer = new Recognizer(model, sampleRate);
+            // Feed audio to the recognizer
             recognizer.acceptWaveForm(audioData, audioData.length);
+
             String result = recognizer.getFinalResult();
 
             JsonNode jsonNode = objectMapper.readTree(result);
@@ -107,6 +108,9 @@ public class VoiceControlService {
             VoiceCommand voiceCommand = new VoiceCommand(transcription);
             voiceCommand.setConfidence(confidence);
 
+            //Close recogniser
+
+            // returns the entity with transcribed text, confidence level and the timestamp for now
             return voiceCommand;
 
         } catch (IOException e) {
@@ -115,11 +119,13 @@ public class VoiceControlService {
         }
     }
 
-    // converts the transcribed text into a parsed command
+    // Step 2: Parses the transcribed text into a ParsedCommand Entity
     @NonNull
     public ParsedCommand parseCommand(@NonNull String transcription) {
+        // Formatting text before operation
         String normalized = transcription.toLowerCase().trim();
 
+        // Not sure if i need to match it this complexly
         for (Map.Entry<Pattern, ParsedCommand> entry : commandPatterns.entrySet()) {
             Matcher matcher = entry.getKey().matcher(normalized);
             if (matcher.find()) {
@@ -138,8 +144,7 @@ public class VoiceControlService {
         return new ParsedCommand(CommandType.UNKNOWN, transcription);
     }
 
-
-    // Accepts raw audio bytes and returns a parsed command
+    // Step 3: Takes raw audio bytes and returns a parsed command
     @NonNull
     public ParsedCommand processAudio(@NonNull byte[] audioData) {
         VoiceCommand voiceCommand = transcribeAudio(audioData);

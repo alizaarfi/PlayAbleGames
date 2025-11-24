@@ -1,7 +1,8 @@
 package com.example.domain;
 
 
-// types of voice commands
+// Enum for types of voice commands
+// provides compile-time safety
 public enum CommandType {
     NAVIGATE,    // Navigate to a page
     CLICK,       // Click an element
