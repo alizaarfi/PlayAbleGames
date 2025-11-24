@@ -5,6 +5,9 @@
 .dashboard {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 50px;
 }
 
 .dashboard-item{
@@ -32,7 +35,6 @@
     padding: 8px 12px;
     width: 90%;
 }
-
 
 
 .black-text {
