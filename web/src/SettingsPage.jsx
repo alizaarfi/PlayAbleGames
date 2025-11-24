@@ -6,7 +6,7 @@ function SettingsPage() {
     // Load settings from localStorage
     const [settings, setSettings] = useState({
         darkMode: localStorage.getItem('darkMode') === 'true',
-        reduceMotion: localStorage.getItem('reduceMotion') === 'true',
+        blueLight: localStorage.getItem('blueLight') === 'true',
         textToSpeech: localStorage.getItem('textToSpeech') === 'true',
         visualCaptions: localStorage.getItem('visualCaptions') === 'true',
         voiceCommands: localStorage.getItem('voiceCommands') === 'true',
@@ -27,11 +27,11 @@ function SettingsPage() {
             document.body.classList.remove('dark-mode');
         }
 
-        // Apply reduced motion
-        if (settings.reduceMotion) {
-            document.body.classList.add('reduce-motion-mode');
+        // Apply blue light filter
+        if (settings.blueLight) {
+            document.body.classList.add('blue-light-filter');
         } else {
-            document.body.classList.remove('reduce-motion-mode');
+            document.body.classList.remove('blue-light-filter');
         }
     }, [settings]);
 
@@ -45,7 +45,7 @@ function SettingsPage() {
     const resetSettings = () => {
         const defaultSettings = {
             darkMode: false,
-            reduceMotion: false,
+            blueLight: false,
             textToSpeech: false,
             visualCaptions: false,
             voiceCommands: false,
@@ -93,14 +93,14 @@ function SettingsPage() {
 
                         <div className="setting-item">
                             <div className="setting-info">
-                                <h3>Reduce Motion</h3>
-                                <p>Minimises animations and transitions</p>
+                                <h3>Blue Light Filter</h3>
+                                <p>Adds a warm tint to reduce blue light and eye strain at night</p>
                             </div>
                             <label className="toggle-switch">
                                 <input
                                     type="checkbox"
-                                    checked={settings.reduceMotion}
-                                    onChange={() => toggleSetting('reduceMotion')}
+                                    checked={settings.blueLight}
+                                    onChange={() => toggleSetting('blueLight')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
