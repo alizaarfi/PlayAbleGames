@@ -1,8 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './NavBar';
 import './style.css';
 
 function AccessibilityPage() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        concernType: '',
+        message: ''
+    });
+    const [submitStatus, setSubmitStatus] = useState(''); // 'success', 'error', or ''
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     useEffect(() => {
         // Scroll animation observer
         const observerOptions = {
@@ -25,6 +34,41 @@ function AccessibilityPage() {
             cards.forEach(card => observer.unobserve(card));
         };
     }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitStatus('');
+
+        try {
+            const response = await fetch('http://localhost:8081/api/accessibility/feedback', {                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                setSubmitStatus('success');
+                setFormData({ name: '', email: '', concernType: '', message: '' });
+            } else {
+                setSubmitStatus('error');
+            }
+        } catch (error) {
+            console.error('Error submitting feedback:', error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className="app">
@@ -157,6 +201,88 @@ function AccessibilityPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* Accessibility Feedback Form */}
+                <section className="accessibility-contact">
+                    <h2>Have Accessibility Concerns?</h2>
+                    <p>We're committed to making this platform accessible to everyone. Let us know how we can improve.</p>
+
+                    {submitStatus === 'success' && (
+                        <div className="form-message success-message">
+                            ✓ Thank you! Your feedback has been sent to our team.
+                        </div>
+                    )}
+
+                    {submitStatus === 'error' && (
+                        <div className="form-message error-message">
+                            ✗ Sorry, something went wrong. Please try again later.
+                        </div>
+                    )}
+
+                    <form className="accessibility-form" onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="name">Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Your Name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="your.email@example.com"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="concernType">Concern Type</label>
+                            <select
+                                id="concernType"
+                                name="concernType"
+                                value={formData.concernType}
+                                onChange={handleInputChange}
+                                required
+                            >
+                                <option value="">Select Concern Type</option>
+                                <option value="Vision">Vision</option>
+                                <option value="Hearing">Hearing</option>
+                                <option value="Motor">Motor/Dexterity</option>
+                                <option value="Cognitive">Cognitive</option>
+                                <option value="Speech">Speech</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="message">Message</label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                placeholder="Describe your concern or suggestion..."
+                                rows="5"
+                                value={formData.message}
+                                onChange={handleInputChange}
+                                required
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" className="submit-btn" disabled={isSubmitting}>
+                            {isSubmitting ? 'Sending...' : 'Submit Feedback'}
+                        </button>
+                    </form>
+                </section>
             </main>
 
             <footer className="page-footer">

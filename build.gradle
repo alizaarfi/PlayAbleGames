@@ -25,10 +25,10 @@ dependencies {
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("jakarta.validation:jakarta.validation-api")
+    implementation("com.sun.mail:javax.mail:1.6.2")
     // Vosk speech recognition
     implementation 'com.alphacephei:vosk:0.3.45'
     implementation 'net.java.dev.jna:jna:5.13.0'
-
     //for complex json
     implementation("io.micronaut:micronaut-jackson-databind")
     // Jakarta annotations
