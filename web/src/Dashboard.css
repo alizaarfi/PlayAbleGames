@@ -8,18 +8,31 @@
     flex-wrap: wrap;
     justify-content: center;
     padding: 50px;
+    margin-top: 80px;
 }
 
 .dashboard-item{
-    margin: 10px;
-    padding: 10px;
+    margin: 15px;
+    padding: 15px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 200px;
+    width: 250px;
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: #acacac;
     display: flex;
     flex-direction: column;
+}
+
+.optionButton{
+    background-color: #838282;
+    color: black;
+    border: black 1px solid;
+    padding: 10px;
+    margin-top: auto;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 .button-box {
@@ -41,6 +54,10 @@
     color: black;
 }
 
+.paddedText{
+    padding: 10px;
+}
+
 .signOut{
     display: flex;
     justify-content: center;
@@ -48,7 +65,14 @@
 }
 
 .sign-out-button {
-    background-color: #9ca3af;
+    background-color: #838282;
     text-align: center;
     color: black;
+    border: black 1px solid;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: auto;
+    cursor: pointer;
+    border-radius: 5px;
 }
