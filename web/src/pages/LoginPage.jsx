@@ -32,7 +32,7 @@ export default function LoginPage() {
                 setError(result.error);
             } else {
                 //auth context
-                auth.login(result.token);
+                saveToken(result.token);
                 //redirect after login
                 window.location.href = "/";
             }

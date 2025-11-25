@@ -46,6 +46,9 @@ public class UserService {
 
         boolean matches = BCrypt.checkpw(rawPassword, user.get().getPassword());
 
-        return matches ? user : Optional.empty();
+        if (!matches){
+            throw new RuntimeException("Invalid password");
+        }
+        return user;
     }
 }

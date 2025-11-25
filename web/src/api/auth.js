@@ -34,27 +34,36 @@ export async function signup(data) {
 
 
 export async function login(credentials){
-    const res = await fetch("http://localhost:8080/user/login", {
+    const res = await fetch("http://localhost:8081/user/login", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(credentials)
     });
 
+    const data= await res.json();
+
     if (!res.ok){
-        return { error: "Invalid username or password"};
+        // Return the specific error message from the backend
+        throw {
+            response: {
+                data: {
+                    error: data.message
+                }
+            }
+        };
     }
-    return await res.json();
+    return data;
 }
 
 export async function logout(){
     const token= localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:8080/user/logout", {
+    const res = await fetch("http://localhost:8081/user/logout", {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${token}`
         }
     });
-    localStrorage.removeItem("token");
+    localStorage.removeItem("token");
     return await res.json();
 }
