@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { login } from "../api/auth.js";
+import {useAuth} from "../hooks/AuthProvider.jsx";
 
 export default function LoginPage() {
+
+    const { login: saveToken } = useAuth();
     const [form, setForm] = useState({
         username: "",
         password: ""
@@ -28,8 +31,10 @@ export default function LoginPage() {
             if (result.error) {
                 setError(result.error);
             } else {
-                localStorage.setItem("token", result.token);
-                window.location.href = "/profile";
+                //auth context
+                auth.login(result.token);
+                //redirect after login
+                window.location.href = "/";
             }
         } catch (err) {
             const backendError = err.response?.data?.error || "Login failed";

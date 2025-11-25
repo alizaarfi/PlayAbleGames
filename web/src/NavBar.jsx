@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "./style.css";
+import {useAuth} from "./hooks/AuthProvider.jsx";
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+
+    const { isAuthenticated, logout } = useAuth();//for login/logout button
+
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -99,14 +103,29 @@ function Navbar() {
 
                                     <div className="dropdown-divider"></div>
 
-                                    <button className="dropdown-item logout-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="dropdown-icon">
-                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                                            <polyline points="16 17 21 12 16 7"/>
-                                            <line x1="21" y1="12" x2="9" y2="12"/>
-                                        </svg>
-                                        <span>Logout</span>
-                                    </button>
+                                    {/* LOGGED OUT → Show LOGIN */}
+                                    {!isAuthenticated && (
+                                        <Link to="/login" className="dropdown-item login-item">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="dropdown-icon">
+                                                <path d="M15 3H21V21H15" />
+                                                <polyline points="10 17 15 12 10 7" />
+                                                <line x1="15" y1="12" x2="3" y2="12" />
+                                            </svg>
+                                            <span>Login</span>
+                                        </Link>
+                                    )}
+
+                                    {/* LOGGED IN → Show LOGOUT */}
+                                    {isAuthenticated && (
+                                        <button className="dropdown-item logout-item" onClick={logout}>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="dropdown-icon">
+                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                                <polyline points="16 17 21 12 16 7" />
+                                                <line x1="21" y1="12" x2="9" y2="12" />
+                                            </svg>
+                                            <span>Logout</span>
+                                        </button>
+                                    )}
                                 </div>
                             )}
                         </div>
