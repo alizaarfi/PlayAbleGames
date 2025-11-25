@@ -145,6 +145,7 @@ const games = [
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [favorites, setFavorites] = useState([]);
+    const [sortOption, setSortOption] = useState('ratingDesc');
     const [filters, setFilters] = useState({
         visionSupport: false,
         hearingSupport: false,
