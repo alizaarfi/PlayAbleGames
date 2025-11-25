@@ -74,49 +74,47 @@ export default function FlaggedReviews() {
         );
 
     return (
-        // <div className="page">
             <div className="content">
                 <div className="admin-nav">
-                    <button><a href="/admin"> Back to Dashboard </a></button>
+                    <button><a className="white-text" href="/admin"> Back to Dashboard </a></button>
                 </div>
-                <h1 className="title"> Flagged Reviews </h1>
+                <h1 className="title black-text"> Flagged Reviews </h1>
 
-                {reviews.length === 0 ? (
-                    <div className="no-reviews">No flagged reviews found.</div>
-                ) : (
-                    reviews.map((review, idx) => (
-                        <div className="reviews-box" key={review.id ?? idx}>
-                            <div className="review-item">
-                                <div className="titles">
-                                    <h2 className="black-text"> User: {review.user} </h2>
-                                    <h2 className="black-text"> Game: {review.game} </h2>
-                                    <h3 className="black-text"> Review Date: {review.reviewDate} </h3>
+                <div className="reviews-container">
+                    {reviews.length === 0 ? (
+                        <div className="no-reviews black-text">No flagged reviews found.</div>
+                    ) : (
+                        reviews.map((review, idx) => (
+                            <div className="reviews-box" key={review.id ?? idx}>
+                                <div className="review-item">
+                                    <div className="titles">
+                                        <h2 className="black-text"> {review.user} · {review.game}</h2>
+                                        <h3 className="black-text"> {review.reviewDate[8] + review.reviewDate[9] + '/' + review.reviewDate[5] + review.reviewDate[6] + '/' +  review.reviewDate[0] + review.reviewDate[1] + review.reviewDate[2] + review.reviewDate[3] } </h3>
+                                    </div>
+                                    <div className="ratings">
+                                        <p className="black-text rating-text"> Hearing: {review.hearingRating}/5 </p>
+                                        <p className="black-text rating-text"> Vision: {review.visionRating}/5 </p>
+                                        <p className="black-text rating-text"> Cognitive: {review.cognitiveRating}/5 </p>
+                                        <p className="black-text rating-text"> Speech: {review.speechRating}/5 </p>
+                                        <p className="black-text rating-text"> Motor: {review.motorRating}/5 </p>
+                                        <p className="black-text rating-text"> Gameplay: {review.gamePlayRating}/5 </p>
+                                    </div>
+                                    <div className="review-text">
+                                        <p className="black-text reviewText"> {review.reviewText} </p>
+                                    </div>
                                 </div>
-                                <div className="ratings">
-                                    <h3 className="black-text"> Ratings: </h3>
-                                    <p className="black-text"> Hearing Rating: {review.hearingRating} </p>
-                                    <p className="black-text"> Vision Rating: {review.visionRating} </p>
-                                    <p className="black-text"> Cognitive Rating: {review.cognitiveRating} </p>
-                                    <p className="black-text"> Speech Rating: {review.speechRating} </p>
-                                    <p className="black-text"> Motor Rating: {review.motorRating} </p>
-                                    <p className="black-text"> Gameplay Rating: {review.gamePlayRating} </p>
-                                </div>
-                                <div className="review-text">
-                                    <p className="black-text"> Review Text: {review.reviewText} </p>
+                                <div className="options-box">
+                                    <h2 className="black-text"> Options </h2>
+                                    <div className="button-box">
+                                        <button> See user's profile </button>
+                                        <button> Approve review </button>
+                                        <button> Remove review </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="options-box">
-                                <h2 className="black-text"> Options </h2>
-                                <div className="button-box">
-                                    <button> See user's profile </button>
-                                    <button> Approve review </button>
-                                    <button> Remove review </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                )}
+                        ))
+                    )}
+                </div>
             </div>
-        // </div>
     );
 }
