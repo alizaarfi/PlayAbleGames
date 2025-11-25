@@ -6,6 +6,7 @@ import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
 import AccessibilityPage from "./AccessibilityPage.jsx";
 import SettingsPage from "./SettingsPage.jsx";
+import useSpeech from "./UseSpeech.jsx";
 
 import "./style.css";
 

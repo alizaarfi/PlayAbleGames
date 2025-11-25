@@ -1447,3 +1447,30 @@ html {
     animation: none !important;
   }
 }
+
+/* Text-to-Speech Speaker Button Animation */
+.accessibility-btn.speaking {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    background-color: #111827;
+  }
+  50% {
+    background-color: #5856d6;
+  }
+}
+
+body.dark-mode .accessibility-btn.speaking {
+  animation: pulseDark 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseDark {
+  0%, 100% {
+    background-color: #7c7aff;
+  }
+  50% {
+    background-color: #5856d6;
+  }
+}

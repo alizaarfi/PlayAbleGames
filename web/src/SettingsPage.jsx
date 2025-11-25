@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar';
+import Navbar from './NavBar';
 import './settings_styles.css';
 
 function SettingsPage() {
-    // Load settings from localStorage
-    const [settings, setSettings] = useState({
-        darkMode: localStorage.getItem('darkMode') === 'true',
-        blueLight: localStorage.getItem('blueLight') === 'true',
-        textToSpeech: localStorage.getItem('textToSpeech') === 'true',
-        visualCaptions: localStorage.getItem('visualCaptions') === 'true',
-        voiceCommands: localStorage.getItem('voiceCommands') === 'true',
-        screenReader: localStorage.getItem('screenReader') === 'true'
+    // Load settings from localStorage - initialize missing values to 'false'
+    const [settings, setSettings] = useState(() => {
+        const savedSettings = {
+            darkMode: localStorage.getItem('darkMode') === 'true',
+            blueLight: localStorage.getItem('blueLight') === 'true',
+            textToSpeech: localStorage.getItem('textToSpeech') === 'true',
+            visualCaptions: localStorage.getItem('visualCaptions') === 'true',
+            voiceCommands: localStorage.getItem('voiceCommands') === 'true',
+            screenReader: localStorage.getItem('screenReader') === 'true'
+        };
+
+        // Initialize any undefined values in localStorage
+        Object.keys(savedSettings).forEach(key => {
+            if (localStorage.getItem(key) === null) {
+                localStorage.setItem(key, 'false');
+            }
+        });
+
+        return savedSettings;
     });
 
     // Apply settings when they change
@@ -33,6 +44,12 @@ function SettingsPage() {
         } else {
             document.body.classList.remove('blue-light-filter');
         }
+
+        // Update TTS setting and notify navbar
+        document.body.setAttribute('data-tts-enabled', settings.textToSpeech);
+        window.dispatchEvent(new CustomEvent('tts-setting-changed', {
+            detail: { enabled: settings.textToSpeech }
+        }));
     }, [settings]);
 
     const toggleSetting = (settingName) => {
@@ -149,28 +166,27 @@ function SettingsPage() {
                         <div className="setting-item">
                             <div className="setting-info">
                                 <h3>Voice Commands</h3>
-                                <p>Microphone for hands-free navigation</p>
-                                {settings.voiceCommands && (
-                                    <div className="voice-commands-info">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" className="mic-icon-small">
-                                            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                                        </svg>
-                                        <div className="voice-commands-list">
-                                            <p>Click the microphone icon in the navigation bar to activate voice commands. Try saying:</p>
-                                            <ul>
-                                                <li>"Go home"</li>
-                                                <li>"Open community"</li>
-                                                <li>"Search puzzle games"</li>
-                                            </ul>
-                                        </div>
+                                <p>Microphone for hands-free navigation (always enabled)</p>
+                                <div className="voice-commands-info">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" className="mic-icon-small">
+                                        <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                    </svg>
+                                    <div className="voice-commands-list">
+                                        <p>Click the microphone icon in the navigation bar to activate voice commands. Try saying:</p>
+                                        <ul>
+                                            <li>"Go home"</li>
+                                            <li>"Open community"</li>
+                                            <li>"Search puzzle games"</li>
+                                        </ul>
                                     </div>
-                                )}
+                                </div>
                             </div>
                             <label className="toggle-switch">
                                 <input
                                     type="checkbox"
-                                    checked={settings.voiceCommands}
-                                    onChange={() => toggleSetting('voiceCommands')}
+                                    checked={true}
+                                    disabled
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -184,13 +200,14 @@ function SettingsPage() {
                             <label className="toggle-switch">
                                 <input
                                     type="checkbox"
-                                    checked={settings.screenReader}
-                                    onChange={() => toggleSetting('screenReader')}
+                                    checked={true}
+                                    disabled
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
                         </div>
                     </div>
+
 
                     {/* Reset Settings */}
                     <div className="settings-section reset-section">

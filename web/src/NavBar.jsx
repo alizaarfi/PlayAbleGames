@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import useSpeech from './UseSpeech';
 import "./style.css";
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const [ttsEnabled, setTtsEnabled] = useState(false);
     const dropdownRef = useRef(null);
+    const { isSpeaking, stop, readPage } = useSpeech();
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -19,6 +22,26 @@ function Navbar() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    // Check Text-to-Speech setting
+    useEffect(() => {
+        const checkTTS = () => {
+            setTtsEnabled(localStorage.getItem('textToSpeech') === 'true');
+        };
+
+        checkTTS();
+        const interval = setInterval(checkTTS, 100);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const handleSpeakerClick = () => {
+        if (isSpeaking) {
+            stop();
+        } else {
+            readPage();
+        }
+    };
 
     return (
         <header className="main-header">
@@ -45,6 +68,25 @@ function Navbar() {
                                 <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
                             </svg>
                         </button>
+
+                        {ttsEnabled && (
+                            <button
+                                className={`nav-btn accessibility-btn ${isSpeaking ? 'speaking' : ''}`}
+                                onClick={handleSpeakerClick}
+                                aria-label={isSpeaking ? "Stop reading page" : "Read page aloud"}
+                            >
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="nav-icon">
+                                    {isSpeaking ? (
+                                        <>
+                                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                                            <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                        </>
+                                    ) : (
+                                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                    )}
+                                </svg>
+                            </button>
+                        )}
 
                         <Link to="/accessibility" className="nav-btn info-btn">
                             <svg viewBox="0 0 24 24" fill="currentColor" className="nav-icon">
