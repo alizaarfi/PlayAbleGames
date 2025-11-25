@@ -49,8 +49,7 @@ function AccessibilityPage() {
         setSubmitStatus('');
 
         try {
-            const response = await fetch('http://localhost:8080/api/accessibility/feedback', {
-                method: 'POST',
+            const response = await fetch('http://localhost:8081/api/accessibility/feedback', {                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
