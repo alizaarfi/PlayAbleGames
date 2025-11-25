@@ -3,8 +3,11 @@ import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
 import useHoverSpeech from './UseHoverSpeech';
+import { useFavorites } from "./FavoritesContext.jsx";
 
-const games = [
+
+
+export const games = [
     {
         id: 1,
         title: "Minecraft",
@@ -144,7 +147,7 @@ const games = [
 
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [favorites, setFavorites] = useState([]);
+    const { favorites, toggleFavorite } = useFavorites();  // ← BACKEND
     const [sortOption, setSortOption] = useState('ratingDesc');
     const [filters, setFilters] = useState({
         visionSupport: false,
@@ -162,15 +165,6 @@ function HomePage() {
     // Enable hover speech when setting is on
     const hoverEnabled = localStorage.getItem('visualCaptions') === 'true';
     useHoverSpeech(hoverEnabled);
-
-    const toggleFavorite = (gameId, event) => {
-        event.stopPropagation();
-        setFavorites(prev =>
-            prev.includes(gameId)
-                ? prev.filter(id => id !== gameId)
-                : [...prev, gameId]
-        );
-    };
 
     const handleCardClick = (gameId) => {
         window.location.href = `/games/${gameId}`;
@@ -406,18 +400,30 @@ function HomePage() {
                                     <div className="card-header">
                                         <h3>{game.title}</h3>
                                         <button
+                                            type="button"
                                             className="favorite-btn"
-                                            aria-label="Add to favorites"
+                                            aria-label={
+                                                favorites.includes(game.id)
+                                                    ? "Remove from favorites"
+                                                    : "Add to favorites"
+                                            }
                                             onClick={(e) => toggleFavorite(game.id, e)}
                                         >
-                                            <svg viewBox="0 0 24 24" fill={favorites.includes(game.id) ? "#ff3b30" : "none"}>
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                className="favorite-icon"
+                                                fill={favorites.includes(game.id) ? "#ff3b30" : "none"}
+                                            >
                                                 <path
-                                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                                    d="M12 21.35l-1.45-1.32C5 15.36 2 12.28 2 8.5
+         2 6 4 4 6.5 4c1.54 0 3.04.99 3.57 2.36h.87C14.46 4.99 15.96 4 17.5 4
+         20 4 22 6 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                     stroke={favorites.includes(game.id) ? "#ff3b30" : "currentColor"}
                                                     strokeWidth="2"
                                                 />
                                             </svg>
                                         </button>
+
                                     </div>
                                     <p className="game-description">{game.description}</p>
                                     <div className="game-meta">

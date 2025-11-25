@@ -7,47 +7,38 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-/**
- * Base URL for the Micronaut backend API.
- * The backend is currently running on port 8081.
- */
+//Base URL for the Micronaut backend API.
+
 const API_BASE = "http://localhost:8081";
 
 export default function GamePage() {
-    /**
-     * The game id is taken from the URL pattern /games/:id.
-     * If no id is present, we default to game 1.
-     */
+    //-------------------------------------------------------------
+    // The game id is taken from the URL pattern /games/:id.
+    // If no id is present, we default to game 1.
+    //-------------------------------------------------------------
     const { id } = useParams();
     const gameId = Number(id || 1);
 
-    /**
-     * Data retrieved from the backend for this game.
-     * This includes: basic game details, reviews, and gallery images.
-     */
+    // Data retrieved from the backend for this game.
+
     const [data, setData] = useState(null);
 
-    /**
-     * Simple loading and error states for basic user feedback.
-     */
+    //  Loading and error states for basic user feedback.
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    /**
-     * Local UI state to record which reviews the user has marked as “reported”.
-     */
+    // Local UI state to record which reviews the user has marked as “reported”.
     const [flagged, setFlagged] = useState({});
 
-    /**
-     * Local UI state for the text content of a review
-     * that the user is writing in the form.
-     */
+
+     // Local UI state for the text content of a review
+     // that the user is writing in the form.
     const [reviewText, setReviewText] = useState("");
 
-    /**
-     * Local UI state for interactive star ratings in the review form.
-     * These values are later sent to the backend when submitting a review.
-     */
+
+     // Local UI state for interactive star ratings in the review form.
+     // These values are later sent to the backend when submitting a review.
+
     const [formRatings, setFormRatings] = useState({
         hearing: 0,
         motor: 0,
@@ -92,25 +83,23 @@ export default function GamePage() {
         setFlagged(initial);
     }, [data]);
 
-    /**
-     * Toggles the reported status for a given review in local UI state.
-     */
+    // Toggles the reported status for a given review in local UI state.
+
     const toggleFlag = (reviewId) => {
         setFlagged((prev) => ({ ...prev, [reviewId]: !prev[reviewId] }));
     };
 
-    /**
-     * Updates a single rating entry in the combined rating state
-     * used by the review submission form.
-     */
+
+    // Updates a single rating entry in the combined rating state
+    // used by the review submission form.
     const updateFormRating = (key, value) => {
         setFormRatings((prev) => ({ ...prev, [key]: value }));
     };
 
-    /**
-     * Simple scroll helper to allow “Jump to section” links to move
-     * the viewport to different semantic sections on the page.
-     */
+
+    // Simple scroll helper to allow “Jump to section” links to move
+    // the viewport to different semantic sections on the page.
+
     const scrollToId = (sectionId) => {
         const el = document.getElementById(sectionId);
         if (el) {
@@ -118,9 +107,9 @@ export default function GamePage() {
         }
     };
 
-    /**
-     * Handles submission of a new review to the backend.
-     */
+
+    // Handles submission of a new review to the backend.
+
     const handleSubmitReview = async () => {
 
         if (!reviewText.trim()) {
@@ -150,8 +139,6 @@ export default function GamePage() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    // In future work: include an authentication token here.
-                    // Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(payload),
             });
@@ -216,7 +203,6 @@ export default function GamePage() {
         ageRating,
         description,
         releaseDate,
-        iconUrl, // currently unused in the hero; retained for future enhancement
         linkToStore,
         aboutVision,
         aboutHearing,
@@ -228,9 +214,8 @@ export default function GamePage() {
         avgGameplayRating,
     } = data;
 
-    /**
-     * Overall rating is derived from the average gameplay rating.
-     */
+    // Overall rating is derived from the average gameplay rating.
+
     const overallRating = avgGameplayRating ?? 0;
 
     // ---------------------------------------------------------------------------
