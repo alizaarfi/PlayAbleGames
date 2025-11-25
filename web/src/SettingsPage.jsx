@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './NavBar';
+import useHoverSpeech from './UseHoverSpeech';
 import './settings_styles.css';
 
 function SettingsPage() {
@@ -23,6 +24,9 @@ function SettingsPage() {
 
         return savedSettings;
     });
+
+    // Enable hover speech on settings page
+    useHoverSpeech(settings.visualCaptions);
 
     // Apply settings when they change
     useEffect(() => {

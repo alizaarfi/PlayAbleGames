@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
+import useHoverSpeech from './UseHoverSpeech';
 
 const games = [
     {
@@ -156,6 +157,10 @@ function HomePage() {
         strategy: false,
         casual: false
     });
+
+    // Enable hover speech when setting is on
+    const hoverEnabled = localStorage.getItem('visualCaptions') === 'true';
+    useHoverSpeech(hoverEnabled);
 
     const toggleFavorite = (gameId, event) => {
         event.stopPropagation();
