@@ -2,9 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "./style.css";
 import {useAuth} from "./hooks/AuthProvider.jsx";
+import ConfirmModal from "./ConfirmModal.jsx";
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const [showConfirmModal, setShowConfirmModal]= useState(false);
+    const [showSuccessToast, setShowSuccessToast]= useState(false);
     const dropdownRef = useRef(null);
 
     const { isAuthenticated, logout } = useAuth();//for login/logout button
@@ -24,7 +27,30 @@ function Navbar() {
         };
     }, []);
 
+    const handleLogoutClick = () => {
+        setProfileDropdownOpen(false);
+        setShowConfirmModal(true);
+    }
+
+    const handleConfirmLogout = async ()=>{
+        setShowConfirmModal(false);
+        try {
+            await logout();
+            setShowSuccessToast(true);
+
+            // redirect after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1500);
+        } catch (e) {
+            console.error("Logout failed:", e);
+            alert("Logout failed. Please try again.");
+
+        }
+    };
+
     return (
+        <>
         <header className="main-header">
             <div className="container">
                 <div className="header-content">
@@ -118,7 +144,7 @@ function Navbar() {
                                                 </svg>
                                                 <span>Favourites</span>
                                             </button>
-                                            <button className="dropdown-item logout-item" onClick={logout}>
+                                            <button className="dropdown-item logout-item" onClick={handleLogoutClick}>
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="dropdown-icon">
                                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                                                     <polyline points="16 17 21 12 16 7" />
@@ -135,6 +161,21 @@ function Navbar() {
                 </div>
             </div>
         </header>
+    {/*Confirmation model*/}
+    <ConfirmModal
+        isOpen={showConfirmModal}
+        message="Are you sure you want to Log Out?"
+        onConfirm={handleConfirmLogout}
+        onCancel={()=> setShowConfirmModal(false)}
+    />
+    {/* Success Toast */}
+    {showSuccessToast && (
+        <div className="success-toast">
+            You have been logged out successfully!
+        </div>
+    )}
+    </>
+
     );
 }
 

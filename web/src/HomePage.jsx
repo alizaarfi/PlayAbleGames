@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
+import ConfirmModal from "./ConfirmModal.jsx";
 
 const games = [
     {
