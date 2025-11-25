@@ -12,7 +12,7 @@ const games = [
         description: "A creative sandbox game with flexible controls, adjustable difficulty, visual accessibility options, and a calm mode that reduces hostile mobs.",
         rating: 4.5,
         reviews: 1231,
-        tags: ["Sandbox", "Adventure"]
+        tags: ["Sandbox", "Adventure", "Vision Support", "Cognitive Support","Motor Support"]
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ const games = [
         description: "A relaxing puzzle game with simple tap controls, clean visuals, and minimal text, making it accessible to a wide range of players.",
         rating: 4.9,
         reviews: 3205,
-        tags: ["Puzzle", "Casual"]
+        tags: ["Puzzle", "Casual", "Cognitive Support", "Vision Support"]
     },
     {
         id: 3,
@@ -30,7 +30,7 @@ const games = [
         description: "A social deduction game with colorblind mode, clear UI, and simple movement controls, supporting accessible team play.",
         rating: 4.6,
         reviews: 2456,
-        tags: ["Multiplayer", "Strategy"]
+        tags: ["Multiplayer", "Strategy", "Hearing Support", "Vision Support", "Motor Support"]
     },
     {
         id: 4,
@@ -39,7 +39,7 @@ const games = [
         description: "A match-3 puzzle game with one-touch controls, optional hints, and bright visuals for easy, accessible play at any pace.",
         rating: 4.8,
         reviews: 1504,
-        tags: ["Puzzle", "Casual"]
+        tags: ["Puzzle", "Casual", "Motor Support", "Cognitive Support"]
     },
     {
         id: 5,
@@ -48,7 +48,7 @@ const games = [
         description: "A fast-paced shooter with customizable controls, aim assist, adjustable sensitivity, and UI scaling for improved accessibility.",
         rating: 4.5,
         reviews: 2721,
-        tags: ["Action", "Multiplayer"]
+        tags: ["Action", "Multiplayer", "Speech Support", "Motor Support"]
     },
     {
         id: 6,
@@ -57,7 +57,7 @@ const games = [
         description: "An outdoor adventure game offering large UI icons, vibration cues, and simplified controls to support diverse physical abilities.",
         rating: 4.7,
         reviews: 1832,
-        tags: ["Adventure", "RPG"]
+        tags: ["Adventure", "RPG", "Cognitive  Support", "Motor Support"]
     },
     {
         id: 7,
@@ -66,7 +66,7 @@ const games = [
         description: "A quick-reaction runner with simple swipe controls, strong color contrast, and optional assist features for ease of play.",
         rating: 4.8,
         reviews: 3642,
-        tags: ["Arcade", "Casual"]
+        tags: ["Arcade", "Casual", "Cognitive Support", "Motor Support"]
     },
     {
         id: 8,
@@ -75,7 +75,7 @@ const games = [
         description: "A strategy game with slow-paced, tap-based controls and adjustable UI elements, making gameplay manageable for many players.",
         rating: 4.6,
         reviews: 2100,
-        tags: ["Strategy", "Multiplayer"]
+        tags: ["Strategy", "Multiplayer", "Motor Support", "Vision Support"]
     },
     {
         id: 9,
@@ -84,7 +84,7 @@ const games = [
         description: "A relaxing jigsaw puzzle app with zoom options, piece outlines, and soothing visuals designed for stress-free, accessible play.",
         rating: 4.9,
         reviews: 5200,
-        tags: ["Puzzle", "Casual"]
+        tags: ["Puzzle", "Casual", "Cognitive Support", "Motor Support"]
     },
     {
         id: 10,
@@ -93,7 +93,7 @@ const games = [
         description: "A calming idle game with soft visuals, minimal input, and gentle soundscapes that support relaxation and low-pressure interaction.",
         rating: 4.7,
         reviews: 3100,
-        tags: ["Simulation", "Casual"]
+        tags: ["Simulation", "Casual", "Vision Cognitive", "Cognitive Support"]
     },
     {
         id: 11,
@@ -102,7 +102,7 @@ const games = [
         description: "A serene endless-runner with one-touch mechanics, high-contrast visuals, and an optional zen mode for stress-free play.",
         rating: 4.8,
         reviews: 2800,
-        tags: ["Action", "Casual"]
+        tags: ["Action", "Casual", "Cognitive Support", "Hearing Support"]
     },
     {
         id: 12,
@@ -111,7 +111,7 @@ const games = [
         description: "A visually clean puzzle game with simple tap interactions and color-based challenges designed with calm, focused gameplay in mind.",
         rating: 4.6,
         reviews: 1900,
-        tags: ["Puzzle", "Casual"]
+        tags: ["Puzzle", "Casual", "Speech Support", "Cognitive Support"]
     },
     {
         id: 13,
@@ -120,7 +120,7 @@ const games = [
         description: "An emotional adventure with gentle controls, scalable visuals, cooperative play, and accessibility-friendly social mechanics.",
         rating: 4.9,
         reviews: 4500,
-        tags: ["Adventure", "Multiplayer"]
+        tags: ["Adventure", "Multiplayer", "Motor Support", "Vision Support"]
     },
     {
         id: 14,
@@ -129,7 +129,7 @@ const games = [
         description: "A peaceful farming RPG offering remappable controls, no strict time pressure, and a play-at-your-own-pace structure ideal for accessibility.",
         rating: 4.8,
         reviews: 3800,
-        tags: ["Simulation", "RPG"]
+        tags: ["Simulation", "RPG", "Cognitive Support", "Vision Support"]
     },
     {
         id: 15,
@@ -138,7 +138,7 @@ const games = [
         description: "A fully audio-based adventure designed for blind and visually impaired players, using binaural sound for navigation instead of visuals.",
         rating: 4.7,
         reviews: 2200,
-        tags: ["Action", "Adventure"]
+        tags: ["Action", "Adventure", "Cognitive Support", "Motor Support"]
     }
 ];
 
@@ -186,6 +186,70 @@ function HomePage() {
         return '★★★★★';
     };
 
+    // Filter Feature
+    const getSelectedTags = () => {
+        const selected = [];
+
+        // Genres
+        if (filters.action) selected.push("action");
+        if (filters.adventure) selected.push("adventure");
+        if (filters.puzzle) selected.push("puzzle");
+        if (filters.strategy) selected.push("strategy");
+        if (filters.casual) selected.push("casual");
+
+        // Accessibility (for this to work, add matching tags on games, e.g. "vision support")
+        if (filters.visionSupport) selected.push("vision support");
+        if (filters.hearingSupport) selected.push("hearing support");
+        if (filters.speechSupport) selected.push("speech support");
+        if (filters.motorSupport) selected.push("motor support");
+        if (filters.cognitiveSupport) selected.push("cognitive support");
+
+        return selected;
+    };
+
+    const filteredGames = games.filter((game) => {
+        const query = searchQuery.trim().toLowerCase();
+
+        // Search by title, description or tags
+        const lowerTags = game.tags.map((t) => t.toLowerCase());
+        const matchesSearch =
+            !query ||
+            game.title.toLowerCase().includes(query) ||
+            game.description.toLowerCase().includes(query) ||
+            lowerTags.some((t) => t.includes(query));
+
+        // Tag-based filters
+        const selectedTags = getSelectedTags();
+        const matchesTags =
+            selectedTags.length === 0 ||
+            // requires all selected tags to be present
+            selectedTags.every((tag) => lowerTags.includes(tag));
+
+        return matchesSearch && matchesTags;
+    });
+
+    // Sorting feature
+
+    const sortedGames = [...filteredGames].sort((a, b) => {
+        switch (sortOption) {
+            case 'ratingAsc':
+                return a.rating - b.rating;
+            case 'ratingDesc':
+                return b.rating - a.rating;
+            case 'reviewsAsc':
+                return a.reviews - b.reviews;
+            case 'reviewsDesc':
+                return b.reviews - a.reviews;
+            case 'titleAsc':
+                return a.title.localeCompare(b.title);
+            case 'titleDesc':
+                return b.title.localeCompare(a.title);
+            default:
+                return 0;
+        }
+    });
+
+
     return (
         <div className="app">
             <Navbar />
@@ -212,19 +276,28 @@ function HomePage() {
                         </button>
                     </div>
                     <div className="sort-controls">
-                        <button className="sort-btn">
+                        <button className="sort-btn" type="button">
                             <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/>
                             </svg>
                             Sort by
                         </button>
-                        <button className="dropdown-btn">
-                            Most Popular
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M7 10l5 5 5-5z"/>
-                            </svg>
-                        </button>
+
+                        <select
+                            className="dropdown-btn"
+                            value={sortOption}
+                            onChange={(e) => setSortOption(e.target.value)}
+                        >
+                            <option value="ratingDesc">Most Popular</option>
+                            <option value="ratingAsc">Rating (low → high)</option>
+                            <option value="reviewsDesc">Most reviewed</option>
+                            <option value="reviewsAsc">Least reviewed</option>
+                            <option value="titleAsc">Title (A → Z)</option>
+                            <option value="titleDesc">Title (Z → A)</option>
+                        </select>
                     </div>
+
+
                 </div>
 
                 <div className="content-layout">
@@ -321,7 +394,7 @@ function HomePage() {
                     </aside>
 
                     <section className="games-grid">
-                        {games.map(game => (
+                        {sortedGames.map(game => (
                             <article
                                 key={game.id}
                                 className="game-card"
