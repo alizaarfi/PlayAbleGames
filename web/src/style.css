@@ -1448,109 +1448,29 @@ html {
   }
 }
 
-.signup-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: var(--background); /* or #f8f9fa */
+/* Text-to-Speech Speaker Button Animation */
+.accessibility-btn.speaking {
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
-.signup-card {
-  background-color: var(--card-bg); /* #ffffff */
-  padding: 40px 32px;
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  width: 100%;
-  max-width: 400px;
-}
-.signup-card label {
-  color: var(--text-primary); /* dark text */
-}
-.signup-card h2,
-.signup-card p,
-.signup-card button {
-  color: #212529; /* ensure headings, links, and buttons are visible */
-}
-.signup-form .form-group {
-  margin-bottom: 20px;
-}
-.signup-card a {
-  text-decoration: underline; /* optional for links */
-}
-.signup-form label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
+@keyframes pulse {
+  0%, 100% {
+    background-color: #111827;
+  }
+  50% {
+    background-color: #5856d6;
+  }
 }
 
-.signup-form input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-}
-.signup-form input::placeholder {
-  color: #6c757d; /* grey placeholder */
+body.dark-mode .accessibility-btn.speaking {
+  animation: pulseDark 1.5s ease-in-out infinite;
 }
 
-
-.signup-form input:focus {
-  border-color: var(--primary-color);
-}
-
-.signup-btn {
-  width: 100%;
-  padding: 12px 0;
-  background-color: var(--primary-color);
-  color: #fff;
-  font-weight: 600;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.signup-btn:hover {
-  background-color: #4741d1;
-}
-
-.signup-card p.error-msg {
-  color: #dc2626;
-  margin-bottom: 12px;
-}
-
-.signup-card p.success-msg {
-  color: #22c55e;
-  margin-bottom: 12px;
-}
-.signup-card button.signup-btn {
-  color: #ffffff; /* white text */
-  border: none;
-  padding: 10px 20px;
-}
-
-.signup-btn.loading {
-  position: relative;
-}
-
-.signup-btn.loading::after {
-  content: "";
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  border: 2px solid #fff;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: translateY(-50%) rotate(0deg); }
-  100% { transform: translateY(-50%) rotate(360deg); }
+@keyframes pulseDark {
+  0%, 100% {
+    background-color: #7c7aff;
+  }
+  50% {
+    background-color: #5856d6;
+  }
 }
