@@ -145,8 +145,8 @@ function SettingsPage() {
 
                         <div className="setting-item">
                             <div className="setting-info">
-                                <h3>Visual Captions</h3>
-                                <p>Display captions for audio content</p>
+                                <h3>Auto-Read on Hover</h3>
+                                <p>Automatically read text when hovering over content</p>
                             </div>
                             <label className="toggle-switch">
                                 <input
