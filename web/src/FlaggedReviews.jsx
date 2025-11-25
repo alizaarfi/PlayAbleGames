@@ -74,8 +74,11 @@ export default function FlaggedReviews() {
         );
 
     return (
-        <div className="page">
+        // <div className="page">
             <div className="content">
+                <div className="admin-nav">
+                    <button><a href="/admin"> Back to Dashboard </a></button>
+                </div>
                 <h1 className="title"> Flagged Reviews </h1>
 
                 {reviews.length === 0 ? (
@@ -114,6 +117,6 @@ export default function FlaggedReviews() {
                     ))
                 )}
             </div>
-        </div>
+        // </div>
     );
 }
