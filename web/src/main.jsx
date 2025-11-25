@@ -4,8 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
-import FavoritesPage from "./FavoritesPage.jsx";
-
+import AccessibilityPage from "./AccessibilityPage.jsx";
+import SettingsPage from "./SettingsPage.jsx";
+import useSpeech from "./UseSpeech.jsx";
 
 import "./style.css";
 
@@ -19,8 +20,12 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                 {/* Game detail page */}
                 <Route path="/games/:id" element={<GamePage />} />
 
-                {/* Favourites page */}
-                <Route path="/favorites" element={<FavoritesPage />} />
+                {/* Accessibility page */}
+                <Route path="/accessibility" element={<AccessibilityPage />} />
+
+                {/* Settings page */}
+                <Route path="/settings" element={<SettingsPage />} />
+
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

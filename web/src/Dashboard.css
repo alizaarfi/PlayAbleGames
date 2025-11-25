@@ -1,0 +1,78 @@
+.title {
+    text-align: center;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 50px;
+    margin-top: 80px;
+}
+
+.dashboard-item{
+    margin: 15px;
+    padding: 15px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 250px;
+    text-align: center;
+    background-color: #acacac;
+    display: flex;
+    flex-direction: column;
+}
+
+.optionButton{
+    background-color: #838282;
+    color: black;
+    border: black 1px solid;
+    padding: 10px;
+    margin-top: auto;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.button-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.button-box button {
+    margin: 5px;
+    padding: 8px 12px;
+    width: 90%;
+}
+
+
+.black-text {
+    color: black;
+}
+
+.paddedText{
+    padding: 10px;
+}
+
+.signOut{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.sign-out-button {
+    background-color: #838282;
+    text-align: center;
+    color: black;
+    border: black 1px solid;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: auto;
+    cursor: pointer;
+    border-radius: 5px;
+}
