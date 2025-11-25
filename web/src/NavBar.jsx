@@ -1,39 +1,74 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "./style.css";
-import useCaptureAudio from "./useCapturedAudio.jsx";
-import useMicrophone from "./useMicrophone.jsx";
+import useVoiceControl from "./useVoiceControl.jsx";
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const { stream, error, isLoading, openMic, closeMic } = useMicrophone();
-    const { isRecording, transcription, startRecording, stopRecording } = useCaptureAudio(stream);
+    const { stream, isRecording, commandData, transcription, error, toggleRecording } = useVoiceControl();
 
-    // Open mic automatically when navbar loads
+    // Monitor transcription
+    // Monitor transcription and command data
     useEffect(() => {
-        const initMic = async () => {
-            await openMic();
-        };
-        void initMic(); // Explicitly ignore the promise
-    }, []);
+        if (transcription && commandData) {
+            console.log("✅ You said:", transcription);
+            console.log("✅ Parsed command:", commandData.command);
+            console.log("✅ Command target:", commandData.target);
+            console.log("✅ Confidence:", commandData.confidence);
 
-    const handleVoiceButtonClick = () => {
-        if (isRecording) {
-            // If recording, stop it
-            stopRecording();
-            closeMic();
-            console.log("Recording stopped");
-        } else if (stream) {
-            // If mic is active but not recording, start recording
-            startRecording();
-            console.log("Recording started");
-        } else {
-            // If mic is closed, open it
-            openMic();
-            console.log("Mic opened");
+            // Display transcription to user
+            alert(`You said: "${transcription}"\nCommand: ${commandData.command}\nTarget: ${commandData.target}`);
+
+            // TODO: Process command - route to page, click button, etc.
+            processVoiceCommand(commandData);
+        }
+    }, [transcription, commandData]);
+
+    // Function to handle voice commands
+    const processVoiceCommand = (commandData) => {
+        const { command, target } = commandData;
+
+        switch (command) {
+            case 'NAVIGATE':
+                console.log(`🧭 Navigating to: ${target}`);
+                // Example: navigate to page
+                // if (target === 'home') window.location.href = '/';
+                // if (target === 'accessibility') window.location.href = '/accessibility';
+                break;
+
+            case 'CLICK':
+                console.log(`👆 Clicking: ${target}`);
+                // Example: find and click element
+                break;
+
+            case 'SEARCH':
+                console.log(`🔍 Searching for: ${target}`);
+                // Example: trigger search
+                break;
+
+            case 'SCROLL':
+                console.log(`📜 Scrolling: ${target}`);
+                // Example: scroll page
+                break;
+
+            case 'UNKNOWN':
+                console.warn(`❓ Unknown command: ${transcription}`);
+                break;
+
+            default:
+                console.log(`📋 Command: ${command}, Target: ${target}`);
         }
     };
+
+    // Display error messages
+    useEffect(() => {
+        if (error) {
+            console.error("❌ Error:", error);
+            // Optionally show error to user
+        }
+    }, [error]);
+
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -69,19 +104,21 @@ function Navbar() {
 
                     <div className="header-nav">
                         {/*VoiceControlButton*/}
+                        {/*<div className="visual-feedback-container">*/}
+                        {/*    <span className="feedback-text">Listening...</span>*/}
+                        {/*</div>*/}
                         <button
                             className={`nav-btn accessibility-btn ${
-                                isLoading ? 'mic-loading' :
-                                    stream ? 'mic-active' :
-                                        error ? 'mic-error' :
-                                            'mic-inactive'
+                                !stream ? 'mic-error' :          // No mic access
+                                    isRecording ? 'mic-recording' :   // Currently recording
+                                        'mic-active'                      // Ready to record
                             }`}
-                            onClick={handleVoiceButtonClick}
+                            onClick={toggleRecording}
+                            disabled={!stream}  // Disable if no mic access
                             title={
-                                isLoading ? 'Requesting microphone...' :
-                                    stream ? 'Microphone active - Click to stop' :
-                                        error ? 'Microphone error - Click to retry' :
-                                            'Click to enable microphone'
+                                !stream ? '❌ Microphone not available' :
+                                    isRecording ? '🔴 Recording - Click to stop' :
+                                        '✅ Click to start recording'
                             }
                         >
                             {/*Button Icon*/}

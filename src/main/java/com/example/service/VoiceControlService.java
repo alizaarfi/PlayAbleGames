@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.example.domain.CommandType;
 import com.example.domain.ParsedCommand;
-import com.example.domain.VoiceCommand;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.context.annotation.Value;
@@ -88,7 +87,7 @@ public class VoiceControlService {
 
     // Step 1: Converts the raw audio chunks into a VoiceCommand Entity with transcribed text.
     @NonNull
-    public VoiceCommand transcribeAudio(@NonNull byte[] audioData) {
+    public ParsedCommand transcribeAudio(@NonNull byte[] audioData) {
 
         try {
             // New instance of the Vosk Recognizer
@@ -109,6 +108,7 @@ public class VoiceControlService {
             voiceCommand.setConfidence(confidence);
 
             //Close recogniser
+            recognizer.close();
 
             // returns the entity with transcribed text, confidence level and the timestamp for now
             return voiceCommand;
@@ -210,8 +210,4 @@ public class VoiceControlService {
 
         LOG.info("Initialized {} command patterns", commandPatterns.size());
     }
-
-//    public void addCommandPattern(String regex, ParsedCommand command) {
-//        commandPatterns.put(Pattern.compile(regex), command);
-//        LOG.debug("Added custom command pattern: {}", regex);
     }

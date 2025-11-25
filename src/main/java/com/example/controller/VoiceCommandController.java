@@ -1,11 +1,13 @@
 package com.example.controller;
 
 import com.example.domain.ParsedCommand;
+import com.example.domain.VoiceCommand;
 import com.example.service.VoiceControlService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Options;
 import io.micronaut.http.annotation.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +17,7 @@ import org.slf4j.LoggerFactory;
 // Leaves all business logic to VoiceControlService
 // Two endpoints: process and parse
 
-@Controller()
+@Controller("/api/v1/transcription") //base path can use v2 for other versions
 public class VoiceCommandController {
 
     private static final Logger LOG = LoggerFactory.getLogger(VoiceCommandController.class);
@@ -36,14 +38,19 @@ public class VoiceCommandController {
         try {
             LOG.info("Received audio data: {} bytes", audioData.length);
 
-            ParsedCommand command = voiceControlService.processAudio(audioData);
-            return HttpResponse.ok(command);
+            // Get transcribed.text
+            ParsedCommand parsedCommand = voiceControlService.
+           // Get confidence, target and type, and timestamp then do a log
 
+            // Return the complete VoiceCommand entity with CORS headers
+            // or return just parsedcommand
+            return parsedCommand;
         } catch (Exception e) {
             LOG.error("Error processing audio", e);
             return HttpResponse.serverError();
         }
     }
+
 
     // parseText() takes plain text and returns a parsed command but is
     // for testing, debugging, and when you already have transcribed text

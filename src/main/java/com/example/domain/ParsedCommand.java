@@ -2,6 +2,9 @@ package com.example.domain;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.serde.annotation.Serdeable;
+
+import java.time.Instant;
 import java.util.Objects;
 
 // An immutable value object for voice commands that have been parsed and are ready for execution.
@@ -9,34 +12,26 @@ import java.util.Objects;
 // Enables clean separation between parsing logic and execution logic
 
 @Introspected // compile-time checks, so that the properties/methods are accessible.
+@Serdeable
 public class ParsedCommand {
     private final CommandType type;
     private final String target;
-
-    public ParsedCommand(CommandType type, @Nullable String target) {
-        this.type = type;
-        this.target = target;
-    }
-
-    // Type is never null (set in enum CommandType)
-    // Returns the command type
-    public CommandType getType() {
-        return type;
-    }
+    private final String transcribedText;
+    private final double confidence;
+    private final Instant timestamp;
 
     // Target is nullable to support commands that don't need parameters
-    // Returns the target (String) of the command e.g "go to home" for "home"
-    @Nullable
-    public String getTarget() {
-        return target;
+    public ParsedCommand(CommandType type, @Nullable String target, String transcribedText, double confidence, Instant timestamp) {
+        this.type = type;
+        this.target = target;
+        this.transcribedText = transcribedText;
+        this.confidence = confidence;
+        this.timestamp = timestamp;
     }
 
 
-    // withTarget() - creates a new ParsedCommand with a different target
-    public ParsedCommand withTarget(String target) {
-        return new ParsedCommand(this.type, target);
-    }
 
+    // Comparing commands
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,14 +39,26 @@ public class ParsedCommand {
         ParsedCommand that = (ParsedCommand) o;
         return type == that.type && Objects.equals(target, that.target);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(type, target);
-    }
-
     @Override
     public String toString() {
         return "ParsedCommand{type=" + type + ", target='" + target + "'}";
     }
+
+    // ----------- Getters -----------
+    // No setters, they need to be immutable
+    public CommandType getType() {
+        return type;
+    }
+
+    @Nullable
+    public String getTarget() {
+        return target;
+    }
+
+    public String getTranscribedText() {return transcribedText;}
+
+    public double getConfidence() {return confidence;}
+
+    public Instant getTimestamp() {return timestamp;}
+
 }
