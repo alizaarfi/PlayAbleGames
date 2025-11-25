@@ -1,10 +1,39 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "./style.css";
+import useCaptureAudio from "./useCapturedAudio.jsx";
+import useMicrophone from "./useMicrophone.jsx";
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const { stream, error, isLoading, openMic, closeMic } = useMicrophone();
+    const { isRecording, transcription, startRecording, stopRecording } = useCaptureAudio(stream);
+
+    // Open mic automatically when navbar loads
+    useEffect(() => {
+        const initMic = async () => {
+            await openMic();
+        };
+        void initMic(); // Explicitly ignore the promise
+    }, []);
+
+    const handleVoiceButtonClick = () => {
+        if (isRecording) {
+            // If recording, stop it
+            stopRecording();
+            closeMic();
+            console.log("Recording stopped");
+        } else if (stream) {
+            // If mic is active but not recording, start recording
+            startRecording();
+            console.log("Recording started");
+        } else {
+            // If mic is closed, open it
+            openMic();
+            console.log("Mic opened");
+        }
+    };
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -40,7 +69,21 @@ function Navbar() {
 
                     <div className="header-nav">
                         {/*VoiceControlButton*/}
-                        <button className="nav-btn accessibility-btn">
+                        <button
+                            className={`nav-btn accessibility-btn ${
+                                isLoading ? 'mic-loading' :
+                                    stream ? 'mic-active' :
+                                        error ? 'mic-error' :
+                                            'mic-inactive'
+                            }`}
+                            onClick={handleVoiceButtonClick}
+                            title={
+                                isLoading ? 'Requesting microphone...' :
+                                    stream ? 'Microphone active - Click to stop' :
+                                        error ? 'Microphone error - Click to retry' :
+                                            'Click to enable microphone'
+                            }
+                        >
                             {/*Button Icon*/}
                             <svg viewBox="0 0 24 24" fill="currentColor" className="nav-icon">
                                 <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>

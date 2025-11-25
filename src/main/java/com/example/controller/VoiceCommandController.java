@@ -35,6 +35,7 @@ public class VoiceCommandController {
     public HttpResponse<ParsedCommand> processAudio(@Body byte[] audioData) {
         try {
             LOG.info("Received audio data: {} bytes", audioData.length);
+
             ParsedCommand command = voiceControlService.processAudio(audioData);
             return HttpResponse.ok(command);
 

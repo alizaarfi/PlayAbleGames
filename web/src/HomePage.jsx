@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
@@ -156,8 +156,13 @@ function HomePage() {
         strategy: false,
         casual: false
     });
-
-    const [sortOption, setSortOption] = useState('ratingDesc'); // 👈 NEW
+    const [sortOption, setSortOption] = useState('ratingDesc');
+    // const { stream, error, isLoading, startMic, stopMic } = useMicrophone();
+    //
+    // // Open mic automatically when page loads
+    // useEffect(() => {
+    //     openMic();
+    // }, []);
 
 
     const toggleFavorite = (gameId, event) => {
@@ -227,7 +232,6 @@ function HomePage() {
     });
 
     // Sorting feature
-
     const sortedGames = [...filteredGames].sort((a, b) => {
         switch (sortOption) {
             case 'ratingAsc':
