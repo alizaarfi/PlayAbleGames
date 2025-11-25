@@ -1448,6 +1448,21 @@ html {
   }
 }
 
+
+/* Text-to-Speech Speaker Button Animation */
+.accessibility-btn.speaking {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseDark {
+  0%, 100% {
+    background-color: #7c7aff;
+  }
+  50% {
+    background-color: #5856d6;
+  }
+}
+
 .signup-page {
   display: flex;
   justify-content: center;
@@ -1456,6 +1471,14 @@ html {
   background-color: var(--background); /* or #f8f9fa */
 }
 
+@keyframes pulse {
+  0%, 100% {
+    background-color: #111827;
+  }
+  50% {
+    background-color: #5856d6;
+  }
+}
 .signup-card {
   background-color: var(--card-bg); /* #ffffff */
   padding: 40px 32px;

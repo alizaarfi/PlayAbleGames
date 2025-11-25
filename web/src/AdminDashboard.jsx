@@ -47,30 +47,30 @@ export default function AdminDashboard(){
 
     // Admin Dashboard Page html code here
     return(
-        <div className="page">
+        // <div className="page">
             <div className="content">
-                <h1 className="title"> Welcome back admin</h1>
+                <h1 className="title black-text"> Welcome back admin</h1>
                 <div className="dashboard">
                         <div className="dashboard-item">
-                            <h2 className="black-text"> Flagged items </h2>
-                            <p className="black-text"> {dashboard.totalFlaggedItems} </p>
+                            <h2 className="black-text paddedText"> Flagged items </h2>
+                            <h3 className="black-text paddedText"> {dashboard.totalFlaggedItems} </h3>
                             <div className="button-box">
-                                <button className="seeFlagged-button"> See Flagged Items </button>
+                                <button className="optionButton" > <a className='black-text' href='/flaggedReviews'> See Flagged Items </a> </button>
                             </div>
                         </div>
                         <div className="dashboard-item">
-                            <h2 className="black-text"> Live Games </h2>
-                            <p className="black-text"> {dashboard.totalLiveGames} </p>
+                            <h2 className="black-text paddedText"> Live Games </h2>
+                            <h3 className="black-text paddedText"> {dashboard.totalLiveGames} </h3>
                             <div className="button-box">
-                                <button className="AddGame-button"> Add New Game </button>
-                                <button className="EditGame-button"> Edit a Game </button>
+                                <button className="optionButton"> Add New Game </button>
+                                <button className="optionButton"> Edit a Game </button>
                             </div>
                         </div>
                         <div className="dashboard-item">
-                            <h2 className="black-text"> Users </h2>
-                            <p className="black-text"> {dashboard.totalUsers} </p>
+                            <h2 className="black-text paddedText"> Users </h2>
+                            <h3 className="black-text paddedText"> {dashboard.totalUsers} </h3>
                             <div className="button-box">
-                                <button className="manageUsers-button"> Manage Users </button>
+                                <button className="optionButton"> Manage Users </button>
                             </div>
                         </div>
                     </div>
@@ -78,6 +78,6 @@ export default function AdminDashboard(){
                     <button className="sign-out-button"> Sign Out </button>
                 </div>
             </div>
-        </div>
+        // </div>
     )
 }

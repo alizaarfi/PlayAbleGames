@@ -3,6 +3,7 @@ import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
 import ConfirmModal from "./ConfirmModal.jsx";
+import useHoverSpeech from './UseHoverSpeech';
 
 const games = [
     {
@@ -145,6 +146,7 @@ const games = [
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [favorites, setFavorites] = useState([]);
+    const [sortOption, setSortOption] = useState('ratingDesc');
     const [filters, setFilters] = useState({
         visionSupport: false,
         hearingSupport: false,
@@ -158,8 +160,9 @@ function HomePage() {
         casual: false
     });
 
-    const [sortOption, setSortOption] = useState('ratingDesc'); // 👈 NEW
-
+    // Enable hover speech when setting is on
+    const hoverEnabled = localStorage.getItem('visualCaptions') === 'true';
+    useHoverSpeech(hoverEnabled);
 
     const toggleFavorite = (gameId, event) => {
         event.stopPropagation();
