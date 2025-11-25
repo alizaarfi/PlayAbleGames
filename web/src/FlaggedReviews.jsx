@@ -35,6 +35,7 @@ export default function FlaggedReviews() {
                 // Ensure each review has expected fields with defaults
                 const mapped = normalized.map((r) => ({
                     id: r.id ?? null,
+                    userId: r.userId ?? null,
                     user: r.user ?? "user",
                     game: r.game ?? "game",
                     hearingRating: r.hearingRating ?? 0,
