@@ -1474,15 +1474,3 @@ body.dark-mode .accessibility-btn.speaking {
     background-color: #5856d6;
   }
 }
-
-/*Favorites toggle*/
-.favorite-btn {
-  border: none;
-  background: transparent;
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-.favorite-btn.is-fav {
-  color: red;
-}
