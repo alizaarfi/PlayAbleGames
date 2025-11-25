@@ -8,9 +8,8 @@ import io.micronaut.http.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * REST controller for creating and listing reviews for a specific game.
- */
+//REST controller for creating and listing reviews for a specific game.
+
 @Controller("/api/games/{gameId}/reviews")
 public class ReviewController {
 
@@ -21,19 +20,20 @@ public class ReviewController {
         this.reviewRepository = reviewRepository;
     }
 
-    /**
-     * Returns all reviews for the given game.
-     */
+
+    //Returns all reviews for the given game.
+
     @Get
     public List<Review> listForGame(@PathVariable Long gameId) {
         return reviewRepository.findByGameId(gameId);
     }
 
-    /**
-     * Creates a new review for the given game.
-     * The server normalises and checks ratings and text length to
-     *  avoid storing invalid or malicious data.
-     */
+    //-------------------------------------------------------------
+    // Creates a new review for the given game.
+    // The server normalises and checks ratings and text length to
+    // avoid storing invalid or malicious data.
+    //-------------------------------------------------------------
+
     @Post
     public HttpResponse<Review> create(@PathVariable Long gameId,
                                        @Body Review incoming) {
@@ -83,9 +83,9 @@ public class ReviewController {
         return HttpResponse.created(saved);
     }
 
-    /**
-     * Normalising a rating to the 0–5 range and replaces null with 0.
-     */
+
+    // Normalising a rating to the 0–5 range and replaces null with 0.
+
     private int normaliseRating(Integer value) {
         if (value == null) {
             return 0;

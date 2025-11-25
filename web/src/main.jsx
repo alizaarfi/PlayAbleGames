@@ -7,26 +7,33 @@ import GamePage from "./GamePage.jsx";
 import AccessibilityPage from "./AccessibilityPage.jsx";
 import SettingsPage from "./SettingsPage.jsx";
 import useSpeech from "./UseSpeech.jsx";
+import { FavoritesProvider } from "./FavoritesContext.jsx";
+import FavoritesPage from "./FavoritesPage.jsx";   // imported as FavouritesPage (UK) :contentReference[oaicite:0]{index=0}
 
 import "./style.css";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <React.StrictMode>
         <BrowserRouter>
-            <Routes>
-                {/* Homepage */}
-                <Route path="/" element={<HomePage />} />
+            <FavoritesProvider>
+                <Routes>
+                    {/* Homepage */}
+                    <Route path="/" element={<HomePage />} />
 
-                {/* Game detail page */}
-                <Route path="/games/:id" element={<GamePage />} />
+                    {/* Game detail page */}
+                    <Route path="/games/:id" element={<GamePage />} />
 
-                {/* Accessibility page */}
-                <Route path="/accessibility" element={<AccessibilityPage />} />
+                    {/* Accessibility page */}
+                    <Route path="/accessibility" element={<AccessibilityPage />} />
 
-                {/* Settings page */}
-                <Route path="/settings" element={<SettingsPage />} />
+                    {/* Settings page */}
+                    <Route path="/settings" element={<SettingsPage />} />
 
-            </Routes>
+                    {/* Favorite page */}
+                    <Route path="/favorites" element={<FavoritesPage />} />
+
+                 </Routes>
+             </FavoritesProvider>
         </BrowserRouter>
     </React.StrictMode>
 );
