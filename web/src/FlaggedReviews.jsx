@@ -60,6 +60,47 @@ export default function FlaggedReviews() {
         return () => controller.abort();
     }, []);
 
+    const handleAccept = async (reviewId) => {
+        try {
+            const res = await fetch(`${API_BASE}/reviews/${reviewId}/accept`, {
+                method: 'PUT'
+            });
+
+            if (res.ok) {
+                const result = await res.json();
+                if (result.success) {
+                    // Remove from list
+                    setReviews(reviews.filter(r => r.id !== reviewId));
+                }
+            } else {
+                setError('Failed to accept review');
+            }
+        } catch (e) {
+            setError('Failed to accept review: ' + e.message);
+        }
+    };
+
+    const handleDecline = async (reviewId) => {
+        try {
+            const res = await fetch(`${API_BASE}/reviews/${reviewId}/decline`, {
+                method: 'PUT'
+            });
+
+            if (res.ok) {
+                const result = await res.json();
+                if (result.success) {
+                    // Remove from list
+                    setReviews(reviews.filter(r => r.id !== reviewId));
+                }
+            } else {
+                setError('Failed to decline review');
+            }
+        } catch (e) {
+            setError('Failed to decline review: ' + e.message);
+        }
+    };
+
+
     if (loading)
         return (
             <div className="page">
@@ -107,11 +148,12 @@ export default function FlaggedReviews() {
                                     <h2 className="black-text"> Options </h2>
                                     <div className="button-box">
                                         <button> See user's profile </button>
-                                        <button> Approve review </button>
-                                        <button> Remove review </button>
+                                        <button onClick={() => handleAccept(review.id)}> Approve review </button>
+                                        <button onClick={() => handleDecline(review.id)}> Remove review </button>
                                     </div>
                                 </div>
                             </div>
+
                         ))
                     )}
                 </div>
