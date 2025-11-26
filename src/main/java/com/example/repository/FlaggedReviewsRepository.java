@@ -55,4 +55,36 @@ public class FlaggedReviewsRepository {
 
         return reviews;
     }
+
+    @Transactional
+    public boolean acceptReview(int reviewId) {
+        String sql = "UPDATE reviews SET Flagged = false, Removed = true WHERE ReviewID = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, reviewId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to accept review " + reviewId, e);
+        }
+    }
+
+    @Transactional
+    public boolean declineReview(int reviewId) {
+        String sql = "UPDATE reviews SET Flagged = false WHERE ReviewID = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, reviewId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to decline review " + reviewId, e);
+        }
+    }
 }
