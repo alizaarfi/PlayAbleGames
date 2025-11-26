@@ -133,6 +133,11 @@ function Navbar() {
                     </div>
 
                     <div className="header-nav">
+
+                        <div className={"visual-feedback-container"}>
+
+                        </div>
+
                         {/*VoiceControlButton*/}
                         {/*<div className="visual-feedback-container">*/}
                         {/*    <span className="feedback-text">Listening...</span>*/}

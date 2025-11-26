@@ -13,7 +13,7 @@ import "./style.css";
 import Navbar from "./NavBar.jsx";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <BrowserRouter>
             <Navbar />
             <Routes>
@@ -33,6 +33,6 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                 <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
         </BrowserRouter>
-    </React.StrictMode>
+    // </React.StrictMode>
 );
 

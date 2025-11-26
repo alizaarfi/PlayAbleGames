@@ -19,6 +19,7 @@ function useVoiceControl() {
     const [error, setError] = useState(null);
 
     const hasInitialized = useRef(false);
+    const isMicActiveRef = useRef(true)
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
 
@@ -87,12 +88,23 @@ function useVoiceControl() {
             // MUTE
             stopRecording();
             setIsMicActive(false);
+            isMicActiveRef.current = false;
         } else {
             // UNMUTE
             setIsMicActive(true);
+            isMicActiveRef.current = true;
             if (stream) {
                 startRecordingAuto(stream, true); // Pass true explicitly
             }
+        }
+    };
+
+    const stopRecording = () => {
+        console.log("🛑 Stopping recording manually");
+
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+            mediaRecorderRef.current.stop();
+            setIsRecording(false);
         }
     };
 
@@ -132,14 +144,23 @@ function useVoiceControl() {
             const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
             await convertToWavAndSend(audioBlob);
 
-            // Restart only if still active (no override needed here)
+            console.log("🔄 About to schedule restart...");
+            console.log("🔄 mediaStream exists?", !!mediaStream);
+            console.log("🔄 isMicActiveRef?", isMicActiveRef.current);
+
             setTimeout(() => {
-                if (stream) {
-                    startRecordingAuto(stream); // Normal call
+                console.log("🔄 Inside setTimeout - attempting restart");
+                console.log("🔄 mediaStream still exists?", !!mediaStream);
+                console.log("🔄 isMicActiveRef still true?", isMicActiveRef.current);
+
+                if (mediaStream && isMicActiveRef.current) {
+                    console.log("✅ Calling startRecordingAuto");
+                    startRecordingAuto(mediaStream);
+                } else {
+                    console.log("❌ Not restarting - conditions not met");
                 }
             }, 1000);
         };
-
         mediaRecorderRef.current.start();
         setIsRecording(true);
 
@@ -153,54 +174,7 @@ function useVoiceControl() {
         console.log("🔴 Continuous recording started");
     };
 
-    const startRecording = () => {
-        console.log("═══════════════════════════════════════════════════════");
-        console.log("▶️  START RECORDING");
 
-        if (!stream) {
-            console.error("❌ No microphone available");
-            setError('Microphone not available');
-            return;
-        }
-
-        audioChunksRef.current = [];
-        setTranscription('');
-        setCommandData(null);
-        setError(null);
-
-        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
-
-        mediaRecorderRef.current = new MediaRecorder(stream, {
-            mimeType: mimeType,
-            audioBitsPerSecond: 16000
-        });
-
-        mediaRecorderRef.current.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-                console.log("📦 Audio chunk:", event.data.size, "bytes");
-                audioChunksRef.current.push(event.data);
-            }
-        };
-
-        mediaRecorderRef.current.onstop = async () => {
-            console.log("⏹️  Recording stopped");
-            const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-            console.log("📦 Original audio:", audioBlob.size, "bytes, type:", audioBlob.type);
-            await convertToWavAndSend(audioBlob);
-        };
-
-        mediaRecorderRef.current.start();
-        setIsRecording(true);
-        console.log("🔴 Recording...");
-    };
-
-    const stopRecording = () => {
-        console.log("⏹️  Stopping recording");
-        if (mediaRecorderRef.current && isRecording) {
-            mediaRecorderRef.current.stop();
-            setIsRecording(false);
-        }
-    };
 
     // Convert audio to WAV format that Vosk expects
     const convertToWavAndSend = async (audioBlob) => {
