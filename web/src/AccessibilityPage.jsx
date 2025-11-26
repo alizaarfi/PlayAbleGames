@@ -28,7 +28,7 @@ function AccessibilityPage() {
 
     return (
         <div className="app">
-            <Navbar />
+            {/*<Navbar />*/}
 
             <main className="accessibility-page-simple">
                 <div className="accessibility-hero">

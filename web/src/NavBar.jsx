@@ -12,63 +12,83 @@ function Navbar() {
     // Monitor transcription
     // Monitor transcription and command data
     useEffect(() => {
-        console.log("🔔 Effect triggered - transcription:", transcription, "commandData:", commandData);
-
         if (commandData) {
-            console.log("✅ Both present - processing command");
             processVoiceCommand(commandData);
-        } else {
-            console.log("❌ Missing commandData:", !!commandData);
+        } else if (transcription && transcription.length > 0) {
+            // Speech was detected but couldn't be parsed into a command
+            console.warn("⚠️ Speech detected but command not recognized:", transcription);
         }
-    }, [commandData]);
+    }, [commandData, transcription]);
 
     // Function to handle voice commands
     const processVoiceCommand = (commandData) => {
-        // extracts from the backend response
-        const { type, target } = commandData;
-        console.log("🔍 Full commandData:", commandData);
-        console.log("🔍 Type:", type);
-        console.log("🔍 Target:", target);
-        console.log("🔍 Type comparison:", type, "===", 'NAVIGATE', ":", type === 'NAVIGATE');
+        try {
+            // Guard clause - validate input
+            if (!commandData || !commandData.type) {
+                console.warn("Invalid command data:", commandData);
+                return; // Don't crash, just exit gracefully
+            }
 
-        switch (type) {
-            case 'NAVIGATE':
-                console.log(`🧭 Navigating to: ${target}`);
-                console.log(`🧭 Target comparison: ${target} === 'accessibility': ${target === 'accessibility'}`);
+            // extracts from the backend response
+            const { type, target } = commandData;
+            console.log("Full commandData:", commandData);
+            console.log("🔍 Target:", target);
+            console.log("🔍 Type comparison:", type, "===", 'NAVIGATE', ":", type === 'NAVIGATE');
 
-                if (target === 'accessibility') {
-                    console.log("✅ About to navigate to /accessibility");
-                    navigate('/accessibility');
-                } else if (target === 'home') {
-                    console.log("✅ About to navigate to /");
-                    navigate('/');
-                } else {
-                    console.log("❌ Target didn't match any condition. Target was:", target);
-                }
-                break;
+            //switchcase for each command type then relevant target
+            switch (type) {
+                case 'NAVIGATE':
+                    console.log("NAVIGATE TYPE")
+                    if (!target) {
+                        console.warn("⚠️ Navigate called without target");
+                        break;
+                    }
 
-            case 'CLICK':
-                console.log(`👆 Clicking: ${target}`);
-                // Example: find and click element
-                break;
+                    // Wrap navigate in try-catch
+                    try {
+                        if (target === 'accessibility') {
+                            navigate('/accessibility');
+                        } else if (target === 'home') {
+                            navigate('/');
+                        } else {
+                            console.log("Unknown route:", target);
+                            // Recording continues!
+                        }
+                    } catch (navError) {
+                        console.error("Navigation failed:", navError);
+                        // Recording still continues!
+                    }
+                    break;
 
-            case 'SEARCH':
-                console.log(`🔍 Searching for: ${target}`);
-                // Example: trigger search
-                break;
+                case 'CLICK':
+                    console.log(`Clicking: ${target}`);
+                    // Example: find and click element
+                    break;
 
-            case 'SCROLL':
-                console.log(`📜 Scrolling: ${target}`);
-                // Example: scroll page
-                break;
+                case 'SEARCH':
+                    console.log(`Searching for: ${target}`);
+                    // Example: trigger search
+                    break;
 
-            case 'UNKNOWN':
-                console.warn(`❓ Unknown command: ${transcription}`);
-                break;
+                case 'SCROLL':
+                    console.log(`Scrolling: ${target}`);
+                    // Example: scroll page
+                    break;
 
-            default:
-                console.log(`📋 Command: ${command}, Target: ${target}`);
+                case 'UNKNOWN':
+                    console.warn(`Unknown command: ${transcription}`);
+                    break;
+
+                default:
+                    console.log(`Command: ${type}, Target: ${target}`);
+            }
+
+        } catch (error) {
+            console.error("Command processing error:", error);
         }
+
+
+
     };
 
     // Display error messages

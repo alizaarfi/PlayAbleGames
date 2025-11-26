@@ -10,10 +10,12 @@ import SignupPage from "./pages/SignupPage.jsx";
 
 
 import "./style.css";
+import Navbar from "./NavBar.jsx";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <React.StrictMode>
         <BrowserRouter>
+            <Navbar />
             <Routes>
                 {/* Homepage */}
                 <Route path="/" element={<HomePage />} />

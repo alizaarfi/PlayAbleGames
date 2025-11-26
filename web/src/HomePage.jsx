@@ -254,7 +254,7 @@ function HomePage() {
 
     return (
         <div className="app">
-            <Navbar />
+            {/*<Navbar />*/}
 
             <main className="container">
                 <section className="hero">

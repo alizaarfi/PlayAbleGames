@@ -134,7 +134,7 @@ function useVoiceControl() {
 
             // Restart only if still active (no override needed here)
             setTimeout(() => {
-                if (stream && isMicActive) {
+                if (stream) {
                     startRecordingAuto(stream); // Normal call
                 }
             }, 1000);
