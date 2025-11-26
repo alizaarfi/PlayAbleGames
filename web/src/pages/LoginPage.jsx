@@ -1,9 +1,16 @@
+//this is the Login Page
 import React, { useState } from "react";
 import { login as loginUser} from "../api/auth.js";
 import {useAuth} from "../hooks/AuthProvider.jsx";
 
+/**
+ * Login page components
+ * Handles user login with form validation and JWT authentication
+ */
+
 export default function LoginPage() {
 
+    //get login function from auth context
     const { login: saveToken } = useAuth();
     const [form, setForm] = useState({
         username: "",
@@ -13,6 +20,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    //updates from state when user types into input fields
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -20,6 +28,7 @@ export default function LoginPage() {
         });
     };
 
+    //frontend validation for login
     const validateLogin = ()=>{
         if (!form.username || !form.password) {
             return "Please fill all the fields.";
@@ -29,11 +38,14 @@ export default function LoginPage() {
         }
         return null;
     };
+
+    //handles form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
 
+        //run validation
         const validationError= validateLogin();
         if(validationError){
             setError(validationError);
@@ -41,6 +53,7 @@ export default function LoginPage() {
             return;
         }
         try {
+            //call backend login api
             const result = await loginUser(form);
 
             if (result.error) {
@@ -52,6 +65,7 @@ export default function LoginPage() {
                 window.location.href = "/";
             }
         } catch (err) {
+            //handle backend errors
             const backendError = err.response?.data?.error || "Login failed";
             setError(backendError);
         } finally {

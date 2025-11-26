@@ -50,18 +50,26 @@ function Navbar() {
         }
     };
 
+    /**
+     * Called when the user clicks the logout button in the navbar.
+     * Shows a confirmation modal before logging out.
+     */
     const handleLogoutClick = () => {
-        setProfileDropdownOpen(false);
-        setShowConfirmModal(true);
+        setProfileDropdownOpen(false); // close profile dropdown
+        setShowConfirmModal(true); // open confirmation modal
     }
 
+    /**
+     * Called when the user confirms logout.
+     * Logs the user out via API, shows success toast, and redirects.
+     */
     const handleConfirmLogout = async ()=>{
         setShowConfirmModal(false);
         try {
-            await logout();
-            setShowSuccessToast(true);
+            await logout(); // call api to invalidate token
+            setShowSuccessToast(true); // show success notifications
 
-            // redirect after 1.5 seconds
+            // redirect to homepage after 1.5 seconds
             setTimeout(() => {
                 window.location.href = "/";
             }, 1500);
