@@ -47,6 +47,12 @@ export default function LoginPage() {
     return (
         <div className="login-page">
             <div className="login-card">
+                <button
+                    className="login-card-close"
+                    onClick={() => window.location.href = "/"}
+                >
+                    ✕
+                </button>
                 <h2>Welcome Back</h2>
                 <p className="login-subtitle">Log in to continue exploring games and reviews.</p>
 

@@ -62,6 +62,10 @@ export default function SignupPage(){
                 setError(result.error);
             } else{
                 setMessage(result.message || "Registration Successful!" );
+                // Redirect after 1 second
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 1000);
             }
         } catch (e){
             const backendError = e.response?.data?.error || "Registration failed";
@@ -74,6 +78,12 @@ export default function SignupPage(){
 
     return(
         <div className="signup-page">
+            <button
+            className="login-card-close"
+            onClick={() => window.location.href = "/"}
+        >
+            ✕
+        </button>
             <div className="signup-card">
                 <h2>Create an Account</h2>
                 <p className="signup-subtitle">
