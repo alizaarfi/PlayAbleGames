@@ -27,10 +27,12 @@ export function AuthProvider({ children }) {
             }
         } catch (err) {
             console.error("Logout error:", err);
-        }
+        }finally {
+            localStorage.removeItem("token");
+            setToken(null);
 
-        localStorage.removeItem("token");
-        setToken(null);
+            return Promise.resolve();
+        }
     };
 
     return (

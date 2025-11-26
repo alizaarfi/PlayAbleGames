@@ -6,7 +6,7 @@ import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
 import AccessibilityPage from "./AccessibilityPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/LoginPage.jsx";
 import SettingsPage from "./SettingsPage.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
 import useSpeech from "./UseSpeech.jsx";
@@ -34,9 +34,6 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                         {/*signup page*/}
                         <Route path="/signup" element={<SignupPage/>} />
-
-                        {/* Settings page */}
-                        <Route path="/settings" element={<SettingsPage />} />
 
                         {/* Load AdminDashboard for /admin */}
                         <Route path="/admin" element={<AdminDashboard />} />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { login } from "../api/auth.js";
+import { login as loginUser} from "../api/auth.js";
 import {useAuth} from "../hooks/AuthProvider.jsx";
 
 export default function LoginPage() {
@@ -20,13 +20,28 @@ export default function LoginPage() {
         });
     };
 
+    const validateLogin = ()=>{
+        if (!form.username || !form.password) {
+            return "Please fill all the fields.";
+        }
+        if (form.password.length<8){
+            return"Password must be at least 8 characters.";
+        }
+        return null;
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
 
+        const validationError= validateLogin();
+        if(validationError){
+            setError(validationError);
+            setLoading(false);
+            return;
+        }
         try {
-            const result = await login(form);
+            const result = await loginUser(form);
 
             if (result.error) {
                 setError(result.error);

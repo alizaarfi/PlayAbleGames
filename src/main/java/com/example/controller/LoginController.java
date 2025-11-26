@@ -53,7 +53,7 @@ public class LoginController {
 
         } catch (RuntimeException e) {
             //catch specific error messages form userService
-            return HttpResponse.badRequest(new LoginResponse(null, e.getMessage()));
+            return HttpResponse.badRequest(new LoginResponse(null, "Invalid username or password. Please try again."));
         }
 
 
