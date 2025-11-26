@@ -8,8 +8,14 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
 import jakarta.validation.Valid;
 
+/**
+ * controller having user registration
+ * allows new users to sign up with username, email, and password
+ */
 @Controller("/user")
 public class RegisterController {
 
@@ -19,6 +25,13 @@ public class RegisterController {
         this.userService = service;
     }
 
+    /**
+     * endpoint for registering a new user
+     * 
+     * @param request RegistrationRequest with username, email, password
+     * @returnHTTP response with success or error message
+     */
+    @Secured(SecurityRule.IS_ANONYMOUS) // allow unauthenticated users
     @Post("/register")
     public HttpResponse<RegistrationResponse> register(@Body @Valid RegistrationRequest request) {
         try{

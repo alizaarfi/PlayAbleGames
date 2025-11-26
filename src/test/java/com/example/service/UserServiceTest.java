@@ -76,4 +76,46 @@ public class UserServiceTest {
 
         verify(userRepository, never()).save(any(User.class));
     }
+
+    @Test
+    void testAuthenticateSuccess() {
+        String rawPassword = "Password1";
+        String hashed = BCrypt.hashpw(rawPassword, BCrypt.gensalt());
+        User user = new User();
+        user.setUsername("john");
+        user.setPassword(hashed);
+
+        when(userRepository.findByUsername("john")).thenReturn(Optional.of(user));
+
+        Optional<User> result = userService.authenticate("john", rawPassword);
+
+        assertTrue(result.isPresent());
+        assertEquals("john", result.get().getUsername());
+    }
+
+    @Test
+    void testAuthenticateFailsWhenUserNotFound() {
+        when(userRepository.findByUsername("nonexistent")).thenReturn(Optional.empty());
+
+        Optional<User> result = userService.authenticate("nonexistent", "Password1");
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testAuthenticateFailsWhenPasswordIncorrect() {
+        String hashed = BCrypt.hashpw("Password1", BCrypt.gensalt());
+        User user = new User();
+        user.setUsername("john");
+        user.setPassword(hashed);
+
+        when(userRepository.findByUsername("john")).thenReturn(Optional.of(user));
+
+        RuntimeException e = assertThrows(RuntimeException.class, () ->
+                userService.authenticate("john", "WrongPassword")
+        );
+
+        assertEquals("Invalid password", e.getMessage());
+    }
+
 }

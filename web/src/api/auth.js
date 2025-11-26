@@ -31,3 +31,39 @@ export async function signup(data) {
         return {success: false, error: networkErr.message || String(networkErr)};
     }
 }
+
+
+export async function login(credentials){
+    const res = await fetch("http://localhost:8081/user/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(credentials)
+    });
+
+    const data= await res.json();
+
+    if (!res.ok){
+        // Return the specific error message from the backend
+        throw {
+            response: {
+                data: {
+                    error: data.message
+                }
+            }
+        };
+    }
+    return data;
+}
+
+export async function logout(){
+    const token= localStorage.getItem("token");
+
+    const res = await fetch("http://localhost:8081/user/logout", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    localStorage.removeItem("token");
+    return await res.json();
+}

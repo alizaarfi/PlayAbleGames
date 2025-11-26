@@ -7,6 +7,10 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.util.Optional;
 
+/**
+ * service handling user registration and authentication logic
+ */
+
 @Singleton
 public class UserService {
     private final UserRepository userRepository;
@@ -15,7 +19,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    //register new user
+    /**
+     * register a new user with encrypted password
+     *
+     * @param username desired username
+     * @param email user's email address
+     * @param rawPassword plaintext password
+     * @return the saved user object
+     */
     public User register (String username, String email, String rawPassword){
         Optional<User> existingUser = userRepository.findByUsername(username);
         Optional<User> existingEmail = userRepository.findByEmail(email);
@@ -28,6 +39,7 @@ public class UserService {
             throw new RuntimeException("Username already exists");
         }
 
+        //encrypt password using bcrypt
         String encrypted= BCrypt.hashpw(rawPassword, BCrypt.gensalt());
 
         User u= new User();
@@ -37,5 +49,25 @@ public class UserService {
         u.setEnabled(true);
 
         return userRepository.save(u);
+    }
+
+    /**
+     * authenticate a user by username and password
+     * @param username Username
+     * @param rawPassword plaintext password
+     * @return Optional<User> if authentication succeeds
+     */
+    public Optional<User> authenticate(String username, String rawPassword){
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty()) return Optional.empty();
+
+        //compare password with hashed password
+        boolean matches = BCrypt.checkpw(rawPassword, user.get().getPassword());
+
+        if (!matches){
+            throw new RuntimeException("Invalid password");
+        }
+        return user;
     }
 }
