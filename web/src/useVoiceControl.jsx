@@ -13,15 +13,23 @@ import React, { useState, useRef, useEffect } from 'react';
 function useVoiceControl() {
     const [stream, setStream] = useState(null);
     const [isRecording, setIsRecording] = useState(false);
+    const [isMicActive, setIsMicActive] = useState(true);
     const [transcription, setTranscription] = useState('');
     const [commandData, setCommandData] = useState(null);
     const [error, setError] = useState(null);
 
+    const hasInitialized = useRef(false);
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
 
     // Request mic access ONCE on mount
     useEffect(() => {
+        if (hasInitialized.current) {
+            console.log("⏭️ Already initialized, skipping");
+            return;
+        }
+        hasInitialized.current = true;
+
         console.log("🎤 Requesting microphone access...");
 
         const initMic = async () => {
@@ -39,6 +47,11 @@ function useVoiceControl() {
                 console.log("✅ Microphone ready");
                 setStream(mediaStream);
 
+                // Auto-start recording after mic is ready
+                setTimeout(() => {
+                    startRecordingAuto(mediaStream);
+                }, 500);
+
             } catch (err) {
                 console.error("❌ Microphone error:", err);
                 setError(err.message);
@@ -48,18 +61,96 @@ function useVoiceControl() {
         void initMic();
 
         return () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
+            console.log("🧹 Cleaning up microphone...");
+            // DON'T reset hasInitialized here!
+
+            // Stop the media recorder if running
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                mediaRecorderRef.current.stop();
             }
+
+            // Get the stream from state and stop all tracks
+            setStream(currentStream => {
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => {
+                        console.log("🛑 Stopping track:", track.kind);
+                        track.stop();
+                    });
+                }
+                return null;
+            });
         };
     }, []);
 
     const toggleRecording = () => {
-        if (isRecording) {
+        if (isMicActive) {
+            // MUTE
             stopRecording();
+            setIsMicActive(false);
         } else {
-            startRecording();
+            // UNMUTE
+            setIsMicActive(true);
+            if (stream) {
+                startRecordingAuto(stream, true); // Pass true explicitly
+            }
         }
+    };
+
+    const startRecordingAuto = (mediaStream, forceActive = null) => {
+        // Use forceActive if provided, otherwise check isMicActive
+        const shouldStart = forceActive !== null ? forceActive : isMicActive;
+
+        if (!shouldStart) {
+            console.log("⏸️ Mic is muted by user, not starting");
+            return;
+        }
+
+        console.log("═══════════════════════════════════════════════════════");
+        console.log("▶️  AUTO-START RECORDING");
+
+        audioChunksRef.current = [];
+        setTranscription('');
+        setCommandData(null);
+        setError(null);
+
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+
+        mediaRecorderRef.current = new MediaRecorder(mediaStream, {
+            mimeType: mimeType,
+            audioBitsPerSecond: 16000
+        });
+
+        mediaRecorderRef.current.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                console.log("📦 Audio chunk:", event.data.size, "bytes");
+                audioChunksRef.current.push(event.data);
+            }
+        };
+
+        mediaRecorderRef.current.onstop = async () => {
+            console.log("⏹️  Recording stopped - Processing audio");
+            const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+            await convertToWavAndSend(audioBlob);
+
+            // Restart only if still active (no override needed here)
+            setTimeout(() => {
+                if (stream && isMicActive) {
+                    startRecordingAuto(stream); // Normal call
+                }
+            }, 1000);
+        };
+
+        mediaRecorderRef.current.start();
+        setIsRecording(true);
+
+        setTimeout(() => {
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                mediaRecorderRef.current.stop();
+                setIsRecording(false);
+            }
+        }, 7000); // 7 seconds
+
+        console.log("🔴 Continuous recording started");
     };
 
     const startRecording = () => {
@@ -206,21 +297,21 @@ function useVoiceControl() {
             if (response.ok) {
                 const voiceCommand = await response.json();
 
-                console.log("✅ Full response:", voiceCommand);
-                console.log("✅ Transcription:", voiceCommand.transcribedText);
-                console.log("✅ Command:", voiceCommand.command);
-                console.log("✅ Target:", voiceCommand.commandTarget);
-                console.log("✅ Confidence:", voiceCommand.confidence);
+                console.log("📦 RAW RESPONSE:", voiceCommand);
+                console.log("📦 Type:", voiceCommand.type);
+                console.log("📦 Target:", voiceCommand.target);
+                console.log("📦 Transcribed Text:", voiceCommand.transcribedText); // Changed
 
-                setTranscription(voiceCommand.transcribedText || '');
-
-                setCommandData({
-                    command: voiceCommand.command,
-                    target: voiceCommand.commandTarget,
-                    confidence: voiceCommand.confidence,
-                    timestamp: voiceCommand.timestamp,
-                    processed: voiceCommand.processed
-                });
+                if (voiceCommand.type !== 'NO_SPEECH' && voiceCommand.transcribedText) {
+                    console.log("✅ Speech detected:", voiceCommand.transcribedText);
+                    setTranscription(voiceCommand.transcribedText); // Changed
+                    setCommandData({
+                        type: voiceCommand.type,
+                        target: voiceCommand.target,
+                        confidence: voiceCommand.confidence,
+                        timestamp: voiceCommand.timestamp
+                    });
+                }
 
             } else {
                 const errorText = await response.text();
@@ -237,6 +328,7 @@ function useVoiceControl() {
     return {
         stream,
         isRecording,
+        isMicActive,
         transcription,
         commandData,
         error,

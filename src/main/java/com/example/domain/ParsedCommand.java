@@ -21,7 +21,7 @@ public class ParsedCommand {
     private final Instant timestamp;
 
     // Target is nullable to support commands that don't need parameters
-    public ParsedCommand(CommandType type, @Nullable String target, String transcribedText, double confidence, Instant timestamp) {
+    public ParsedCommand( CommandType type, @Nullable String target, String transcribedText, double confidence, Instant timestamp) {
         this.type = type;
         this.target = target;
         this.transcribedText = transcribedText;

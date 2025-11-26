@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.domain.ParsedCommand;
+import com.example.domain.CommandType;
 import com.example.domain.VoiceCommand;
 import com.example.service.VoiceControlService;
 import io.micronaut.http.HttpResponse;
@@ -11,6 +12,7 @@ import io.micronaut.http.annotation.Options;
 import io.micronaut.http.annotation.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.time.Instant;
 
 // (Thin) Controller class for HTTP endpoints for voice control
 // Receives HTTP requests from frontend/react and returns JSON responses
@@ -38,31 +40,96 @@ public class VoiceCommandController {
         try {
             LOG.info("Received audio data: {} bytes", audioData.length);
 
-            // Get transcribed.text
-            ParsedCommand parsedCommand = voiceControlService.
-           // Get confidence, target and type, and timestamp then do a log
+            // Service returns a complete ParsedCommand with all fields populated
+            ParsedCommand parsedCommand = voiceControlService.processAudio(audioData);
 
-            // Return the complete VoiceCommand entity with CORS headers
-            // or return just parsedcommand
-            return parsedCommand;
+            // ===== BACKEND UPDATE A: Detect Speech Activity =====
+            String transcribedText = parsedCommand.getTranscribedText();
+
+            // Check if no speech was detected (empty or very short text)
+            if (transcribedText == null || transcribedText.trim().length() < 2) {
+                LOG.info("No speech detected in audio chunk");
+
+                // Create NO_SPEECH response using constructor
+                ParsedCommand noSpeechCommand = new ParsedCommand(
+                        CommandType.NO_SPEECH,  // Use enum
+                        null,                    // target can be null
+                        "",                      // empty transcription
+                        0.0,                     // confidence as double
+                        Instant.now()            // timestamp as Instant
+                );
+
+                return HttpResponse.ok(noSpeechCommand);
+            }
+
+            // ===== BACKEND UPDATE B: Only Process Valid Commands =====
+            // Log the parsed command details only if speech was detected
+            LOG.info("Speech detected - Type: {}, Target: {}, Transcription: '{}', Confidence: {}, Timestamp: {}",
+                    parsedCommand.getType(),
+                    parsedCommand.getTarget(),
+                    parsedCommand.getTranscribedText(),
+                    parsedCommand.getConfidence(),
+                    parsedCommand.getTimestamp());
+
+            // Additional validation: Check if confidence is too low
+            if (parsedCommand.getConfidence() < 0.3) {
+                LOG.warn("Low confidence transcription ({}): '{}'",
+                        parsedCommand.getConfidence(),
+                        transcribedText);
+
+                // You can choose to return NO_SPEECH or still return the low-confidence result
+                // For now, we'll return it but you could uncomment below to filter it out
+                /*
+                ParsedCommand lowConfidenceCommand = ParsedCommand.builder()
+                        .type("NO_SPEECH")
+                        .target("")
+                        .transcribedText(transcribedText)
+                        .confidence(parsedCommand.getConfidence())
+                        .timestamp(parsedCommand.getTimestamp())
+                        .build();
+
+                return HttpResponse.ok(lowConfidenceCommand);
+                */
+            }
+
+            // Return the valid ParsedCommand - Micronaut will serialize it to JSON
+            return HttpResponse.ok(parsedCommand);
+
+        } catch (IllegalArgumentException e) {
+            LOG.error("Invalid audio data: {}", e.getMessage());
+            return HttpResponse.badRequest();
         } catch (Exception e) {
             LOG.error("Error processing audio", e);
             return HttpResponse.serverError();
         }
     }
 
-
-    // parseText() takes plain text and returns a parsed command but is
-    // for testing, debugging, and when you already have transcribed text
-
-    //Testing! Use this endpoint to verify all command patterns work
-    //E.g test for empty string, special characters, very long text
-    //Validate that UNKNOWN is returned for unrecognized commands
     @Post(value = "/parse", consumes = MediaType.TEXT_PLAIN)
     public HttpResponse<ParsedCommand> parseText(@Body String text) {
         try {
             LOG.info("Parsing text: '{}'", text);
+
+            // Also add speech detection check here for consistency
+            if (text == null || text.trim().length() < 2) {
+                LOG.info("Empty or too short text provided");
+
+                ParsedCommand noSpeechCommand = new ParsedCommand(
+                        CommandType.NO_SPEECH,  // Use enum
+                        null,                    // target can be null
+                        "",                      // empty transcription
+                        0.0,                     // confidence as double
+                        Instant.now()            // timestamp as Instant
+                );
+
+                return HttpResponse.ok(noSpeechCommand);
+            }
+
             ParsedCommand command = voiceControlService.parseCommand(text);
+
+            LOG.info("Parsed command - Type: {}, Target: '{}'",
+                    command.getType(),
+                    command.getTarget());
+
             return HttpResponse.ok(command);
 
         } catch (Exception e) {

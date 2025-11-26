@@ -15,7 +15,9 @@ import org.vosk.Model;
 import org.vosk.Recognizer;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +49,8 @@ public class VoiceControlService {
     private final String modelPath;
     private final float sampleRate;
 
-    private final Map<Pattern, ParsedCommand> commandPatterns = new HashMap<>();
+//    private final Map<Pattern, CommandType> commandPatterns = new HashMap<>();
+    private final Map<Pattern, CommandType> commandPatterns = new LinkedHashMap<>();
 
     /* Constructor injection is preferred over field injection in Micronaut for
     better testability and immutability **/
@@ -85,18 +88,27 @@ public class VoiceControlService {
         }
     }
 
-    // Step 1: Converts the raw audio chunks into a VoiceCommand Entity with transcribed text.
+    // Convert audio bytes into a parsed command
     @NonNull
-    public ParsedCommand transcribeAudio(@NonNull byte[] audioData) {
+    public ParsedCommand processAudio(@NonNull byte[] audioData) {
+
+        Recognizer recognizer = null;
 
         try {
-            // New instance of the Vosk Recognizer
-            Recognizer recognizer = new Recognizer(model, sampleRate);
-            // Feed audio to the recognizer
-            recognizer.acceptWaveForm(audioData, audioData.length);
+            // checking if empty BUT i dont think this should be here
+            if (audioData == null || audioData.length == 0) {
+                LOG.error("Received empty or null audio data");
+                throw new IllegalArgumentException("Audio data cannot be empty");
+            }
 
+            LOG.info("Processing audio data: {} bytes", audioData.length);
+
+            // Step 1: Transcribe audio using Vosk
+            recognizer = new Recognizer(model, sampleRate);
+            recognizer.acceptWaveForm(audioData, audioData.length);
             String result = recognizer.getFinalResult();
 
+            // Parse Vosk JSON response
             JsonNode jsonNode = objectMapper.readTree(result);
             String transcription = jsonNode.get("text").asText();
             double confidence = jsonNode.has("confidence") ?
@@ -104,18 +116,29 @@ public class VoiceControlService {
 
             LOG.debug("Transcribed audio: '{}' (confidence: {})", transcription, confidence);
 
-            VoiceCommand voiceCommand = new VoiceCommand(transcription);
-            voiceCommand.setConfidence(confidence);
+            // Validate transcription
+            if (transcription == null || transcription.trim().isEmpty()) {
+                LOG.warn("Empty transcription received from Vosk");
+                return new ParsedCommand(CommandType.UNKNOWN, null, "", confidence, Instant.now());
+            }
 
-            //Close recogniser
-            recognizer.close();
+            // Step 2: Parse the transcription to identify command type and target
+            ParsedCommand parsedCommand = parseCommand(transcription);
 
-            // returns the entity with transcribed text, confidence level and the timestamp for now
-            return voiceCommand;
+            LOG.info("Successfully processed audio: '{}' -> Type: {}, Target: {}",
+                    transcription, parsedCommand.getType(), parsedCommand.getTarget());
+
+            return parsedCommand;
 
         } catch (IOException e) {
             LOG.error("Error transcribing audio", e);
             throw new RuntimeException("Audio transcription failed", e);
+        } finally {
+            // Always close the recognizer to prevent resource leaks
+            if (recognizer != null) {
+                recognizer.close();
+                LOG.trace("Recognizer closed");
+            }
         }
     }
 
@@ -125,15 +148,19 @@ public class VoiceControlService {
         // Formatting text before operation
         String normalized = transcription.toLowerCase().trim();
 
-        // Not sure if i need to match it this complexly
-        for (Map.Entry<Pattern, ParsedCommand> entry : commandPatterns.entrySet()) {
+        for (Map.Entry<Pattern, CommandType> entry : commandPatterns.entrySet()) {
             Matcher matcher = entry.getKey().matcher(normalized);
             if (matcher.find()) {
-                ParsedCommand command = entry.getValue();
+                CommandType commandType = entry.getValue();
+                String target = matcher.groupCount() > 0 ? matcher.group(1) : null;
 
-                if (matcher.groupCount() > 0) {
-                    command = command.withTarget(matcher.group(1));
-                }
+                ParsedCommand command = new ParsedCommand(
+                        commandType,
+                        target,
+                        transcription,
+                        0.0,  // No confidence available in this method
+                        Instant.now()
+                );
 
                 LOG.info("Matched command: '{}' -> {}", transcription, command);
                 return command;
@@ -141,73 +168,50 @@ public class VoiceControlService {
         }
 
         LOG.warn("No matching command found for: '{}'", transcription);
-        return new ParsedCommand(CommandType.UNKNOWN, transcription);
+        return new ParsedCommand(CommandType.UNKNOWN, null, transcription, 0.0, Instant.now());
     }
 
-    // Step 3: Takes raw audio bytes and returns a parsed command
-    @NonNull
-    public ParsedCommand processAudio(@NonNull byte[] audioData) {
-        VoiceCommand voiceCommand = transcribeAudio(audioData);
-        ParsedCommand parsed = parseCommand(voiceCommand.getTranscribedText());
-
-        voiceCommand.setCommand(parsed.getType().name());
-        voiceCommand.setCommandTarget(parsed.getTarget());
-        voiceCommand.setProcessed(true);
-
-        LOG.info("Processed audio: {} -> {}", voiceCommand.getTranscribedText(), parsed);
-
-        return parsed;
-    }
 
 //    Sets up the regex patterns that map natural language phrases to structured commands.
 //   - forms the vocabulary of voice commands
+private void initializeCommandMappings() {
+    // Specific pages with capture groups
+    commandPatterns.put(
+            Pattern.compile("go to (accessibility)(?:\\s+page)?"),
+            CommandType.NAVIGATE
+    );
 
-    private void initializeCommandMappings() {
-        commandPatterns.put(
-                Pattern.compile("go to accessibility page"),
-                new ParsedCommand(CommandType.NAVIGATE, "accessibility")
-        );
+    commandPatterns.put(
+            Pattern.compile("go to (home)\\s*(?:page)?"),
+            CommandType.NAVIGATE
+    );
 
-        commandPatterns.put(
-                Pattern.compile("go to home\\s*(?:page)?"),
-                new ParsedCommand(CommandType.NAVIGATE, "home")
-        );
+    commandPatterns.put(
+            Pattern.compile("go to (settings)"),
+            CommandType.NAVIGATE
+    );
 
-        commandPatterns.put(
-                Pattern.compile("go to settings"),
-                new ParsedCommand(CommandType.NAVIGATE, "settings")
-        );
+    // Generic navigation with capture group
+    commandPatterns.put(
+            Pattern.compile("(?:go to|open|navigate to)\\s+(\\w+(?:\\s+\\w+)?)\\s*(?:page)?"),
+            CommandType.NAVIGATE
+    );
 
-        commandPatterns.put(
-                Pattern.compile("(?:go to|open|navigate to)\\s+(\\w+(?:\\s+\\w+)?)\\s*(?:page)?"),
-                new ParsedCommand(CommandType.NAVIGATE, null)
-        );
+    commandPatterns.put(
+            Pattern.compile("click\\s+(\\w+(?:\\s+\\w+)?)"),
+            CommandType.CLICK
+    );
 
-        commandPatterns.put(
-                Pattern.compile("click\\s+(\\w+(?:\\s+\\w+)?)"),
-                new ParsedCommand(CommandType.CLICK, null)
-        );
+    commandPatterns.put(
+            Pattern.compile("search\\s+(?:for\\s+)?(.+)"),
+            CommandType.SEARCH
+    );
 
-        commandPatterns.put(
-                Pattern.compile("(?:submit|send|save)"),
-                new ParsedCommand(CommandType.SUBMIT, null)
-        );
+    commandPatterns.put(
+            Pattern.compile("scroll\\s+(up|down|top|bottom)"),
+            CommandType.SCROLL
+    );
 
-        commandPatterns.put(
-                Pattern.compile("(?:cancel|close|back)"),
-                new ParsedCommand(CommandType.CANCEL, null)
-        );
-
-        commandPatterns.put(
-                Pattern.compile("search\\s+(?:for\\s+)?(.+)"),
-                new ParsedCommand(CommandType.SEARCH, null)
-        );
-
-        commandPatterns.put(
-                Pattern.compile("scroll\\s+(up|down|top|bottom)"),
-                new ParsedCommand(CommandType.SCROLL, null)
-        );
-
-        LOG.info("Initialized {} command patterns", commandPatterns.size());
-    }
+    LOG.info("Initialized {} command patterns", commandPatterns.size());
+}
     }

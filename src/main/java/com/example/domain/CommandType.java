@@ -10,5 +10,7 @@ public enum CommandType {
     CANCEL,      // Cancel/close/back
     SEARCH,      // Search for something
     SCROLL,      // Scroll up/down
-    UNKNOWN      // Unrecognized command
+    UNKNOWN, //Unrecognised
+    NO_SPEECH,      // No speech
+
 }

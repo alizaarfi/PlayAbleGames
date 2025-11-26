@@ -1,40 +1,50 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "./style.css";
 import useVoiceControl from "./useVoiceControl.jsx";
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const { stream, isRecording, commandData, transcription, error, toggleRecording } = useVoiceControl();
+    const navigate = useNavigate();
+    const { stream, isRecording, isMicActive,commandData, transcription, error, toggleRecording } = useVoiceControl();
 
     // Monitor transcription
     // Monitor transcription and command data
     useEffect(() => {
-        if (transcription && commandData) {
-            console.log("✅ You said:", transcription);
-            console.log("✅ Parsed command:", commandData.command);
-            console.log("✅ Command target:", commandData.target);
-            console.log("✅ Confidence:", commandData.confidence);
+        console.log("🔔 Effect triggered - transcription:", transcription, "commandData:", commandData);
 
-            // Display transcription to user
-            alert(`You said: "${transcription}"\nCommand: ${commandData.command}\nTarget: ${commandData.target}`);
-
-            // TODO: Process command - route to page, click button, etc.
+        if (commandData) {
+            console.log("✅ Both present - processing command");
             processVoiceCommand(commandData);
+        } else {
+            console.log("❌ Missing commandData:", !!commandData);
         }
-    }, [transcription, commandData]);
+    }, [commandData]);
 
     // Function to handle voice commands
     const processVoiceCommand = (commandData) => {
-        const { command, target } = commandData;
+        // extracts from the backend response
+        const { type, target } = commandData;
+        console.log("🔍 Full commandData:", commandData);
+        console.log("🔍 Type:", type);
+        console.log("🔍 Target:", target);
+        console.log("🔍 Type comparison:", type, "===", 'NAVIGATE', ":", type === 'NAVIGATE');
 
-        switch (command) {
+        switch (type) {
             case 'NAVIGATE':
                 console.log(`🧭 Navigating to: ${target}`);
-                // Example: navigate to page
-                // if (target === 'home') window.location.href = '/';
-                // if (target === 'accessibility') window.location.href = '/accessibility';
+                console.log(`🧭 Target comparison: ${target} === 'accessibility': ${target === 'accessibility'}`);
+
+                if (target === 'accessibility') {
+                    console.log("✅ About to navigate to /accessibility");
+                    navigate('/accessibility');
+                } else if (target === 'home') {
+                    console.log("✅ About to navigate to /");
+                    navigate('/');
+                } else {
+                    console.log("❌ Target didn't match any condition. Target was:", target);
+                }
                 break;
 
             case 'CLICK':
@@ -109,12 +119,12 @@ function Navbar() {
                         {/*</div>*/}
                         <button
                             className={`nav-btn accessibility-btn ${
-                                !stream ? 'mic-error' :          // No mic access
-                                    isRecording ? 'mic-recording' :   // Currently recording
-                                        'mic-active'                      // Ready to record
+                                !stream ? 'mic-error' :
+                                    isMicActive ? 'mic-recording' :  // Use isMicActive instead of isRecording
+                                        'mic-inactive'
                             }`}
                             onClick={toggleRecording}
-                            disabled={!stream}  // Disable if no mic access
+                            // disabled={!stream}  // Disable if no mic access
                             title={
                                 !stream ? '❌ Microphone not available' :
                                     isRecording ? '🔴 Recording - Click to stop' :
@@ -122,9 +132,18 @@ function Navbar() {
                             }
                         >
                             {/*Button Icon*/}
+                            {/*Updates  to show based on isMicActive:*/}
                             <svg viewBox="0 0 24 24" fill="currentColor" className="nav-icon">
-                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                {isMicActive ? (
+                                    // Active mic icon
+                                    <>
+                                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                    </>
+                                ) : (
+                                    // Muted mic icon
+                                    <path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/>
+                                )}
                             </svg>
                         </button>
 
