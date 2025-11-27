@@ -7,102 +7,120 @@ import React, {
 
 const FavoritesContext = createContext();
 
-const API_BASE = "http://localhost:8081";
-//Hard coded user will replace when login system is made
-const USER_ID = 1;
+// read auth token from localStorage
+const getToken = () =>
+    localStorage.getItem("authToken") ||
+    localStorage.getItem("token") ||
+    localStorage.getItem("jwt");
 
-// ----- Helper to ensure IDs are always treated as numbers
-const toId = (value) => Number(value);
+// toast notification
+const showToast = (msg) => {
+    const el = document.createElement("div");
+    el.className = "toast-notice";
+    el.textContent = msg;
+
+    document.body.appendChild(el);
+
+    // trigger CSS transition
+    requestAnimationFrame(() => {
+        el.classList.add("visible");
+    });
+
+    setTimeout(() => {
+        el.classList.remove("visible");
+        setTimeout(() => el.remove(), 300);
+    }, 2500);
+};
 
 export function FavoritesProvider({ children }) {
-    const [favorites, setFavorites] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // track whether a token exists
+    const [hasToken, setHasToken] = useState(!!getToken());
 
-    // ---------------------------------------------------------------------
-    // Load favorites from backend once when the app starts.
-    // Calls: GET /api/users/{userId}/favorites
-    // ---------------------------------------------------------------------
+    // initial favourites: only load if logged in
+    const [favorites, setFavorites] = useState(() => {
+        if (!getToken()) return [];
+        const saved = localStorage.getItem("favorites");
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    // persist favourites only when logged in
     useEffect(() => {
-        console.log("Favorites state is now:", favorites);
-    }, [favorites]);
-
-    useEffect(() => {
-        async function loadFavorites() {
-            try {
-                const res = await fetch(`${API_BASE}/api/users/${USER_ID}/favorites`);
-                console.log("GET favorites status:", res.status);
-
-                if (!res.ok) {
-                    console.error("Failed to load favorites:", await res.text());
-                    setFavorites([]);
-                    return;
-                }
-
-                const data = await res.json();
-                const ids = Array.isArray(data) ? data.map(toId) : [];
-                console.log("Loaded favorites from backend:", ids);
-                setFavorites(ids);
-            } catch (err) {
-                console.error("Error fetching favorites:", err);
-                setFavorites([]);
-            } finally {
-                setLoading(false);
-            }
+        if (hasToken) {
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+        } else {
+            localStorage.removeItem("favorites");
         }
+    }, [favorites, hasToken]);
 
-        loadFavorites();
+    // watch for logout: clear favourites when token disappears
+    useEffect(() => {
+        const handleStorage = (event) => {
+            if (!event.key) return;
+            if (
+                event.key === "authToken" ||
+                event.key === "token" ||
+                event.key === "jwt"
+            ) {
+                const nowHasToken = !!getToken();
+                setHasToken(nowHasToken);
+                if (!nowHasToken) {
+                    setFavorites([]);
+                    localStorage.removeItem("favorites");
+                }
+            }
+        };
+
+        window.addEventListener("storage", handleStorage);
+
+        // simple poll for changes in the same tab that performed logout
+        const intervalId = setInterval(() => {
+            setHasToken((prev) => {
+                const nowHasToken = !!getToken();
+                if (prev && !nowHasToken) {
+                    setFavorites([]);
+                    localStorage.removeItem("favorites");
+                }
+                return nowHasToken;
+            });
+        }, 500);
+
+        return () => {
+            window.removeEventListener("storage", handleStorage);
+            clearInterval(intervalId);
+        };
     }, []);
 
+    // Toggle favourite for a game
+    // Requires login
+    const toggleFavorite = (gameId, event) => {
+        if (event && event.stopPropagation) {
+            event.stopPropagation();
+        }
 
-    // ---------------------------------------------------------------------
-    // Toggle a game's favorite status.
-    // Uses optimistic UI: update immediately, then notify backend.
-    // Calls:
-    //   POST   /api/users/{userId}/favorites/{gameId}
-    //   DELETE /api/users/{userId}/favorites/{gameId}
-    // ---------------------------------------------------------------------
-    const toggleFavorite = async (gameId, event) => {
-        if (event) event.stopPropagation();
+        if (!hasToken) {
+            showToast("Please log in to save favourites.");
+            return;
+        }
 
-        const id = toId(gameId);
-        const isFav = favorites.includes(id);
+        setFavorites((prev) => {
+            const isFav = prev.includes(gameId);
+            const next = isFav
+                ? prev.filter((id) => id !== gameId)
+                : [...prev, gameId];
 
-        const next = isFav
-            ? favorites.filter((v) => v !== id)
-            : [...favorites, id];
-
-        setFavorites(next);
-
-        try {
-            const method = isFav ? "DELETE" : "POST";
-            const res = await fetch(
-                `${API_BASE}/api/users/${USER_ID}/favorites/${id}`,
-                { method }
+            showToast(
+                isFav ? "Removed from favourites." : "Added to favourites."
             );
 
-            console.log(`${method} /favorites/${id} ->`, res.status);
-
-            if (!res.ok) {
-                // If backend fails, UI stays updated but logs error
-                console.error("Backend favorite update failed:", await res.text());
-            }
-        } catch (err) {
-            console.error("Network error updating favorite:", err);
-            // Hearts remain filled because we did not revert optimistic UI
-        }
+            return next;
+        });
     };
 
-    // ----- Provide favorites state and toggle function to the app
     return (
-        <FavoritesContext.Provider
-            value={{ favorites, toggleFavorite, loading }}
-        >
+        <FavoritesContext.Provider value={{ favorites, toggleFavorite }}>
             {children}
         </FavoritesContext.Provider>
     );
 }
 
-// ----- Hook for components to access favorites easily
-export function useFavorites() {
-    return useContext(FavoritesContext);
-}
+export const useFavorites = () => useContext(FavoritesContext);
