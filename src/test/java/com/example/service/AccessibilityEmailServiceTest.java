@@ -80,4 +80,41 @@ class AccessibilityEmailServiceTest {
 
         assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
     }
+
+    @Test
+    void testSendFeedbackEmail_WithLongMessage() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("User");
+        feedback.setEmail("user@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("This is a very long message that contains extensive details " +
+                "about various accessibility issues including but not limited to: color contrast " +
+                "problems, inadequate font sizes, poor navigation structure, lack of keyboard " +
+                "accessibility, missing ARIA labels, confusing form layouts, and several other " +
+                "concerns that need comprehensive attention and thoughtful solutions.");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
+
+    @Test
+    void testSendFeedbackEmail_WithEmptyStringName() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("");
+        feedback.setEmail("test@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("Test");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
+
+    @Test
+    void testSendFeedbackEmail_WithWhitespaceInFields() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("  User Name  ");
+        feedback.setEmail("  user@test.com  ");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("  Message with spaces  ");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
 }
