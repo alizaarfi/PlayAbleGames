@@ -4,7 +4,7 @@ import com.example.service.UserFavoriteService;
 import io.micronaut.http.*;
 import io.micronaut.http.annotation.*;
 
-
+// Controller for listing, adding and removing user favourites.
 @Controller("/api/users/{userId}/favorites")
 public class FavoritesController {
 

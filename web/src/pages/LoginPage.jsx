@@ -62,7 +62,14 @@ export default function LoginPage() {
                 //auth context
                 saveToken(result.token);
                 //redirect after login
-                window.location.href = "/";
+                const redirectPath = localStorage.getItem("redirectAfterLogin");
+
+                if (redirectPath) {
+                    localStorage.removeItem("redirectAfterLogin");
+                    window.location.href = redirectPath;
+                } else {
+                    window.location.href = "/";
+                }
             }
         } catch (err) {
             //handle backend errors

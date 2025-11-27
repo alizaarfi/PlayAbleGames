@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
+// Unit tests for the favourites controller.
 @ExtendWith(MockitoExtension.class)
 class FavoritesControllerTest {
 
