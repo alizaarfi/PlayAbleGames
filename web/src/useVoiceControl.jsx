@@ -22,6 +22,8 @@ function useVoiceControl() {
     const isMicActiveRef = useRef(true)
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
+    // put this so i can track loading time
+    const [processingState, setProcessingState] = useState('idle');
 
     // Request mic access ONCE on mount
     useEffect(() => {
@@ -89,6 +91,7 @@ function useVoiceControl() {
             stopRecording();
             setIsMicActive(false);
             isMicActiveRef.current = false;
+            setProcessingState('idle'); //may need to change
         } else {
             // UNMUTE
             setIsMicActive(true);
@@ -141,6 +144,9 @@ function useVoiceControl() {
 
         mediaRecorderRef.current.onstop = async () => {
             console.log("⏹️  Recording stopped - Processing audio");
+            //atm doesn't diff from speech and from commanding
+            setProcessingState('processing');
+
             const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
             await convertToWavAndSend(audioBlob);
 
@@ -163,13 +169,15 @@ function useVoiceControl() {
         };
         mediaRecorderRef.current.start();
         setIsRecording(true);
+        // recording now
+        setProcessingState('recording');
 
         setTimeout(() => {
             if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
                 mediaRecorderRef.current.stop();
                 setIsRecording(false);
             }
-        }, 7000); // 7 seconds
+        }, 4000); // 7 seconds
 
         console.log("🔴 Continuous recording started");
     };
@@ -278,6 +286,15 @@ function useVoiceControl() {
 
                 if (voiceCommand.type !== 'NO_SPEECH' && voiceCommand.transcribedText) {
                     console.log("✅ Speech detected:", voiceCommand.transcribedText);
+
+                    // now access processing state
+                    if (voiceCommand.type !== 'UNKNOWN') {
+                        setProcessingState('executing'); // ← Valid command! Show executing
+                    } else {
+                        setProcessingState('idle'); // ← Unknown command, back to idle
+                        console.log("Speech detected but not a recognized command");
+                    }
+
                     setTranscription(voiceCommand.transcribedText); // Changed
                     setCommandData({
                         type: voiceCommand.type,
@@ -285,17 +302,24 @@ function useVoiceControl() {
                         confidence: voiceCommand.confidence,
                         timestamp: voiceCommand.timestamp
                     });
+                } else {
+                    // set back if no speech
+                    setProcessingState('idle');
                 }
 
             } else {
                 const errorText = await response.text();
                 console.error("❌ HTTP Error:", response.status, errorText);
+                setProcessingState('error'); // ← Show error state
+                setTimeout(() => setProcessingState('idle'), 3000);
                 throw new Error(`HTTP ${response.status}: ${errorText}`);
             }
 
         } catch (err) {
             console.error("❌ Backend error:", err);
             setError(err.message);
+            setProcessingState('error'); // ← Show error state
+            setTimeout(() => setProcessingState('idle'), 3000);
         }
     };
 
@@ -303,6 +327,8 @@ function useVoiceControl() {
         stream,
         isRecording,
         isMicActive,
+        processingState,
+        setProcessingState,  // for setting it
         transcription,
         commandData,
         error,

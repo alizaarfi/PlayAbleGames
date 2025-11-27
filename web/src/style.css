@@ -626,17 +626,106 @@ html {
   transform: translateY(-1px);
 }
 
-
-/**VFeedback**/
+/* visual feedback for voice control */
 .visual-feedback-container {
-  width: 300px;
-  height: 41px;
-  border: 1px solid var(--border-color);
-  background-color: white;
-  border-radius: 8px;
+  min-width: 200px;
+  height: 40px;
+  display: flex;
   align-items: center;
-  padding: 6px;
+  justify-content: center;
+  margin-right: 12px;
+  padding: 0 16px;
+  border: 1px solid grey;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1));
+  /*background-color: white;*/
+  border-radius: 10px;
+  /*backdrop-filter: blur(10px);*/
 }
+
+/* Hint text (idle state) */
+.feedback-hint {
+  font-size: 13px;
+  color: black;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Feedback text states */
+.feedback-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  background-color: transparent;  /* ADD THIS */
+  width: auto;  /* ADD THIS */
+}
+
+.feedback-text.recording {
+  color: #FF5722;
+  animation: pulse 2s infinite;
+}
+
+.feedback-text.processing,
+.feedback-text.executing {
+  color: #2196F3;
+  align-items: center;
+}
+
+.feedback-text.success {
+  color: #4CAF50;
+  animation: fadeIn 0.3s ease;
+}
+
+.feedback-text.error {
+  color: #F44336;
+  animation: shake 0.5s ease;
+  background-color: transparent;  /* Ensure no background */
+  display: flex;  /* Match other states */
+  align-items: center;
+  width: auto;  /* Let it size naturally */
+  max-width: 100%;  /* Don't overflow container */
+}
+
+/* Spinner animation */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(33, 150, 243, 0.3);
+  border-top-color: #2196F3;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+
+
+
+
+
 
 
 .nav-icon {

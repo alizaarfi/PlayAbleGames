@@ -7,7 +7,7 @@ function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
-    const { stream, isRecording, isMicActive,commandData, transcription, error, toggleRecording } = useVoiceControl();
+    const { stream, isRecording, isMicActive, processingState,setProcessingState, transcription, commandData, error, toggleRecording } = useVoiceControl();
 
     // Monitor transcription
     // Monitor transcription and command data
@@ -35,7 +35,7 @@ function Navbar() {
             console.log("🔍 Target:", target);
             console.log("🔍 Type comparison:", type, "===", 'NAVIGATE', ":", type === 'NAVIGATE');
 
-            //switchcase for each command type then relevant target
+            //switch case for each command type then relevant target
             switch (type) {
                 case 'NAVIGATE':
                     console.log("NAVIGATE TYPE")
@@ -44,19 +44,29 @@ function Navbar() {
                         break;
                     }
 
-                    // Wrap navigate in try-catch
                     try {
                         if (target === 'accessibility') {
                             navigate('/accessibility');
+                            // ✅ SHOW SUCCESS AFTER NAVIGATION
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
                         } else if (target === 'home') {
                             navigate('/');
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
                         } else {
                             console.log("Unknown route:", target);
-                            // Recording continues!
+                            setProcessingState('error');
+                            setTimeout(() => setProcessingState('idle'), 2000);
                         }
                     } catch (navError) {
                         console.error("Navigation failed:", navError);
-                        // Recording still continues!
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
                     }
                     break;
 
@@ -85,6 +95,8 @@ function Navbar() {
 
         } catch (error) {
             console.error("Command processing error:", error);
+            setProcessingState('error');
+            setTimeout(() => setProcessingState('idle'), 2000);
         }
 
 
@@ -135,13 +147,58 @@ function Navbar() {
                     <div className="header-nav">
 
                         <div className={"visual-feedback-container"}>
+                            {/* Show example command when idle */}
+                            {(processingState === 'idle' || !processingState) && (
+                                <span className={"feedback-hint"}>
+                                      Try: "Go to Accessibility Page"
+                                </span>
+                            )}
+
+                            {/*/!*Show recording state when audio wave*!/*/}
+                            {/*{processingState === 'recording' && (*/}
+                            {/*    <div className="audio-wave">*/}
+                            {/*        <span className="wave-bar"></span>*/}
+                            {/*        <span className="wave-bar"></span>*/}
+                            {/*        <span className="wave-bar"></span>*/}
+                            {/*        <span className="wave-bar"></span>*/}
+                            {/*    </div>*/}
+                            {/*)}*/}
+
+                            {/*Need for listening */}
+                            {processingState === 'recording' && (
+                                <span className="feedback-text recording">
+                                    🔴 Listening...
+                                </span>
+                            )}
+                            {/*Need for processing */}
+                            {processingState === 'processing' && (
+                                <span className="feedback-text processing">
+                                    <span className="spinner"></span> Processing...
+                                </span>
+                            )}
+                            {/*Need for executing*/}
+                            {processingState === 'executing' && (
+                                <span className="feedback-text executing">
+                                    <span className="spinner"></span> Executing...
+                                </span>
+                            )}
+
+                            {/*Need for successful */}
+                            {processingState === 'success' && (
+                                <span className="feedback-text success">
+                                    ✓ Done!
+                                </span>
+                            )}
+                            {/*Need for try again */}
+                            {processingState === 'error' && (
+                                <span className="feedback-text error">
+                                    Retry
+                                </span>
+                            )}
 
                         </div>
 
                         {/*VoiceControlButton*/}
-                        {/*<div className="visual-feedback-container">*/}
-                        {/*    <span className="feedback-text">Listening...</span>*/}
-                        {/*</div>*/}
                         <button
                             className={`nav-btn accessibility-btn ${
                                 !stream ? 'mic-error' :
@@ -171,6 +228,8 @@ function Navbar() {
                                 )}
                             </svg>
                         </button>
+
+
 
                         <Link to="/accessibility" className="nav-btn info-btn">
                             <svg viewBox="0 0 24 24" fill="currentColor" className="nav-icon">
