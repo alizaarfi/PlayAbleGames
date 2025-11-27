@@ -97,28 +97,6 @@ class AccessibilityEmailServiceTest {
     }
 
     @Test
-    void testSendFeedbackEmail_WithEmptyStringName() {
-        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
-        feedback.setName("");
-        feedback.setEmail("test@test.com");
-        feedback.setConcernType("Vision");
-        feedback.setMessage("Test");
-
-        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
-    }
-
-    @Test
-    void testSendFeedbackEmail_WithWhitespaceInFields() {
-        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
-        feedback.setName("  User Name  ");
-        feedback.setEmail("  user@test.com  ");
-        feedback.setConcernType("Vision");
-        feedback.setMessage("  Message with spaces  ");
-
-        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
-    }
-
-    @Test
     void testSendFeedbackEmail_WithSpecialCharactersInName() {
         AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
         feedback.setName("José García-López O'Brien");
@@ -160,5 +138,56 @@ class AccessibilityEmailServiceTest {
         feedback.setMessage("Line 1: First issue\nLine 2: Second issue\nLine 3: Third issue");
 
         assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
+
+    @Test
+    void testSendFeedbackEmail_DifferentConcernTypes() {
+        String[] concernTypes = {"Vision", "Hearing", "Motor", "Cognitive", "Speech", "Other"};
+
+        for (String type : concernTypes) {
+            AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+            feedback.setName("Test User");
+            feedback.setEmail("test@test.com");
+            feedback.setConcernType(type);
+            feedback.setMessage("Testing " + type + " concern type");
+
+            assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback),
+                    "Should handle " + type + " concern type without error");
+        }
+    }
+
+    @Test
+    void testSendFeedbackEmail_WithEmptyStringName() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("");
+        feedback.setEmail("test@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("Test");
+
+        // Empty string might be accepted or rejected depending on validation
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
+
+    @Test
+    void testSendFeedbackEmail_WithWhitespaceInFields() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("  User Name  ");
+        feedback.setEmail("  user@test.com  ");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("  Message with spaces  ");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
+
+    @Test
+    void testSendFeedbackEmail_ValidCompleteSubmission() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("Complete User");
+        feedback.setEmail("complete@test.com");
+        feedback.setConcernType("Cognitive");
+        feedback.setMessage("This is a complete and valid feedback submission.");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback),
+                "Valid complete submission should not throw exception");
     }
 }
