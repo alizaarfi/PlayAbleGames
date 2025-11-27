@@ -117,4 +117,48 @@ class AccessibilityEmailServiceTest {
 
         assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
     }
+
+    @Test
+    void testSendFeedbackEmail_WithSpecialCharactersInName() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("José García-López O'Brien");
+        feedback.setEmail("jose@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("Test message");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
+
+    @Test
+    void testSendFeedbackEmail_WithSpecialCharactersInMessage() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("User");
+        feedback.setEmail("user@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("Message with special characters: @#$%^&*()_+-=[]{}|;:',.<>?/`~");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
+
+    @Test
+    void testSendFeedbackEmail_WithEmailPlusAddressing() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("Test User");
+        feedback.setEmail("user+accessibility@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("Test message");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
+
+    @Test
+    void testSendFeedbackEmail_WithMultilineMessage() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("User");
+        feedback.setEmail("user@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("Line 1: First issue\nLine 2: Second issue\nLine 3: Third issue");
+
+        assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
+    }
 }
