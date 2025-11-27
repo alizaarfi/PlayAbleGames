@@ -54,7 +54,6 @@ export function FavoritesProvider({ children }) {
 
     // watch for logout: clear favourites when token disappears
     useEffect(() => {
-        // storage event for other tabs/windows
         const handleStorage = (event) => {
             if (!event.key) return;
             if (
@@ -83,7 +82,7 @@ export function FavoritesProvider({ children }) {
                 }
                 return nowHasToken;
             });
-        }, 500); // half-second check is fine for coursework
+        }, 500);
 
         return () => {
             window.removeEventListener("storage", handleStorage);
@@ -124,5 +123,4 @@ export function FavoritesProvider({ children }) {
     );
 }
 
-// Hook used by HomePage and other components.
 export const useFavorites = () => useContext(FavoritesContext);

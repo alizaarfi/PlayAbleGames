@@ -16,7 +16,6 @@ public class FavoritesController {
     }
 
     // ---------------------------------------------------------------------
-    // GET /api/users/{userId}/favorites
     // Returns a list of game IDs the user has favorited.
     // ---------------------------------------------------------------------
     @Get
@@ -25,7 +24,6 @@ public class FavoritesController {
     }
 
     // ---------------------------------------------------------------------
-    // POST /api/users/{userId}/favorites/{gameId}
     // Adds the given game to the user's favorites.
     // If it already exists, the service ignores the duplicate.
     // ---------------------------------------------------------------------
@@ -36,7 +34,6 @@ public class FavoritesController {
     }
 
     // ---------------------------------------------------------------------
-    // DELETE /api/users/{userId}/favorites/{gameId}
     // Removes the game from the user's favorites.
     // If no record exists, nothing happens.
     // ---------------------------------------------------------------------
