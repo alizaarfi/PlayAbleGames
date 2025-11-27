@@ -1,14 +1,12 @@
 package com.example.controller;
 
 import com.example.dto.AccessibilityFeedbackDTO;
-import com.example.service.AccessibilityEmailService;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.micronaut.test.support.TestPropertyProvider;
 import io.micronaut.context.annotation.Property;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -17,6 +15,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 @MicronautTest
 @Property(name = "micronaut.server.port", value = "-1")
 class AccessibilityFeedbackControllerTest {
@@ -230,7 +229,7 @@ class AccessibilityFeedbackControllerTest {
                 Map.class
         );
 
-        Map<String, String> body = response.body();
+        Map body = response.body();
         assertNotNull(body);
         assertTrue(body.containsKey("message"));
         assertEquals("Feedback sent successfully", body.get("message"));
