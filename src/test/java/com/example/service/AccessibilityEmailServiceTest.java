@@ -164,7 +164,6 @@ class AccessibilityEmailServiceTest {
         feedback.setConcernType("Vision");
         feedback.setMessage("Test");
 
-        // Empty string might be accepted or rejected depending on validation
         assertDoesNotThrow(() -> service.sendFeedbackEmail(feedback));
     }
 
