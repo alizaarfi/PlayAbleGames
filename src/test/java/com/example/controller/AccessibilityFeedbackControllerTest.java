@@ -8,6 +8,7 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
 import io.micronaut.context.annotation.Property;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -124,6 +125,149 @@ class AccessibilityFeedbackControllerTest {
         );
 
         assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals("Feedback sent successfully", response.body().get("message"));
+    }
+
+    @Test
+    void testSubmitFeedback_WithLongMessage() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("Test User");
+        feedback.setEmail("test@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("This is a very long message that contains extensive details " +
+                "about various accessibility issues including but not limited to: color contrast " +
+                "problems, inadequate font sizes, poor navigation structure, lack of keyboard " +
+                "accessibility, missing ARIA labels, confusing form layouts, and several other " +
+                "concerns that need comprehensive attention and thoughtful solutions.");
+
+        HttpResponse<Map> response = client.toBlocking().exchange(
+                HttpRequest.POST("/api/accessibility/feedback", feedback),
+                Map.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals("Feedback sent successfully", response.body().get("message"));
+    }
+
+    @Test
+    void testSubmitFeedback_WithSpecialCharactersInName() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("José García-López O'Brien");
+        feedback.setEmail("jose@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("Test message with special name");
+
+        HttpResponse<Map> response = client.toBlocking().exchange(
+                HttpRequest.POST("/api/accessibility/feedback", feedback),
+                Map.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals("Feedback sent successfully", response.body().get("message"));
+    }
+
+    @Test
+    void testSubmitFeedback_WithSpecialCharactersInMessage() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("Test User");
+        feedback.setEmail("user@test.com");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("Message with special characters: @#$%^&*()_+-=[]{}|;:',.<>?/`~");
+
+        HttpResponse<Map> response = client.toBlocking().exchange(
+                HttpRequest.POST("/api/accessibility/feedback", feedback),
+                Map.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals("Feedback sent successfully", response.body().get("message"));
+    }
+
+    @Test
+    void testSubmitFeedback_WithEmailPlusAddressing() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("Plus Test User");
+        feedback.setEmail("user+accessibility@test.com");
+        feedback.setConcernType("Motor");
+        feedback.setMessage("Testing email plus addressing");
+
+        HttpResponse<Map> response = client.toBlocking().exchange(
+                HttpRequest.POST("/api/accessibility/feedback", feedback),
+                Map.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals("Feedback sent successfully", response.body().get("message"));
+    }
+
+    @Test
+    void testSubmitFeedback_WithMultilineMessage() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("Multiline Tester");
+        feedback.setEmail("multiline@test.com");
+        feedback.setConcernType("Cognitive");
+        feedback.setMessage("Line 1: First issue\nLine 2: Second issue\nLine 3: Third issue");
+
+        HttpResponse<Map> response = client.toBlocking().exchange(
+                HttpRequest.POST("/api/accessibility/feedback", feedback),
+                Map.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals("Feedback sent successfully", response.body().get("message"));
+    }
+
+    @Test
+    void testSubmitFeedback_ResponseContainsMessage() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("Response Test");
+        feedback.setEmail("response@test.com");
+        feedback.setConcernType("Hearing");
+        feedback.setMessage("Testing response structure");
+
+        HttpResponse<Map> response = client.toBlocking().exchange(
+                HttpRequest.POST("/api/accessibility/feedback", feedback),
+                Map.class
+        );
+
+        Map<String, String> body = response.body();
+        assertNotNull(body);
+        assertTrue(body.containsKey("message"));
+        assertEquals("Feedback sent successfully", body.get("message"));
+    }
+
+    @Test
+    void testSubmitFeedback_WithWhitespaceInFields() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("  User Name  ");
+        feedback.setEmail("  user@test.com  ");
+        feedback.setConcernType("Vision");
+        feedback.setMessage("  Message with spaces  ");
+
+        HttpResponse<Map> response = client.toBlocking().exchange(
+                HttpRequest.POST("/api/accessibility/feedback", feedback),
+                Map.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals("Feedback sent successfully", response.body().get("message"));
+    }
+
+    @Test
+    void testSubmitFeedback_ValidCompleteSubmission() {
+        AccessibilityFeedbackDTO feedback = new AccessibilityFeedbackDTO();
+        feedback.setName("Complete User");
+        feedback.setEmail("complete@test.com");
+        feedback.setConcernType("Speech");
+        feedback.setMessage("This is a complete and valid feedback submission.");
+
+        HttpResponse<Map> response = client.toBlocking().exchange(
+                HttpRequest.POST("/api/accessibility/feedback", feedback),
+                Map.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertNotNull(response.body());
         assertEquals("Feedback sent successfully", response.body().get("message"));
     }
 }
