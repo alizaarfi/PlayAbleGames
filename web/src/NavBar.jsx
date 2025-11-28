@@ -33,7 +33,6 @@ function Navbar() {
             const { type, target } = commandData;
             console.log("Full commandData:", commandData);
             console.log("Target:", target);
-            console.log("Type comparison:", type, "===", 'NAVIGATE', ":", type === 'NAVIGATE');
 
             //switch case for each command type then relevant target
             switch (type) {
@@ -76,12 +75,56 @@ function Navbar() {
 
                 case 'SEARCH':
                     console.log(`Searching for: ${target}`);
-                    // Example: trigger search
+
+                    // Dispatch search command
+                    window.dispatchEvent(new CustomEvent('voiceCommand', {
+                        detail: {
+                            type: 'SEARCH',
+                            searchQuery: target
+                        }
+                    }));
+
+                    console.log(`✅ Dispatched SEARCH event for: ${target}`);
+
+                    setTimeout(() => {
+                        setProcessingState('success');
+                        setTimeout(() => setProcessingState('idle'), 1500);
+                    }, 100);
                     break;
 
                 case 'SCROLL':
                     console.log(`Scrolling: ${target}`);
-                    // Example: scroll page
+
+                    // Map scroll directions
+                    const scrollActions = {
+                        'up': -500,      // Scroll up 500px
+                        'down': 500,     // Scroll down 500px
+                        'top': 'top',    // Scroll to top
+                        'bottom': 'bottom' // Scroll to bottom
+                    };
+
+                    const scrollAmount = scrollActions[target.toLowerCase()];
+
+                    if (scrollAmount !== undefined) {
+                        window.dispatchEvent(new CustomEvent('voiceCommand', {
+                            detail: {
+                                type: 'SCROLL',
+                                direction: target,
+                                amount: scrollAmount
+                            }
+                        }));
+
+                        console.log(`✅ Dispatched SCROLL event: ${target}`);
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.warn(`Unknown scroll direction: ${target}`);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
                     break;
 
                 case 'UNKNOWN':
@@ -131,6 +174,92 @@ function Navbar() {
                         }, 100);
                     } else {
                         console.warn(`Game not found: ${target}`);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
+                    break;
+
+                case 'FILTER':
+                    console.log(`Filtering by: ${target}`);
+
+                    // Map spoken filter names to your filter state keys
+                    const filterMap = {
+                        'vision support': 'visionSupport',
+                        'vision': 'visionSupport',
+                        'hearing support': 'hearingSupport',
+                        'hearing': 'hearingSupport',
+                        'speech support': 'speechSupport',
+                        'speech': 'speechSupport',
+                        'motor support': 'motorSupport',
+                        'motor': 'motorSupport',
+                        'cognitive support': 'cognitiveSupport',
+                        'cognitive': 'cognitiveSupport',
+                        'action': 'action',
+                        'adventure': 'adventure',
+                        'puzzle': 'puzzle',
+                        'strategy': 'strategy',
+                        'casual': 'casual'
+                    };
+
+                    const filterKey = filterMap[target.toLowerCase()];
+
+                    if (filterKey) {
+                        window.dispatchEvent(new CustomEvent('voiceCommand', {
+                            detail: {
+                                type: 'FILTER',
+                                filterKey: filterKey,
+                                filterName: target
+                            }
+                        }));
+
+                        console.log(`✅ Dispatched FILTER event for ${target}`);
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.warn(`Filter not found: ${target}`);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
+                    break;
+
+                case 'SORT':
+                    console.log(`Sorting by: ${target}`);
+
+                    // Map spoken sort options to your sortOption values
+                    const sortMap = {
+                        'rating': 'ratingDesc',
+                        'highest rating': 'ratingDesc',
+                        'lowest rating': 'ratingAsc',
+                        'most popular': 'ratingDesc',
+                        'most reviewed': 'reviewsDesc',
+                        'least reviewed': 'reviewsAsc',
+                        'title': 'titleAsc',
+                        'alphabetical': 'titleAsc',
+                        'reverse alphabetical': 'titleDesc'
+                    };
+
+                    const sortValue = sortMap[target.toLowerCase()];
+
+                    if (sortValue) {
+                        window.dispatchEvent(new CustomEvent('voiceCommand', {
+                            detail: {
+                                type: 'SORT',
+                                sortValue: sortValue,
+                                sortName: target
+                            }
+                        }));
+
+                        console.log(`✅ Dispatched SORT event for ${target}`);
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.warn(`Sort option not found: ${target}`);
                         setProcessingState('error');
                         setTimeout(() => setProcessingState('idle'), 2000);
                     }

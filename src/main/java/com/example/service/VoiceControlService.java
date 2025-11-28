@@ -215,6 +215,17 @@ private void initializeCommandMappings() {
             Pattern.compile("favou?rite\\s+(.+)"),  // Captures everything after "favourite"
             CommandType.FAVOURITE
     );
+    // FILTER commands - "filter by [accessibility/genre]"
+    commandPatterns.put(
+            Pattern.compile("filter(?:\\s+by)?\\s+(.+)"),
+            CommandType.FILTER
+    );
+
+// SORT commands - "sort by [option]"
+    commandPatterns.put(
+            Pattern.compile("sort(?:\\s+by)?\\s+(.+)"),
+            CommandType.SORT
+    );
 
     LOG.info("Initialized {} command patterns", commandPatterns.size());
 }

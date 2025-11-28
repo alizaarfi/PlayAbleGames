@@ -261,12 +261,23 @@ function HomePage() {
     // Listen for voice commands from Navbar
     useEffect(() => {
         const handleVoiceCommand = (event) => {
-            const { type, gameId, gameName } = event.detail;
+            // Extract ALL possible properties from event.detail
+            const {
+                type,
+                gameId,
+                gameName,
+                filterKey,
+                filterName,
+                sortValue,
+                sortName,
+                searchQuery,
+                direction,
+                amount
+            } = event.detail;
 
             if (type === 'FAVOURITE') {
                 console.log(`🎮 HomePage received FAVOURITE command for game ${gameId}`);
 
-                // ✅ DIRECTLY update state instead of calling toggleFavorite
                 setFavorites(prev => {
                     console.log("Current favorites:", prev);
                     console.log("Toggling game ID:", gameId);
@@ -279,6 +290,49 @@ function HomePage() {
                     return newFavorites;
                 });
             }
+
+            if (type === 'FILTER') {
+                console.log(`🔍 HomePage received FILTER command for ${filterName}`);
+
+                setFilters(prev => {
+                    console.log("Current filters:", prev);
+                    console.log("Toggling filter:", filterKey);
+
+                    const newFilters = {
+                        ...prev,
+                        [filterKey]: !prev[filterKey]  // Toggle the filter on/off
+                    };
+
+                    console.log("New filters:", newFilters);
+                    return newFilters;
+                });
+            }
+
+            if (type === 'SORT') {
+                console.log(`📊 HomePage received SORT command: ${sortName}`);
+                console.log("Setting sort to:", sortValue);
+
+                setSortOption(sortValue);
+            }
+
+            // NEW: Handle SEARCH commands
+            if (type === 'SEARCH') {
+                console.log(`🔍 HomePage received SEARCH command: ${searchQuery}`);
+                setSearchQuery(searchQuery);
+            }
+
+            // scroll
+            if (type === 'SCROLL') {
+                console.log(`📜 HomePage received SCROLL command: ${direction}, amount: ${amount}`);
+
+                if (amount === 'top') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (amount === 'bottom') {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                } else if (typeof amount === 'number') {
+                    window.scrollBy({ top: amount, behavior: 'smooth' });
+                }
+            }
         };
 
         window.addEventListener('voiceCommand', handleVoiceCommand);
@@ -286,7 +340,7 @@ function HomePage() {
         return () => {
             window.removeEventListener('voiceCommand', handleVoiceCommand);
         };
-    }, []); // ✅ Empty dependency array - no stale closure issues
+    }, []); // Empty dependency array
 
 
     return (
