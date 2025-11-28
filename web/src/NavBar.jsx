@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./style.css";
 import useVoiceControl from "./useVoiceControl.jsx";
+import { executeCommand } from './commandRegistry';
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -9,14 +10,13 @@ function Navbar() {
     const navigate = useNavigate();
     const { stream, isRecording, isMicActive, processingState,setProcessingState, transcription, commandData, error, toggleRecording } = useVoiceControl();
 
-    // Monitor transcription
-    // Monitor transcription and command data
+    // when commandData is received
     useEffect(() => {
         if (commandData) {
             processVoiceCommand(commandData);
         } else if (transcription && transcription.length > 0) {
             // Speech was detected but couldn't be parsed into a command
-            console.warn("⚠️ Speech detected but command not recognized:", transcription);
+            console.warn("Speech detected but command not recognized:", transcription);
         }
     }, [commandData, transcription]);
 
@@ -32,22 +32,21 @@ function Navbar() {
             // extracts from the backend response
             const { type, target } = commandData;
             console.log("Full commandData:", commandData);
-            console.log("🔍 Target:", target);
-            console.log("🔍 Type comparison:", type, "===", 'NAVIGATE', ":", type === 'NAVIGATE');
+            console.log("Target:", target);
+            console.log("Type comparison:", type, "===", 'NAVIGATE', ":", type === 'NAVIGATE');
 
             //switch case for each command type then relevant target
             switch (type) {
                 case 'NAVIGATE':
                     console.log("NAVIGATE TYPE")
                     if (!target) {
-                        console.warn("⚠️ Navigate called without target");
+                        console.warn("Navigate called without target");
                         break;
                     }
 
                     try {
                         if (target === 'accessibility') {
                             navigate('/accessibility');
-                            // ✅ SHOW SUCCESS AFTER NAVIGATION
                             setTimeout(() => {
                                 setProcessingState('success');
                                 setTimeout(() => setProcessingState('idle'), 1500);
@@ -89,8 +88,57 @@ function Navbar() {
                     console.warn(`Unknown command: ${transcription}`);
                     break;
 
+                case 'FAVOURITE':
+                    console.log(`Favouriting game: ${target}`);
+
+                    // Simple game name to ID mapping
+                    const gameNameToId = {
+                        'minecraft': 1,
+                        'monument valley': 2,
+                        'among us': 3,
+                        'candy crush saga': 4,
+                        'call of duty': 5,
+                        'pokemon go': 6,
+                        'subway surfers': 7,
+                        'clash of clans': 8,
+                        'jigsawscapes': 9,
+                        'my oasis': 10,
+                        'altos odyssey': 11,
+                        'kami 2': 12,
+                        'sky children of light': 13,
+                        'stardew valley': 14,
+                        'a blind legend': 15
+                    };
+
+                    const gameName = target.toLowerCase();
+                    const gameId = gameNameToId[gameName];
+
+                    if (gameId) {
+                        // Dispatch custom event that HomePage will listen to
+                        window.dispatchEvent(new CustomEvent('voiceCommand', {
+                            detail: {
+                                type: 'FAVOURITE',
+                                gameId: gameId,
+                                gameName: target
+                            }
+                        }));
+
+                        console.log(`✅ Dispatched FAVOURITE event for ${target} (ID: ${gameId})`);
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.warn(`Game not found: ${target}`);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
+                    break;
+
                 default:
                     console.log(`Command: ${type}, Target: ${target}`);
+                    break;
             }
 
         } catch (error) {
@@ -106,7 +154,7 @@ function Navbar() {
     // Display error messages
     useEffect(() => {
         if (error) {
-            console.error("❌ Error:", error);
+            console.error("Error:", error);
             // Optionally show error to user
         }
     }, [error]);
@@ -148,6 +196,7 @@ function Navbar() {
 
                         <div className={"visual-feedback-container"}>
                             {/* Show example command when idle */}
+                            {/*can change for prompts*/}
                             {(processingState === 'idle' || !processingState) && (
                                 <span className={"feedback-hint"}>
                                       Try: "Go to Accessibility Page"
@@ -167,7 +216,7 @@ function Navbar() {
                             {/*Need for listening */}
                             {processingState === 'recording' && (
                                 <span className="feedback-text recording">
-                                    🔴 Listening...
+                                    Listening...
                                 </span>
                             )}
                             {/*Need for processing */}
@@ -186,7 +235,7 @@ function Navbar() {
                             {/*Need for successful */}
                             {processingState === 'success' && (
                                 <span className="feedback-text success">
-                                    ✓ Done!
+                                    Done!
                                 </span>
                             )}
                             {/*Need for try again */}

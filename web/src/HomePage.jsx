@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
+import usePageCommands from './usePageCommands';
 
 const games = [
     {
@@ -143,7 +144,18 @@ const games = [
 
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [favorites, setFavorites] = useState([]);
+    // NEW - Initialize from localStorage
+    const [favorites, setFavorites] = useState(() => {
+        const saved = localStorage.getItem('playable-favorites');
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    // Save to localStorage whenever favorites change
+    useEffect(() => {
+        localStorage.setItem('playable-favorites', JSON.stringify(favorites));
+        console.log("💾 Saved favorites:", favorites);
+    }, [favorites]);
+
     const [filters, setFilters] = useState({
         visionSupport: false,
         hearingSupport: false,
@@ -157,12 +169,7 @@ function HomePage() {
         casual: false
     });
     const [sortOption, setSortOption] = useState('ratingDesc');
-    // const { stream, error, isLoading, startMic, stopMic } = useMicrophone();
-    //
-    // // Open mic automatically when page loads
-    // useEffect(() => {
-    //     openMic();
-    // }, []);
+
 
 
     const toggleFavorite = (gameId, event) => {
@@ -250,6 +257,36 @@ function HomePage() {
                 return 0;
         }
     });
+
+    // Listen for voice commands from Navbar
+    useEffect(() => {
+        const handleVoiceCommand = (event) => {
+            const { type, gameId, gameName } = event.detail;
+
+            if (type === 'FAVOURITE') {
+                console.log(`🎮 HomePage received FAVOURITE command for game ${gameId}`);
+
+                // ✅ DIRECTLY update state instead of calling toggleFavorite
+                setFavorites(prev => {
+                    console.log("Current favorites:", prev);
+                    console.log("Toggling game ID:", gameId);
+
+                    const newFavorites = prev.includes(gameId)
+                        ? prev.filter(id => id !== gameId)
+                        : [...prev, gameId];
+
+                    console.log("New favorites:", newFavorites);
+                    return newFavorites;
+                });
+            }
+        };
+
+        window.addEventListener('voiceCommand', handleVoiceCommand);
+
+        return () => {
+            window.removeEventListener('voiceCommand', handleVoiceCommand);
+        };
+    }, []); // ✅ Empty dependency array - no stale closure issues
 
 
     return (

@@ -211,6 +211,10 @@ private void initializeCommandMappings() {
             Pattern.compile("scroll\\s+(up|down|top|bottom)"),
             CommandType.SCROLL
     );
+    commandPatterns.put(
+            Pattern.compile("favou?rite\\s+(.+)"),  // Captures everything after "favourite"
+            CommandType.FAVOURITE
+    );
 
     LOG.info("Initialized {} command patterns", commandPatterns.size());
 }
