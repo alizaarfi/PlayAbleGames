@@ -26,6 +26,8 @@ function AccessibilityPage() {
         };
     }, []);
 
+
+
     return (
         <div className="app">
             {/*<Navbar />*/}

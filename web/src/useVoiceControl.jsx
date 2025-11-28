@@ -53,7 +53,7 @@ function useVoiceControl() {
                 // Auto-start recording after mic is ready
                 setTimeout(() => {
                     startRecordingAuto(mediaStream);
-                }, 500);
+                }, 800);
 
             } catch (err) {
                 console.error("Microphone error:", err);
@@ -149,7 +149,7 @@ function useVoiceControl() {
         mediaRecorderRef.current.onstop = async () => {
             console.log("Recording stopped - Processing audio");
             //atm doesn't diff from speech and from commanding
-            setProcessingState('processing');
+            // setProcessingState('processing');
 
             const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
             await convertToWavAndSend(audioBlob);
@@ -181,7 +181,7 @@ function useVoiceControl() {
                 mediaRecorderRef.current.stop();
                 setIsRecording(false);
             }
-        }, 7000); // 7 seconds
+        }, 3000); // 7 seconds
 
         console.log("Continuous recording started");
     };
@@ -271,6 +271,7 @@ function useVoiceControl() {
     // sending converted data to backend
     const sendToBackend = async (audioBlob) => {
         console.log("Sending WAV to backend...");
+        setProcessingState('processing'); //set here instead of onstop
 
         try {
             const response = await fetch('http://localhost:8081/api/v1/transcription/process', {
@@ -293,7 +294,8 @@ function useVoiceControl() {
                     console.log("Speech detected:", voiceCommand.transcribedText);
                     // now access processing state
                     if (voiceCommand.type !== 'UNKNOWN') {
-                        setProcessingState('executing'); // ← Valid command! Show executing
+                        //let navbar handle this?
+                        // setProcessingState('executing');
                     } else {
                         setProcessingState('idle'); // ← Unknown command, back to idle
                         console.log("Speech detected but not a recognized command");

@@ -95,26 +95,26 @@ function Navbar() {
                 case 'SCROLL':
                     console.log(`Scrolling: ${target}`);
 
-                    // Map scroll directions
                     const scrollActions = {
-                        'up': -500,      // Scroll up 500px
-                        'down': 500,     // Scroll down 500px
-                        'top': 'top',    // Scroll to top
-                        'bottom': 'bottom' // Scroll to bottom
+                        'up': -500,
+                        'down': 500,
+                        'top': 'top',
+                        'bottom': 'bottom'
                     };
 
                     const scrollAmount = scrollActions[target.toLowerCase()];
 
                     if (scrollAmount !== undefined) {
-                        window.dispatchEvent(new CustomEvent('voiceCommand', {
-                            detail: {
-                                type: 'SCROLL',
-                                direction: target,
-                                amount: scrollAmount
-                            }
-                        }));
+                        // Execute scroll directly instead of dispatching event
+                        if (scrollAmount === 'top') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (scrollAmount === 'bottom') {
+                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                        } else {
+                            window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+                        }
 
-                        console.log(`✅ Dispatched SCROLL event: ${target}`);
+                        console.log(`✅ Executed SCROLL: ${target}`);
 
                         setTimeout(() => {
                             setProcessingState('success');
@@ -129,6 +129,8 @@ function Navbar() {
 
                 case 'UNKNOWN':
                     console.warn(`Unknown command: ${transcription}`);
+                    setProcessingState('error');
+                    setTimeout(() => setProcessingState('idle'), 2000);
                     break;
 
                 case 'FAVOURITE':
@@ -325,41 +327,46 @@ function Navbar() {
 
                         <div className={"visual-feedback-container"}>
                             {/* Show example command when idle */}
-                            {/*can change for prompts*/}
-                            {(processingState === 'idle' || !processingState) && (
-                                <span className={"feedback-hint"}>
-                                      Try: "Go to Accessibility Page"
+                            {(!processingState || processingState === 'idle') && (
+                                <span className="feedback-text idle">
+                                    Ready - Speak to start
                                 </span>
                             )}
 
-                            {/*/!*Show recording state when audio wave*!/*/}
-                            {/*{processingState === 'recording' && (*/}
-                            {/*    <div className="audio-wave">*/}
-                            {/*        <span className="wave-bar"></span>*/}
-                            {/*        <span className="wave-bar"></span>*/}
-                            {/*        <span className="wave-bar"></span>*/}
-                            {/*        <span className="wave-bar"></span>*/}
-                            {/*    </div>*/}
-                            {/*)}*/}
-
-                            {/*Need for listening */}
+                            {/*Show recording state when audio wave*/}
+                            {/* Audio wave during recording */}
                             {processingState === 'recording' && (
-                                <span className="feedback-text recording">
-                                    Listening...
-                                </span>
+                                <div className="feedback-recording">
+                                    <div className="audio-wave">
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                    </div>
+                                    <span className="feedback-text recording">Listening</span>
+                                </div>
                             )}
+
+                            {/*/!*Need for listening *!/*/}
+                            {/*{processingState === 'recording' && (*/}
+                            {/*    <span className="feedback-text recording">*/}
+                            {/*        Listening...*/}
+                            {/*    </span>*/}
+                            {/*)}*/}
                             {/*Need for processing */}
                             {processingState === 'processing' && (
                                 <span className="feedback-text processing">
                                     <span className="spinner"></span> Processing...
                                 </span>
                             )}
-                            {/*Need for executing*/}
-                            {processingState === 'executing' && (
-                                <span className="feedback-text executing">
-                                    <span className="spinner"></span> Executing...
-                                </span>
-                            )}
+                            {/*/!*Need for executing*!/*/}
+                            {/*{processingState === 'executing' && (*/}
+                            {/*    <span className="feedback-text executing">*/}
+                            {/*        <span className="spinner"></span> Executing...*/}
+                            {/*    </span>*/}
+                            {/*)}*/}
 
                             {/*Need for successful */}
                             {processingState === 'success' && (
@@ -369,8 +376,8 @@ function Navbar() {
                             )}
                             {/*Need for try again */}
                             {processingState === 'error' && (
-                                <span className="feedback-text error">
-                                    Retry
+                                <span className="feedback-text error-state">
+                                    Try Again
                                 </span>
                             )}
 

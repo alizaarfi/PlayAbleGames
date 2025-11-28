@@ -640,10 +640,11 @@ html {
   /*background-color: white;*/
   border-radius: 10px;
   /*backdrop-filter: blur(10px);*/
+  line-height: 1;
 }
 
 /* Hint text (idle state) */
-.feedback-hint {
+.feedback-text.idle {
   font-size: 13px;
   color: black;
   font-weight: 600;
@@ -660,11 +661,26 @@ html {
   white-space: nowrap;
   background-color: transparent;  /* ADD THIS */
   width: auto;  /* ADD THIS */
+  line-height: 1;
+}
+
+
+
+/*.feedback-text.recording {*/
+/*  color: #FF5722;*/
+/*  animation: pulse 2s infinite;*/
+/*}*/
+
+
+.feedback-recording {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .feedback-text.recording {
-  color: #FF5722;
-  animation: pulse 2s infinite;
+  color: var(--primary-color, #007aff);
+  font-weight: 500;
 }
 
 .feedback-text.processing,
@@ -678,14 +694,10 @@ html {
   animation: fadeIn 0.3s ease;
 }
 
-.feedback-text.error {
-  color: #F44336;
-  animation: shake 0.5s ease;
-  background-color: transparent;  /* Ensure no background */
-  display: flex;  /* Match other states */
-  align-items: center;
-  width: auto;  /* Let it size naturally */
-  max-width: 100%;  /* Don't overflow container */
+.feedback-text.error-state {
+  color: #ff3b30;
+  font-weight: 500;
+  line-height: 1;  /* Add this too */
 }
 
 /* Spinner animation */
@@ -719,6 +731,54 @@ html {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
+}
+
+.audio-wave {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+}
+
+.wave-bar {
+  width: 3px;
+  height: 100%;
+  background: var(--primary-color, #007aff);
+  border-radius: 2px;
+  animation: wave 1s ease-in-out infinite;
+}
+
+.wave-bar:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.wave-bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.wave-bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.wave-bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.wave-bar:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+.wave-bar:nth-child(6) {
+  animation-delay: 0.5s;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 
 

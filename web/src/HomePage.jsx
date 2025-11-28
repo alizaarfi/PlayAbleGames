@@ -321,18 +321,18 @@ function HomePage() {
                 setSearchQuery(searchQuery);
             }
 
-            // scroll
-            if (type === 'SCROLL') {
-                console.log(`📜 HomePage received SCROLL command: ${direction}, amount: ${amount}`);
-
-                if (amount === 'top') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else if (amount === 'bottom') {
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                } else if (typeof amount === 'number') {
-                    window.scrollBy({ top: amount, behavior: 'smooth' });
-                }
-            }
+            // // scroll
+            // if (type === 'SCROLL') {
+            //     console.log(`📜 HomePage received SCROLL command: ${direction}, amount: ${amount}`);
+            //
+            //     if (amount === 'top') {
+            //         window.scrollTo({ top: 0, behavior: 'smooth' });
+            //     } else if (amount === 'bottom') {
+            //         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            //     } else if (typeof amount === 'number') {
+            //         window.scrollBy({ top: amount, behavior: 'smooth' });
+            //     }
+            // }
         };
 
         window.addEventListener('voiceCommand', handleVoiceCommand);
