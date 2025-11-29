@@ -4,15 +4,24 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [token, setToken] = useState(null);
+    const [role, setRole]= useState(null);
+
 
     useEffect(() => {
-        const saved = localStorage.getItem("token");
-        if (saved) setToken(saved);
+
+        const savedToken = localStorage.getItem("token");
+        const savedRole = localStorage.getItem("role");
+        if (savedToken) {
+            setToken(savedToken);
+            setRole(savedRole);
+        }
     }, []);
 
-    const login = (jwt) => {
-        localStorage.setItem("token", jwt);
-        setToken(jwt);
+    const login = (newToken, newRole) => {
+        setToken(newToken);
+        setRole(newRole);
+        localStorage.setItem("token", newToken);
+        localStorage.setItem("role", newRole);
     };
 
     const logout = async () => {
@@ -29,14 +38,26 @@ export function AuthProvider({ children }) {
             console.error("Logout error:", err);
         }finally {
             localStorage.removeItem("token");
+            localStorage.removeItem("role");
             setToken(null);
+            setRole(null);
 
             return Promise.resolve();
         }
     };
 
+    const isAdmin = () =>{
+        return role === "ADMIN"
+    }
+
     return (
-        <AuthContext.Provider value={{ token, isAuthenticated: !!token, login, logout }}>
+        <AuthContext.Provider value={{
+            token,
+            role,
+            isAuthenticated: !!token,
+            login,
+            logout
+        }}>
             {children}
         </AuthContext.Provider>
     );

@@ -4,6 +4,8 @@ import com.example.repository.AdminDashboardRepository;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.server.cors.CrossOrigin;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.authentication.Authentication;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +19,9 @@ public class AdminDashboardController {
         this.repository = repository;
     }
 
+    @Secured("ADMIN")
     @Get("/admin")
-    public Map<String, Object> getDashboardData() {
+    public Map<String, Object> getDashboardData(Authentication authentication) {
         Map<String, Object> dashboard = new HashMap<>();
         dashboard.put("totalFlaggedItems", repository.getTotalFlagged());
         dashboard.put("totalUsers", repository.getTotalUsers());

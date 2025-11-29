@@ -1,7 +1,11 @@
 package com.example.service;
 
 import com.example.domain.User;
+import com.example.domain.Role;
+import com.example.domain.UserRole;
+import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
+import com.example.repository.UserRoleRepository;
 import jakarta.inject.Singleton;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -14,9 +18,13 @@ import java.util.Optional;
 @Singleton
 public class UserService {
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.roleRepository = roleRepository;
     }
 
     /**
@@ -69,5 +77,23 @@ public class UserService {
             throw new RuntimeException("Invalid password");
         }
         return user;
+    }
+
+    //get all role names for a user
+    public java.util.List<String> getUserRoles(Long userID) {
+        java.util.List<UserRole> userRoles = userRoleRepository.findByUserId(userID);
+
+        return userRoles.stream()
+                .map(ur -> roleRepository.findById(ur.getRoleId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Role::getName)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    // check if user is an admin
+    public boolean isAdmin(Long userID) {
+        java.util.List<String> roles=getUserRoles(userID);
+        return roles.contains("ADMIN");
     }
 }
