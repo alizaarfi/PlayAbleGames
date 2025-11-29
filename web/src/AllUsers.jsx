@@ -49,6 +49,10 @@ export default function AllUsers(){
         return () => controller.abort();
     }, []);
 
+    function goToUserPage(userId) {
+        window.location.href = `/users/${userId}`;
+    }
+
     if (loading)
         return (
             <div className="page">
@@ -75,7 +79,7 @@ export default function AllUsers(){
                     <div className="no-reviews black-text">No users found.</div>
                 ) : (
                     user.map((user, idx) => (
-                        <div className="userBox" key={user.userId ?? idx} href="/users/{user.userId}">
+                        <div className="userBox" key={user.userId ?? idx} onClick={() => goToUserPage(user.userId)}>
                             <h3 className="black-text"> {user.user} {user.enabled ? " (active)" : " (banned)"} </h3>
                             <p className="black-text"> {user.numReviews} reviews</p>
                         </div>
