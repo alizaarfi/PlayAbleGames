@@ -5,6 +5,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 
@@ -32,5 +33,21 @@ public class IndividualUserController {
         }
 
         return HttpResponse.ok(userData);
+    }
+
+    @Post("/users/{userId}/ban")
+    public HttpResponse<Map<String, Object>> banUser(@PathVariable int userId) {
+        boolean success = repository.banUser(userId);
+
+        Map<String, Object> response = new HashMap<>();
+        if (success) {
+            response.put("message", "User banned successfully");
+            response.put("userId", userId);
+            return HttpResponse.ok(response);
+        } else {
+            response.put("error", "Failed to ban user");
+            response.put("userId", userId);
+            return HttpResponse.serverError(response);  // Changed this line
+        }
     }
 }

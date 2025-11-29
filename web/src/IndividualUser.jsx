@@ -74,6 +74,19 @@ export default function IndividualUser(){
         return () => controller.abort();
     }, [userId]);
 
+    const banUser = async (userId) => {
+        try {
+            const res = await fetch(`${API_BASE}/users/${userId}/ban`, {
+                method: 'POST',
+            });
+            if (!res.ok) throw new Error("Failed to ban user.");
+            alert("User has been banned successfully.");
+            window.location.reload();
+        } catch (e) {
+            alert(`Error: ${e.message}`);
+        }
+    }
+
     if (loading)
         return (
             <div className="page">
@@ -91,6 +104,9 @@ export default function IndividualUser(){
         <div className="content">
             <div className="admin-nav">
                 <button><a className="white-text" href="/admin"> Back to Dashboard </a></button>
+                {user.enabled && (
+                    <button className="banButton white-text" onClick={() => banUser(user.userId)}> Ban User </button>
+                )}
             </div>
             <div className="userInfoSection">
                 <h1 className="title black-text"> {user.username}'s profile </h1>

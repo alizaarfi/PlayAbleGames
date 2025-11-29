@@ -92,4 +92,19 @@ public class IndividualUserRepository {
 
         return reviews;
     }
+
+    @Transactional
+    public boolean banUser(int userId) {
+        String sql = "UPDATE users SET Enabled = FALSE WHERE UserID = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to ban user with userId: " + userId, e);
+        }
+    }
 }
