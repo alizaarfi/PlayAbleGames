@@ -11,6 +11,10 @@ import java.util.Objects;
 // Carries command parameters (target) extracted from user speech
 // Enables clean separation between parsing logic and execution logic
 
+/**
+ * ParsedCommand object defines necessary info taken from captured audio
+ *
+ */
 @Introspected // compile-time checks, so that the properties/methods are accessible.
 @Serdeable
 public class ParsedCommand {

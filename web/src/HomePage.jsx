@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
-import usePageCommands from './usePageCommands';
+
 
 const games = [
     {
@@ -144,16 +144,18 @@ const games = [
 
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
-    // NEW - Initialize from localStorage
+    // Initialise from local storage - switch to db when logic added
     const [favorites, setFavorites] = useState(() => {
         const saved = localStorage.getItem('playable-favorites');
         return saved ? JSON.parse(saved) : [];
     });
 
     // Save to localStorage whenever favorites change
+    // Update this when I have the my account feature
+    // Then save to the DB instead
     useEffect(() => {
         localStorage.setItem('playable-favorites', JSON.stringify(favorites));
-        console.log("💾 Saved favorites:", favorites);
+        console.log("Saved favorites:", favorites);
     }, [favorites]);
 
     const [filters, setFilters] = useState({
@@ -261,7 +263,7 @@ function HomePage() {
     // Listen for voice commands from Navbar
     useEffect(() => {
         const handleVoiceCommand = (event) => {
-            // Extract ALL possible properties from event.detail
+            // For voice commands, extract all details from the event
             const {
                 type,
                 gameId,
@@ -275,11 +277,12 @@ function HomePage() {
                 amount
             } = event.detail;
 
+            // currently repeating, filter, favourite cancels it
             if (type === 'FAVOURITE') {
-                console.log(`🎮 HomePage received FAVOURITE command for game ${gameId}`);
+                console.log(`HomePage received FAVOURITE command for game ${gameId}`);
 
                 setFavorites(prev => {
-                    console.log("Current favorites:", prev);
+                    console.log("Current favourites: ", prev);
                     console.log("Toggling game ID:", gameId);
 
                     const newFavorites = prev.includes(gameId)
@@ -292,7 +295,7 @@ function HomePage() {
             }
 
             if (type === 'FILTER') {
-                console.log(`🔍 HomePage received FILTER command for ${filterName}`);
+                console.log(`HomePage received FILTER command for ${filterName}`);
 
                 setFilters(prev => {
                     console.log("Current filters:", prev);
@@ -300,7 +303,7 @@ function HomePage() {
 
                     const newFilters = {
                         ...prev,
-                        [filterKey]: !prev[filterKey]  // Toggle the filter on/off
+                        [filterKey]: !prev[filterKey]
                     };
 
                     console.log("New filters:", newFilters);
@@ -309,7 +312,7 @@ function HomePage() {
             }
 
             if (type === 'SORT') {
-                console.log(`📊 HomePage received SORT command: ${sortName}`);
+                console.log(`HomePage received SORT command: ${sortName}`);
                 console.log("Setting sort to:", sortValue);
 
                 setSortOption(sortValue);
@@ -320,19 +323,6 @@ function HomePage() {
                 console.log(`🔍 HomePage received SEARCH command: ${searchQuery}`);
                 setSearchQuery(searchQuery);
             }
-
-            // // scroll
-            // if (type === 'SCROLL') {
-            //     console.log(`📜 HomePage received SCROLL command: ${direction}, amount: ${amount}`);
-            //
-            //     if (amount === 'top') {
-            //         window.scrollTo({ top: 0, behavior: 'smooth' });
-            //     } else if (amount === 'bottom') {
-            //         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            //     } else if (typeof amount === 'number') {
-            //         window.scrollBy({ top: amount, behavior: 'smooth' });
-            //     }
-            // }
         };
 
         window.addEventListener('voiceCommand', handleVoiceCommand);

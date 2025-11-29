@@ -23,7 +23,6 @@ function Navbar() {
     // Function to handle voice commands
     const processVoiceCommand = (commandData) => {
         try {
-            // Guard clause - validate input
             if (!commandData || !commandData.type) {
                 console.warn("Invalid command data:", commandData);
                 return; // Don't crash, just exit gracefully
@@ -76,6 +75,7 @@ function Navbar() {
                 case 'SEARCH':
                     console.log(`Searching for: ${target}`);
 
+                    // Event pattern
                     // Dispatch search command
                     window.dispatchEvent(new CustomEvent('voiceCommand', {
                         detail: {
@@ -84,7 +84,7 @@ function Navbar() {
                         }
                     }));
 
-                    console.log(`✅ Dispatched SEARCH event for: ${target}`);
+                    console.log(`Dispatched SEARCH event for: ${target}`);
 
                     setTimeout(() => {
                         setProcessingState('success');
@@ -114,7 +114,7 @@ function Navbar() {
                             window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
                         }
 
-                        console.log(`✅ Executed SCROLL: ${target}`);
+                        console.log(`Executed SCROLL: ${target}`);
 
                         setTimeout(() => {
                             setProcessingState('success');
@@ -168,7 +168,7 @@ function Navbar() {
                             }
                         }));
 
-                        console.log(`✅ Dispatched FAVOURITE event for ${target} (ID: ${gameId})`);
+                        console.log(`Dispatched FAVOURITE event for ${target} (ID: ${gameId})`);
 
                         setTimeout(() => {
                             setProcessingState('success');
@@ -214,7 +214,7 @@ function Navbar() {
                             }
                         }));
 
-                        console.log(`✅ Dispatched FILTER event for ${target}`);
+                        console.log(`Dispatched FILTER event for ${target}`);
 
                         setTimeout(() => {
                             setProcessingState('success');
@@ -254,7 +254,7 @@ function Navbar() {
                             }
                         }));
 
-                        console.log(`✅ Dispatched SORT event for ${target}`);
+                        console.log(`Dispatched SORT event for ${target}`);
 
                         setTimeout(() => {
                             setProcessingState('success');
@@ -393,9 +393,9 @@ function Navbar() {
                             onClick={toggleRecording}
                             // disabled={!stream}  // Disable if no mic access
                             title={
-                                !stream ? '❌ Microphone not available' :
-                                    isRecording ? '🔴 Recording - Click to stop' :
-                                        '✅ Click to start recording'
+                                !stream ? 'Microphone not available' :
+                                    isRecording ? 'Recording - Click to stop' :
+                                        'Click to start recording'
                             }
                         >
                             {/*Button Icon*/}

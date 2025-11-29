@@ -3,6 +3,8 @@ import Navbar from './NavBar';
 import './style.css';
 
 function AccessibilityPage() {
+
+    //add this scroll effect on needed pages may need to alter to the main.jsx when all code is merged
     useEffect(() => {
         // Scroll animation observer
         const observerOptions = {

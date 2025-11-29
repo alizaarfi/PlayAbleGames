@@ -16,45 +16,57 @@ import org.vosk.Recognizer;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
-    VoiceControlService holds the business logic for:
+    VoiceCommandService holds the business logic for:
     - integrating with the Vosk speech recognition library
-    - translating voice commands into actionable instructions for the application.
+    - translating voice commands into actions for the application.
+
+    Architecture & Design Patterns:
+    - Service layer ensures all business logic is separate from HTTP handling
+    - Singleton pattern ensures one instance of Vosk model
+    - Strategy pattern in commandPatterns maps speech to structured commands
+    - Factory Pattern in creating ParsedCommand objects
 
     Dependencies:
     - ObjectMapper: For parsing JSON responses from Vosk
     - Vosk Model: Pre-trained speech recognition model
     - Configuration: Model path and sample rate injected from application.yml
 
-    Understand the stages here:
+    To understand the stages here:
      - @PostConstruct loads Vosk model + initialises command patterns
      - At Runtime audio and text commands are processed
      - @PreDestroy cleans up model resources on shutdown
+
+    Scalability:
+    - Currently using hard-coded pattern alternatives in initialiseCommandMappings based on testing
+    - When scaling site, can download a larger Vosk Model and add complex fuzzy matching to maintain current accuracy
+    - All business logic can still remain here
+
 **/
 
 @Singleton //Singleton to ensure only one Vosk model instance
-public class VoiceControlService {
+public class VoiceCommandService {
 
-    // using logging
-    private static final Logger LOG = LoggerFactory.getLogger(VoiceControlService.class);
+    // Using logging
+    private static final Logger LOG = LoggerFactory.getLogger(VoiceCommandService.class);
 
     private final ObjectMapper objectMapper;
     private Model model;
     private final String modelPath;
     private final float sampleRate;
 
-//    private final Map<Pattern, CommandType> commandPatterns = new HashMap<>();
+    // CommandPatterns linked hash map, stores the voice command patterns by type
+    // Updated it from a hash map to store more options for each pattern
     private final Map<Pattern, CommandType> commandPatterns = new LinkedHashMap<>();
 
     /* Constructor injection is preferred over field injection in Micronaut for
     better testability and immutability **/
-    public VoiceControlService(
+    public VoiceCommandService(
             ObjectMapper objectMapper,
             @Value("${vosk.model.path:/path/to/vosk-model}") String modelPath,
             @Value("${vosk.sample-rate:16000}") float sampleRate) {
@@ -64,22 +76,31 @@ public class VoiceControlService {
     }
 
     // Auto called by Micronaut after DI
-    // performs expensive one-time initialization that should not happen in constructor.
+    // performs expensive one-time initialisation that should not happen in constructor.
+
+    /**
+     * After DI, auto called by Micronaut
+     * Not in the constructor as loading the vosk model is expensive and will be even more if using a larger model in future
+     * Allows micronaut is catch any initialisation errors separate to others - better error handling
+     */
     @PostConstruct
-    public void initialize() {
+    public void initialise() {
         try {
-            LOG.info("Initializing Vosk model from: {}", modelPath);
+            LOG.info("Initialising Vosk model from: {}", modelPath);
             this.model = new Model(modelPath);
-            initializeCommandMappings();
-            LOG.info("Voice command service initialized successfully");
+            initialiseCommandMappings();
+            LOG.info("Voice command service initialised successfully");
         } catch (IOException e) {
-            LOG.error("Failed to initialize Vosk model", e);
-            throw new RuntimeException("Failed to initialize voice recognition", e);
+            LOG.error("Failed to initialise Vosk model", e);
+            throw new RuntimeException("Failed to initialise voice recognition", e);
         }
     }
 
-    // Auto called by Micronaut during graceful application shutdown
-    // Properly releases the Vosk model from memory to prevent resource leaks.
+    /**
+     * Very important to better handle resources (Vosk)
+     * Its model's memory isn't handled by JVM garbage collection so essential to be called automatically
+     * Prevents memory leaks
+     */
     @PreDestroy
     public void cleanup() {
         if (model != null) {
@@ -88,41 +109,45 @@ public class VoiceControlService {
         }
     }
 
-    // Convert audio bytes into a parsed command
+
+    /**
+     * processAudio() actually converts the bytes into a ParsedCommand to return to the controller endpoint
+     * @param audioData - byte
+     * @return ParsedCommand
+     *
+     * Design Pattern: Template Method
+     * - Multiple steps to processing audio but allow for some to be extended when scaling/refactoring
+     */
     @NonNull
     public ParsedCommand processAudio(@NonNull byte[] audioData) {
 
+        // Each request has a recognizer instance that is always closed at the end
         Recognizer recognizer = null;
 
         try {
-            // checking if empty BUT i dont think this should be here
-            if (audioData == null || audioData.length == 0) {
-                LOG.error("Received empty or null audio data");
-                throw new IllegalArgumentException("Audio data cannot be empty");
-            }
-
             LOG.info("Processing audio data: {} bytes", audioData.length);
 
-            // Step 1: Transcribe audio using Vosk
+            // Transcribe audio using Vosk's recognizer
             recognizer = new Recognizer(model, sampleRate);
             recognizer.acceptWaveForm(audioData, audioData.length);
             String result = recognizer.getFinalResult();
 
-            // Parse Vosk JSON response
+            // Parse Vosk JSON response using Jackson
             JsonNode jsonNode = objectMapper.readTree(result);
             String transcription = jsonNode.get("text").asText();
+            // confidence is important for future analysis of recognition accuracy
             double confidence = jsonNode.has("confidence") ?
                     jsonNode.get("confidence").asDouble() : 0.0;
 
             LOG.debug("Transcribed audio: '{}' (confidence: {})", transcription, confidence);
 
-            // Validate transcription
+            // Validate transcription is this needed?????
             if (transcription == null || transcription.trim().isEmpty()) {
                 LOG.warn("Empty transcription received from Vosk");
                 return new ParsedCommand(CommandType.UNKNOWN, null, "", confidence, Instant.now());
             }
 
-            // Step 2: Parse the transcription to identify command type and target
+            // calls parseCommand to parse the transcription to identify command type and target
             ParsedCommand parsedCommand = parseCommand(transcription);
 
             LOG.info("Successfully processed audio: '{}' -> Type: {}, Target: {}",
@@ -134,7 +159,7 @@ public class VoiceControlService {
             LOG.error("Error transcribing audio", e);
             throw new RuntimeException("Audio transcription failed", e);
         } finally {
-            // Always close the recognizer to prevent resource leaks
+            // Always close the recognizer
             if (recognizer != null) {
                 recognizer.close();
                 LOG.trace("Recognizer closed");
@@ -143,6 +168,20 @@ public class VoiceControlService {
     }
 
     // Step 2: Parses the transcribed text into a ParsedCommand Entity
+
+    /**
+     * parseCommand takes the transcription text handles mapping to an equivalent type and target from commandPatterns
+     * @param transcription - string from processAudio method
+     * @return ParsedCommand (updated with the target and type)
+     *
+     * Design Pattern: Strategy as it matches patterns to speech (specific ones before generic)
+     * Scalability:
+     * - Add new patterns in initialiseCommandMappings
+     * - Add new fuzzy matching in assignTarget
+     * - When dataset increases, can simply add helper functions with the larger Vosk model
+     * - Also, can then utilise confidence to enhance recognition
+     *
+     */
     @NonNull
     public ParsedCommand parseCommand(@NonNull String transcription) {
         // Formatting text before operation
@@ -181,7 +220,18 @@ public class VoiceControlService {
         return new ParsedCommand(CommandType.UNKNOWN, null, transcription, 0.0, Instant.now());
     }
 
-    // this allows if speech recognition misheards due to accent
+
+    /**
+     * assignTarget allows to input common speech recognition errors at this scale
+     * Vosk may mishear "accessibility" as "access lousy" so this improves performance without a larger model
+     * @param commandType - based on the picked up type
+     * @param fullText - the full transcription
+     * @param target - the  target
+     * @return - a string for the target
+     * Scalability:
+     *  - Current: Add to the hardcoded alternatives for small Vosk model
+     *  - Future: Use Levenshtein distance -> https://www.baeldung.com/java-levenshtein-distance
+     */
     @NonNull
     private String assignTarget(CommandType commandType, String fullText, String target) {
         switch (commandType) {
@@ -244,11 +294,16 @@ public class VoiceControlService {
     }
 
 
-    //    Sets up the regex patterns that map natural language phrases to structured commands.
-    //   - forms the vocabulary of voice commands
-    private void initializeCommandMappings() {
+    /**
+     * initialiseCommandMappings maps the set/equivalent spoken phrases to actions within the app
+     * has  specific patterns as priority
+     * Uses regex patterns for different options for each pattern
+     * Editing this:
+     * - Add common misheard phrases that you identify from logs
+     * - Keep patterns in priority order from specific to generic command types
+     */
+    private void initialiseCommandMappings() {
         // Specific pages with capture groups
-        // can add options if commonly misheard in logs
         commandPatterns.put(
                 Pattern.compile("(?:go to |open |navigate to )?(?:accessibility|access ability|access lousy|access in|accessability)(?:\\s+page)?"),
                 CommandType.NAVIGATE
@@ -300,6 +355,6 @@ public class VoiceControlService {
                 CommandType.SORT
         );
 
-        LOG.info("Initialized {} command patterns", commandPatterns.size());
+        LOG.info("Initialised {} command patterns", commandPatterns.size());
     }
     }

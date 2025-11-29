@@ -18,7 +18,7 @@ function useVoiceControl() {
     const [commandData, setCommandData] = useState(null);
     const [error, setError] = useState(null);
 
-    const hasInitialized = useRef(false);
+    const hasInitialised = useRef(false);
     const isMicActiveRef = useRef(true)
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
@@ -27,11 +27,11 @@ function useVoiceControl() {
 
     // Request mic access ONCE on mount
     useEffect(() => {
-        if (hasInitialized.current) {
+        if (hasInitialised.current) {
             console.log("Already initialised, skipping");
             return;
         }
-        hasInitialized.current = true;
+        hasInitialised.current = true;
 
         console.log("Requesting microphone access...");
 
@@ -191,7 +191,7 @@ function useVoiceControl() {
     // Convert audio to WAV format that Vosk expects
     const convertToWavAndSend = async (audioBlob) => {
         try {
-            console.log("🔄 Converting to WAV...");
+            console.log("Converting to WAV...");
 
             const arrayBuffer = await audioBlob.arrayBuffer();
             const audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
@@ -203,16 +203,16 @@ function useVoiceControl() {
             console.log("- Duration:", audioBuffer.duration.toFixed(2), "seconds");
 
             if (audioBuffer.duration < 0.5) {
-                console.warn("⚠️ Recording is very short, may not transcribe well");
+                console.warn("Recording is very short, may not transcribe well");
             }
 
             const wavBlob = audioBufferToWav(audioBuffer);
-            console.log("✅ Converted to WAV:", wavBlob.size, "bytes");
+            console.log("Converted to WAV:", wavBlob.size, "bytes");
 
             await sendToBackend(wavBlob);
 
         } catch (err) {
-            console.error("❌ Audio conversion error:", err);
+            console.error("Audio conversion error:", err);
             setError(`Audio conversion failed: ${err.message}`);
         }
     };
