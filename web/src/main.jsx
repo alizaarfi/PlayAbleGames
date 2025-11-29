@@ -13,8 +13,9 @@ import "./style.css";
 import Navbar from "./NavBar.jsx";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
-    // <React.StrictMode>
+    // <React.StrictMode> // disabled for the mic to work
         <BrowserRouter>
+            {/* Moved navbar outside of routes to ensures voice control persistent across all pages*/}
             <Navbar />
             <Routes>
                 {/* Homepage */}

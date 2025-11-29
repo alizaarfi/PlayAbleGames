@@ -643,7 +643,7 @@ html {
   line-height: 1;
 }
 
-/* Hint text (idle state) */
+/* Hint text when idle */
 .feedback-text.idle {
   font-size: 13px;
   color: black;
@@ -651,7 +651,7 @@ html {
   white-space: nowrap;
 }
 
-/* Feedback text states */
+/* Feedback text states (general*/
 .feedback-text {
   display: flex;
   align-items: center;
@@ -664,13 +664,10 @@ html {
   line-height: 1;
 }
 
-
-
 /*.feedback-text.recording {*/
 /*  color: #FF5722;*/
 /*  animation: pulse 2s infinite;*/
 /*}*/
-
 
 .feedback-recording {
   display: flex;
@@ -780,9 +777,7 @@ html {
     transform: scaleY(1);
   }
 }
-
-
-
+/*END OF VISUAL FEEDBACK CONTAINER*/
 
 
 

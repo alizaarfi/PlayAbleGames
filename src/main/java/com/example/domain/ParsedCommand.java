@@ -7,13 +7,12 @@ import io.micronaut.serde.annotation.Serdeable;
 import java.time.Instant;
 import java.util.Objects;
 
-// An immutable value object for voice commands that have been parsed and are ready for execution.
-// Carries command parameters (target) extracted from user speech
-// Enables clean separation between parsing logic and execution logic
 
 /**
- * ParsedCommand object defines necessary info taken from captured audio
- *
+ * ParsedCommand value object defines necessary info taken from captured audio
+ * Immutable as each audio chunk turned ParsedCommand is unique (timestamp)
+ * Carries command parameters (target) extracted from user speech
+ * Enables clean separation between parsing logic and execution logic
  */
 @Introspected // compile-time checks, so that the properties/methods are accessible.
 @Serdeable
@@ -33,23 +32,21 @@ public class ParsedCommand {
         this.timestamp = timestamp;
     }
 
-
-
-    // Comparing commands
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ParsedCommand that = (ParsedCommand) o;
-        return type == that.type && Objects.equals(target, that.target);
-    }
-    @Override
-    public String toString() {
-        return "ParsedCommand{type=" + type + ", target='" + target + "'}";
-    }
+//    // Comparing commands
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        ParsedCommand that = (ParsedCommand) o;
+//        return type == that.type && Objects.equals(target, that.target);
+//    }
+//    @Override
+//    public String toString() {
+//        return "ParsedCommand{type=" + type + ", target='" + target + "'}";
+//    }
 
     // ----------- Getters -----------
-    // No setters, they need to be immutable
+    // No setters, they need to stay immutable
     public CommandType getType() {
         return type;
     }

@@ -1,31 +1,41 @@
 import React, { useState, useRef, useEffect } from 'react';
-
-// HomePage prompts for mic access?
-
-// Captures audio from microphone
-// Sends to your Java backend (http://localhost:8080/api/v1/transcription/upload)
-// Displays the result from backend
-// Handles errors gracefully
-
-// Request mic access on booting default page
-// With permissions record
+/**
+ * useVoiceControl hook captures audio, sends to backend to be processed, handles backend response continuously
+ *
+ * Architecture & Design Patterns:
+ *  - Custom Hook pattern keeps recording audio in one place and allows logic to be reused
+ *  - Continuous recording/processing stream as restarts recording automatically every 3 seconds
+ *  - Processing state to feedback to users
+ *  - Ref Pattern & cleanup pattern
+ *
+ *  Understand the flow:
+ *  - useEffect - initialises mic permission on mount with initMic()
+ *  - toggleRecording - toggles use of stopRecording and startRecordingAuto based on user muting or unmuting the mic button in the Navbar UI
+ *  - startRecordingAuto calls convertToWaveAndSend which takes audio sends to backend
+ *  - convertToWavAndSend calls audioBufferToWave and sendToBackend
+ *  - sendToBackend sends to controller, awaits JSON response and handles it to either create a NO_SPEECH ParsedCommand, or a valid command type as part of commandData
+ * */
 
 function useVoiceControl() {
-    const [stream, setStream] = useState(null);
+    const [stream, setStream] = useState(null); // The media stream is null until mic permission from browser is accepted
+    // These states trigger rendering again on the UI (isRecording, transcription, error)
     const [isRecording, setIsRecording] = useState(false);
-    const [isMicActive, setIsMicActive] = useState(true);
+    const [isMicActive, setIsMicActive] = useState(true); // mute/unmuting by user
     const [transcription, setTranscription] = useState('');
+
     const [commandData, setCommandData] = useState(null);
     const [error, setError] = useState(null);
 
+    // These refs are mutable as they do not render again (mediaRecorder, audio chunks, isMicActiveRef)
     const hasInitialised = useRef(false);
-    const isMicActiveRef = useRef(true)
+    const isMicActiveRef = useRef(true) //tracks isMicActive for muting/unmuting and recording
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
-    // put this so i can track loading time
+
+    // Track loading time for commands to display in visual feedback box
     const [processingState, setProcessingState] = useState('idle');
 
-    // Request mic access ONCE on mount
+    // Request mic access once on mount
     useEffect(() => {
         if (hasInitialised.current) {
             console.log("Already initialised, skipping");
@@ -37,6 +47,7 @@ function useVoiceControl() {
 
         const initMic = async () => {
             try {
+                // The constraints are for Vosk
                 const mediaStream = await navigator.mediaDevices.getUserMedia({
                     audio: {
                         channelCount: 1,
@@ -50,7 +61,7 @@ function useVoiceControl() {
                 console.log("Microphone ready");
                 setStream(mediaStream);
 
-                // Auto-start recording after mic is ready
+                // Auto-start recording after mic is ready after short delay
                 setTimeout(() => {
                     startRecordingAuto(mediaStream);
                 }, 800);
@@ -63,6 +74,7 @@ function useVoiceControl() {
 
         void initMic();
 
+        // Cleanup for mic when unmounting
         return () => {
             console.log("Cleaning up microphone...");
 
@@ -84,7 +96,7 @@ function useVoiceControl() {
         };
     }, []);
 
-    // mute/unmute when mic icon is clicked
+    // For mute/unmute when mic icon is clicked
     const toggleRecording = () => {
         // mute mic if its currently active
         if (isMicActive) {
@@ -104,7 +116,7 @@ function useVoiceControl() {
         }
     };
 
-    // stop recording
+    // When mute stop recording
     const stopRecording = () => {
         console.log("Stopping recording manually");
 
@@ -114,13 +126,13 @@ function useVoiceControl() {
         }
     };
 
-    // for startrecording made auto
+    // Unmuted for startrecording made auto (used to have just recording)
     const startRecordingAuto = (mediaStream, forceActive = null) => {
-        // Use forceActive if provided, otherwise check isMicActive
+        // Use forceActive if provide
         const shouldStart = forceActive !== null ? forceActive : isMicActive;
 
         if (!shouldStart) {
-            console.log("⏸️ Mic is muted by user, not starting");
+            console.log("Mic is muted by user, not starting");
             return;
         }
 
@@ -134,11 +146,13 @@ function useVoiceControl() {
 
         const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
 
+        // Created MediaRecorder (Vosk constraints - better for Vosk)
         mediaRecorderRef.current = new MediaRecorder(mediaStream, {
             mimeType: mimeType,
             audioBitsPerSecond: 16000
         });
 
+        // accumulates chunks
         mediaRecorderRef.current.ondataavailable = (event) => {
             if (event.data.size > 0) {
                 console.log("Audio chunk:", event.data.size, "bytes");
@@ -146,6 +160,7 @@ function useVoiceControl() {
             }
         };
 
+        // processes the captured audio and schedules when next recording
         mediaRecorderRef.current.onstop = async () => {
             console.log("Recording stopped - Processing audio");
             //atm doesn't diff from speech and from commanding
@@ -154,12 +169,14 @@ function useVoiceControl() {
             const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
             await convertToWavAndSend(audioBlob);
 
+            // needed when testing if recording auto restarts
             console.log("About to schedule restart...");
             console.log("mediaStream exists?", !!mediaStream);
             console.log("isMicActiveRef?", isMicActiveRef.current);
 
+            // When next recording
             setTimeout(() => {
-                console.log("Inside setTimeout - attempting restart");
+                console.log("Inside setTimeout() trying restart");
                 console.log("mediaStream still exists?", !!mediaStream);
                 console.log("isMicActiveRef still true?", isMicActiveRef.current);
 
@@ -167,25 +184,26 @@ function useVoiceControl() {
                     console.log("calling startRecordingAuto");
                     startRecordingAuto(mediaStream);
                 } else {
-                    console.log("Not restarting - conditions not met");
+                    console.log("Not restarting no media stream/active mic");
                 }
             }, 1000);
         };
+        // This starts capturing the audio
         mediaRecorderRef.current.start();
         setIsRecording(true);
-        // recording now
+        // set recording now for UI
         setProcessingState('recording');
 
+        // Setting timing for capturing audio, can edit time for testing
         setTimeout(() => {
             if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
                 mediaRecorderRef.current.stop();
                 setIsRecording(false);
             }
-        }, 3000); // 7 seconds
+        }, 3000); // 3 seconds
 
         console.log("Continuous recording started");
     };
-
 
 
     // Convert audio to WAV format that Vosk expects
@@ -202,13 +220,16 @@ function useVoiceControl() {
             console.log("- Channels:", audioBuffer.numberOfChannels);
             console.log("- Duration:", audioBuffer.duration.toFixed(2), "seconds");
 
+            // For short recordings
             if (audioBuffer.duration < 0.5) {
                 console.warn("Recording is very short, may not transcribe well");
             }
 
+            // Converts to WAV from the buffer
             const wavBlob = audioBufferToWav(audioBuffer);
             console.log("Converted to WAV:", wavBlob.size, "bytes");
 
+            // waits for response when calling sendToBackend
             await sendToBackend(wavBlob);
 
         } catch (err) {
@@ -217,7 +238,7 @@ function useVoiceControl() {
         }
     };
 
-    // Convert AudioBuffer to WAV format (16-bit PCM, mono, 16kHz)
+    // Convert AudioBuffer to WAV format
     const audioBufferToWav = (buffer) => {
         const numberOfChannels = 1; // Mono
         const sampleRate = buffer.sampleRate;
@@ -235,7 +256,7 @@ function useVoiceControl() {
         const arrayBuffer = new ArrayBuffer(bufferLength);
         const view = new DataView(arrayBuffer);
 
-        // Write WAV header
+        // Write WAV header - sampleData good for vosk
         writeString(view, 0, 'RIFF');
         view.setUint32(4, 36 + dataLength, true);
         writeString(view, 8, 'WAVE');
@@ -262,6 +283,7 @@ function useVoiceControl() {
         return new Blob([arrayBuffer], { type: 'audio/wav' });
     };
 
+    // helper for AudioBufferToWav
     const writeString = (view, offset, string) => {
         for (let i = 0; i < string.length; i++) {
             view.setUint8(offset + i, string.charCodeAt(i));
@@ -274,6 +296,7 @@ function useVoiceControl() {
         setProcessingState('processing'); //set here instead of onstop
 
         try {
+            // in application.properties need micronaut config for cors enabled or will encounter CORS error
             const response = await fetch('http://localhost:8081/api/v1/transcription/process', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/octet-stream' },
@@ -281,6 +304,7 @@ function useVoiceControl() {
             });
 
             console.log("Response status:", response.status);
+
             // handle response
             if (response.ok) {
                 const voiceCommand = await response.json();
@@ -328,6 +352,7 @@ function useVoiceControl() {
         }
     };
 
+    // exposes the state and controls to Navbar (parent component)
     return {
         stream,
         isRecording,

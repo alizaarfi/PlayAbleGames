@@ -2,7 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./style.css";
 import useVoiceControl from "./useVoiceControl.jsx";
-import { executeCommand } from './commandRegistry';
+
+/**
+ * Navbar as a container component
+ * UI: Logo (home page nav), Visual feedback box, microphone icon for muting/unmuting, accessibility page, community page, profile icon with dropdown
+ */
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -10,17 +14,22 @@ function Navbar() {
     const navigate = useNavigate();
     const { stream, isRecording, isMicActive, processingState,setProcessingState, transcription, commandData, error, toggleRecording } = useVoiceControl();
 
-    // when commandData is received
+    // When commandData/transcription is received from useVoiceControl hook
     useEffect(() => {
         if (commandData) {
             processVoiceCommand(commandData);
         } else if (transcription && transcription.length > 0) {
-            // Speech was detected but couldn't be parsed into a command
-            console.warn("Speech detected but command not recognized:", transcription);
+            // Log when speech was detected but couldn't be parsed into a command
+            console.warn("Speech detected but command not recognised:", transcription);
         }
     }, [commandData, transcription]);
 
-    // Function to handle voice commands
+    /**
+     * Performs actions based on incoming voice commands from commandData
+     * HomePage and other pages can be mounted/unmounted without breaking voice control
+     * Sets processing states for success or error when UNKNOWN
+     * @param commandData
+     */
     const processVoiceCommand = (commandData) => {
         try {
             if (!commandData || !commandData.type) {
@@ -37,11 +46,11 @@ function Navbar() {
             switch (type) {
                 case 'NAVIGATE':
                     console.log("NAVIGATE TYPE")
+                    // unneeded but navigate has very specific targets
                     if (!target) {
                         console.warn("Navigate called without target");
                         break;
                     }
-
                     try {
                         if (target === 'accessibility') {
                             navigate('/accessibility');
@@ -132,11 +141,12 @@ function Navbar() {
                     setProcessingState('error');
                     setTimeout(() => setProcessingState('idle'), 2000);
                     break;
-
+                // Important: For logged-in users only
                 case 'FAVOURITE':
                     console.log(`Favouriting game: ${target}`);
 
                     // Simple game name to ID mapping
+                    // Updates this when adding new games until dataset gets too large
                     const gameNameToId = {
                         'minecraft': 1,
                         'monument valley': 2,
@@ -160,6 +170,7 @@ function Navbar() {
 
                     if (gameId) {
                         // Dispatch custom event that HomePage will listen to
+                        // Homepage needs to check authentication and handle
                         window.dispatchEvent(new CustomEvent('voiceCommand', {
                             detail: {
                                 type: 'FAVOURITE',
@@ -184,7 +195,7 @@ function Navbar() {
                 case 'FILTER':
                     console.log(`Filtering by: ${target}`);
 
-                    // Map spoken filter names to your filter state keys
+                    // Map spoken filter names to the filter keys
                     const filterMap = {
                         'vision support': 'visionSupport',
                         'vision': 'visionSupport',
@@ -282,7 +293,8 @@ function Navbar() {
 
     };
 
-    // Display error messages
+    // Logs error messages from voice control
+    // In future could give user refined version of errors
     useEffect(() => {
         if (error) {
             console.error("Error:", error);
@@ -325,6 +337,7 @@ function Navbar() {
 
                     <div className="header-nav">
 
+                        {/*VISUAL FEEDBACK CONTAINER TO DISPLAY PROCESSING STATES*/}
                         <div className={"visual-feedback-container"}>
                             {/* Show example command when idle */}
                             {(!processingState || processingState === 'idle') && (
@@ -334,7 +347,8 @@ function Navbar() {
                             )}
 
                             {/*Show recording state when audio wave*/}
-                            {/* Audio wave during recording */}
+                            {/* Audio wave during recording,
+                            can add more waves but need to update css too*/}
                             {processingState === 'recording' && (
                                 <div className="feedback-recording">
                                     <div className="audio-wave">
@@ -349,24 +363,12 @@ function Navbar() {
                                 </div>
                             )}
 
-                            {/*/!*Need for listening *!/*/}
-                            {/*{processingState === 'recording' && (*/}
-                            {/*    <span className="feedback-text recording">*/}
-                            {/*        Listening...*/}
-                            {/*    </span>*/}
-                            {/*)}*/}
                             {/*Need for processing */}
                             {processingState === 'processing' && (
                                 <span className="feedback-text processing">
                                     <span className="spinner"></span> Processing...
                                 </span>
                             )}
-                            {/*/!*Need for executing*!/*/}
-                            {/*{processingState === 'executing' && (*/}
-                            {/*    <span className="feedback-text executing">*/}
-                            {/*        <span className="spinner"></span> Executing...*/}
-                            {/*    </span>*/}
-                            {/*)}*/}
 
                             {/*Need for successful */}
                             {processingState === 'success' && (
@@ -387,7 +389,7 @@ function Navbar() {
                         <button
                             className={`nav-btn accessibility-btn ${
                                 !stream ? 'mic-error' :
-                                    isMicActive ? 'mic-recording' :  // Use isMicActive instead of isRecording
+                                    isMicActive ? 'mic-recording' :  
                                         'mic-inactive'
                             }`}
                             onClick={toggleRecording}
@@ -413,7 +415,6 @@ function Navbar() {
                                 )}
                             </svg>
                         </button>
-
 
 
                         <Link to="/accessibility" className="nav-btn info-btn">

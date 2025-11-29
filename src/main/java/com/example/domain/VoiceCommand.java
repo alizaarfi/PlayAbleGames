@@ -3,11 +3,18 @@ package com.example.domain;
 import io.micronaut.serde.annotation.Serdeable;
 import java.time.Instant;
 
+/**
+ * CURRENTLY UNUSED! VoiceCommand record for the complete action
+ * Added initially for debugging and ParsedCommand but unnecessary at this scale/stage
+ *  Future use:
+ *  - Track interactions for compliance
+ *  - Analytics for admin/company use like command usage patterns and confidence data
+ *  - GDPR compliance - not sure ok to keep audio data for persistence
+ *  - Help train the Vosk model or own future models
+ *  - Would use Micronaut Data @MappedEntity
+ */
 
-// Voice Command Entity - complete record of a voice command interaction
-// Business logic - what happens when '' is recognised
-// Mainly if we need to store in DB but also debugging at the moment
-@Serdeable // serialisation without runtime reflection needed for JSON serialization
+@Serdeable // serialisation without runtime reflection needed for JSON serialisation
 public class VoiceCommand {
     private String id;
     private String transcribedText; // since user's speech, comply with GDPR if storing in db
