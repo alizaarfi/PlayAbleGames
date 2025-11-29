@@ -25,7 +25,7 @@ public class AllUsersController {
         List<Map<String, Object>> users = repository.getAllUsers();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("users", users);
+        response.put("user", users);
         return response;
     }
 }
