@@ -523,4 +523,3 @@ VALUES ('Blog title placeholder 3','linkPlaceholder', 'This is a placeholder des
 
 
 
-

@@ -2,7 +2,6 @@
 Drop Database if exists AppDB;
 Create Database AppDB;
 USE AppDB;
-
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create Tables
 -- -- This is the users table, this holds all the user information for both
 -- -- admins and regular users.

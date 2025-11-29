@@ -75,7 +75,7 @@ export default function AllUsers(){
                     <div className="no-reviews black-text">No users found.</div>
                 ) : (
                     user.map((user, idx) => (
-                        <div className="userBox" key={user.userId ?? idx}>
+                        <div className="userBox" key={user.userId ?? idx} href="/users/{user.userId}">
                             <h1> {user.user} {user.enabled ? " (active)" : " (banned)"} </h1>
                             <p> {user.numReviews} reviews</p>
                         </div>
