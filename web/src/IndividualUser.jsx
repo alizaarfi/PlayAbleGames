@@ -92,21 +92,28 @@ export default function IndividualUser(){
             <div className="admin-nav">
                 <button><a className="white-text" href="/admin"> Back to Dashboard </a></button>
             </div>
-                <div className="userInfoSection">
+            <div className="userInfoSection">
                 <h1 className="title black-text"> {user.username}'s profile </h1>
                 <h2 className="status black-text"> Account Status: {user.enabled ? "Enabled" : "Disabled"} </h2>
             </div>
             <div className="reviews-container">
-                <h2 className="title black-text"> Reviews by {user.username} </h2>
+                <h2 className="title black-text"> Reviews  </h2>
                 {reviews.length === 0 ? (
                     <div className="no-reviews black-text">No reviews found.</div>
                 ) : (
                     reviews.map((review, idx) => (
-                        <div className="reviews-box" key={review.id ?? idx}>
+                        <div className={`reviews-box ${review.flagged || review.removed ? 'flagged-review' : ''}`} key={review.id ?? idx}>
                             <div className="review-item">
-                                <div className="titles">
-                                    <h2 className="black-text"> {review.game}</h2>
-                                    <h3 className="black-text"> {review.reviewDate[8] + review.reviewDate[9] + '/' + review.reviewDate[5] + review.reviewDate[6] + '/' +  review.reviewDate[0] + review.reviewDate[1] + review.reviewDate[2] + review.reviewDate[3] } </h3>
+                                <div className="topBox">
+                                    <div className="titles">
+                                        <h2 className="black-text"> {review.game}</h2>
+                                        <h3 className="black-text"> {review.reviewDate[8] + review.reviewDate[9] + '/' + review.reviewDate[5] + review.reviewDate[6] + '/' +  review.reviewDate[0] + review.reviewDate[1] + review.reviewDate[2] + review.reviewDate[3] } </h3>
+                                    </div>
+                                    <div className="statusBox">
+                                        <h3 className="black-text"> {review.removed ? "Hidden from Users" : "Active"} </h3>
+                                        <h3 className="black-text"> {review.flagged ? "Flagged" : ""} </h3>
+
+                                    </div>
                                 </div>
                                 <div className="ratings">
                                     <p className="black-text rating-text"> Hearing: {review.hearingRating}/5 </p>

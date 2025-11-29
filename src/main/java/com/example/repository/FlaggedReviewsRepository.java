@@ -35,7 +35,7 @@ public class FlaggedReviewsRepository {
             while (rs.next()) {
                 Map<String, Object> review = new HashMap<>();
                 review.put("id", rs.getInt("ReviewID"));
-                review.put("UserID", rs.getInt("UserID"));
+                review.put("userId", rs.getInt("UserID"));
                 review.put("user", rs.getString("Username"));
                 review.put("game", rs.getString("GameName"));
                 review.put("hearingRating", rs.getInt("HearingRating"));

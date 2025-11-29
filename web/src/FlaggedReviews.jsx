@@ -100,6 +100,10 @@ export default function FlaggedReviews() {
         }
     };
 
+    const goToProfile = (userId) => {
+        window.location.href = `/users/${userId}`;
+    }
+
 
     if (loading)
         return (
@@ -147,7 +151,7 @@ export default function FlaggedReviews() {
                                 <div className="options-box">
                                     <h2 className="black-text"> Options </h2>
                                     <div className="button-box">
-                                        <button> See user's profile </button>
+                                        <button onClick={() => goToProfile(review.userId)}> See user's profile </button>
                                         <button onClick={() => handleAccept(review.id)}> Approve review </button>
                                         <button onClick={() => handleDecline(review.id)}> Remove review </button>
                                     </div>

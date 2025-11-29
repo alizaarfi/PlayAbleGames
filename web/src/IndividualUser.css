@@ -1,0 +1,21 @@
+.flagged-review {
+    background-color: #ffebee; /* Light red */
+    border-left: 4px solid #f44336; /* Red border */
+}
+
+.userInfoSection{
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title{
+    margin-bottom: 10px;
+}
+
+.status{
+    margin-top: 10px;
+}
