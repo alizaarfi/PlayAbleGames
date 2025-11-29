@@ -43,7 +43,7 @@ public class VoiceCommandController {
             // Service returns a complete ParsedCommand with all fields populated
             ParsedCommand parsedCommand = voiceControlService.processAudio(audioData);
 
-            // ===== BACKEND UPDATE A: Detect Speech Activity =====
+            // get the text
             String transcribedText = parsedCommand.getTranscribedText();
 
             // Check if no speech was detected (empty or very short text)
@@ -62,7 +62,7 @@ public class VoiceCommandController {
                 return HttpResponse.ok(noSpeechCommand);
             }
 
-            // ===== BACKEND UPDATE B: Only Process Valid Commands =====
+            // only process commands that are valuid
             // Log the parsed command details only if speech was detected
             LOG.info("Speech detected - Type: {}, Target: {}, Transcription: '{}', Confidence: {}, Timestamp: {}",
                     parsedCommand.getType(),
@@ -71,25 +71,11 @@ public class VoiceCommandController {
                     parsedCommand.getConfidence(),
                     parsedCommand.getTimestamp());
 
-            // Additional validation: Check if confidence is too low
+            // Additional validation: Check if confidence is too low for future analysis
             if (parsedCommand.getConfidence() < 0.3) {
                 LOG.warn("Low confidence transcription ({}): '{}'",
                         parsedCommand.getConfidence(),
                         transcribedText);
-
-                // You can choose to return NO_SPEECH or still return the low-confidence result
-                // For now, we'll return it but you could uncomment below to filter it out
-                /*
-                ParsedCommand lowConfidenceCommand = ParsedCommand.builder()
-                        .type("NO_SPEECH")
-                        .target("")
-                        .transcribedText(transcribedText)
-                        .confidence(parsedCommand.getConfidence())
-                        .timestamp(parsedCommand.getTimestamp())
-                        .build();
-
-                return HttpResponse.ok(lowConfidenceCommand);
-                */
             }
 
             // Return the valid ParsedCommand - Micronaut will serialize it to JSON
