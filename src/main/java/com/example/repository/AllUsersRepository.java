@@ -34,8 +34,9 @@ public class AllUsersRepository {
                 Map<String, Object> user = new HashMap<>();
                 user.put("userId", rs.getInt("UserID"));
                 user.put("user", rs.getString("Username"));
+                user.put("numReviews", rs.getInt("reviewCount"));
                 user.put("enabled", rs.getBoolean("Enabled"));
-                user.put("reviewCount", rs.getInt("reviewCount"));
+
                 users.add(user);
             }
 
