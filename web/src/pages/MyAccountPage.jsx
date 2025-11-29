@@ -1,0 +1,328 @@
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../hooks/AuthProvider.jsx";
+import Navbar from "../NavBar.jsx";
+import "../style.css";
+
+const API_BASE = "http://localhost:8081/api";
+
+export default function MyAccountPage() {
+    const { token, logout } = useAuth();
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [profile, setProfile] = useState({
+        username: "",
+        email: "",
+        userId: null,
+        enabled: true,
+        profilePictureURL: null
+    });
+
+    const [showEditProfile, setShowEditProfile] = useState(false);
+    const [showChangePassword, setShowChangePassword] = useState(false);
+    const [oldPassword, setOldPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+
+
+    useEffect(() => {
+        async function fetchProfile() {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const res = await fetch(`${API_BASE}/user/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to fetch profile data');
+                }
+
+                const data = await res.json();
+                setProfile(data);
+            } catch (e) {
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        if (token) {
+            fetchProfile();
+        }
+    }, [token]);
+
+    const handleSignOut = async () => {
+        await logout();
+        window.location.href = "/";
+    };
+
+    const handleSaveProfile = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/user/profile`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(profile)
+            });
+
+            if (!res.ok) {
+                alert("Failed to update profile");
+            } else {
+                alert("Profile updated successfully");
+                setShowEditProfile(false);
+            }
+        } catch (e) {
+            alert("Error updating profile");
+        }
+    };
+
+    const handleChangePassword = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/user/change-password`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ oldPassword, newPassword })
+            });
+
+            if (!res.ok) {
+                alert("Failed to change password");
+            } else {
+                alert("Password updated successfully");
+                setOldPassword("");
+                setNewPassword("");
+                setShowChangePassword(false);
+            }
+        } catch (e) {
+            alert("Error changing password");
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="app">
+                <Navbar />
+                <main className="container">
+                    <div className="loading-container">
+                        <p>Loading your account...</p>
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="app">
+                <Navbar />
+                <main className="container">
+                    <div className="error-container">
+                        <p>Error: {error}</p>
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
+    return (
+        <div className="app">
+            <Navbar />
+            <main className="container">
+                <section className="hero">
+                    <h2>My Account</h2>
+                    <p>Manage your profile and account settings</p>
+                </section>
+
+                <div className="account-layout">
+
+                    <div className="account-card">
+                        <div className="account-profile-header">
+                            <div className="profile-avatar-large">
+                                {profile.profilePictureURL ? (
+                                    <img src={profile.profilePictureURL} alt="Profile" />
+                                ) : (
+                                    <div className="avatar-placeholder-large">
+                                        {profile.username?.charAt(0).toUpperCase()}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="profile-header-info">
+                                <h3>{profile.username}</h3>
+                                <p className="user-email">{profile.email}</p>
+                                <span className={`status-badge ${profile.enabled ? 'active' : 'inactive'}`}>
+                                    {profile.enabled ? '● Active' : '● Inactive'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="account-details-section">
+                            <h4>Account Details</h4>
+                            <div className="detail-row">
+                                <span className="detail-label">Username</span>
+                                <span className="detail-value">{profile.username}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="detail-label">Email</span>
+                                <span className="detail-value">{profile.email}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="detail-label">User ID</span>
+                                <span className="detail-value">#{profile.userId}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="detail-label">Account Status</span>
+                                <span className="detail-value">
+                                    <span className={`status-badge ${profile.enabled ? 'active' : 'inactive'}`}>
+                                        {profile.enabled ? 'Active' : 'Inactive'}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="account-actions-section">
+                            <h4>Account Actions</h4>
+                            <div className="action-buttons">
+                                <button
+                                    className="action-button edit-profile"
+                                    onClick={() => {
+                                        setShowEditProfile(!showEditProfile);
+                                        setShowChangePassword(false);
+                                    }}
+                                >
+                                    Edit Profile
+                                </button>
+
+                                {showEditProfile && (
+                                    <div className="collapsible-section">
+                                        <h4>Edit Profile</h4>
+
+                                        <label>Username</label>
+                                        <input
+                                            type="text"
+                                            value={profile.username}
+                                            onChange={(e) =>
+                                                setProfile({ ...profile, username: e.target.value })
+                                            }
+                                        />
+
+                                        <label>Email</label>
+                                        <input
+                                            type="email"
+                                            value={profile.email}
+                                            onChange={(e) =>
+                                                setProfile({ ...profile, email: e.target.value })
+                                            }
+                                        />
+
+                                        <button className="save-button" onClick={handleSaveProfile}>
+                                            Save Changes
+                                        </button>
+                                    </div>
+                                )}
+
+                                <button
+                                    className="action-button change-password"
+                                    onClick={() => {
+                                        setShowChangePassword(!showChangePassword);
+                                        setShowEditProfile(false);
+                                    }}
+                                >
+                                    Change Password
+                                </button>
+                                {showChangePassword && (
+                                    <div className="collapsible-section">
+                                        <h4>Change Password</h4>
+
+                                        <label>Old Password</label>
+                                        <input
+                                            type="password"
+                                            value={oldPassword}
+                                            onChange={(e) => setOldPassword(e.target.value)}
+                                        />
+
+                                        <label>New Password</label>
+                                        <input
+                                            type="password"
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                        />
+
+                                        <button className="save-button" onClick={handleChangePassword}>
+                                            Update Password
+                                        </button>
+                                    </div>
+                                )}
+
+
+                                <button
+                                    className="action-button sign-out"
+                                    onClick={handleSignOut}
+                                >
+                                    Sign Out
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <aside className="account-sidebar">
+                        <div className="sidebar-card">
+                            <h4>Quick Stats</h4>
+                            <div className="stat-item">
+                                <span className="stat-label">Reviews Written</span>
+                                <span className="stat-value">0</span>
+                            </div>
+                            <div className="stat-item">
+                                <span className="stat-label">Games Favorited</span>
+                                <span className="stat-value">0</span>
+                            </div>
+                            <div className="stat-item">
+                                <span className="stat-label">Member Since</span>
+                                <span className="stat-value">2025</span>
+                            </div>
+                        </div>
+
+                        <div className="sidebar-card">
+                            <h4>Quick Links</h4>
+                            <a href="/" className="quick-link">
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="link-icon">
+                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                </svg>
+                                Browse Games
+                            </a>
+                            <a href="/favorites" className="quick-link">
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="link-icon">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                My Favorites
+                            </a>
+                        </div>
+                    </aside>
+                </div>
+
+                <footer className="page-footer">
+                    <p>Making Games Accessible for Every Player</p>
+                    <p>
+                        Platform designed with{" "}
+                        <a
+                            href="https://accessibility-manual.dwp.gov.uk/accessibility-law/web-content-accessibility-guidelines"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            WCAG 2.1 Level AA
+                        </a>{" "}
+                        compliance in mind
+                    </p>
+                </footer>
+            </main>
+        </div>
+    );
+}

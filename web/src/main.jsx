@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
@@ -12,6 +13,7 @@ import AdminDashboard from "./AdminDashboard.jsx";
 import useSpeech from "./UseSpeech.jsx";
 import { FavoritesProvider } from "./FavoritesContext.jsx";
 import FavoritesPage from "./FavoritesPage.jsx";   // imported as FavouritesPage (UK) :contentReference[oaicite:0]{index=0}
+import MyAccountPage from './pages/MyAccountPage.jsx';
 
 import "./style.css";
 import {AuthProvider} from "./hooks/AuthProvider.jsx";
@@ -47,6 +49,12 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         {/* Favorite page */}
                         <Route path="/favorites" element={<FavoritesPage />} />
 
+                        <Route
+                            path="/myaccount"
+                            element={
+                                    <MyAccountPage />
+                            }
+                        />
                     </Routes>
                 </FavoritesProvider>
             </AuthProvider>

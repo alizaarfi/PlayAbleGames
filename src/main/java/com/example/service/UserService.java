@@ -70,4 +70,8 @@ public class UserService {
         }
         return user;
     }
+
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 }
