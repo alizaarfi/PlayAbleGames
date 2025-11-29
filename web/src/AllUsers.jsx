@@ -76,8 +76,8 @@ export default function AllUsers(){
                 ) : (
                     user.map((user, idx) => (
                         <div className="userBox" key={user.userId ?? idx} href="/users/{user.userId}">
-                            <h1> {user.user} {user.enabled ? " (active)" : " (banned)"} </h1>
-                            <p> {user.numReviews} reviews</p>
+                            <h3 className="black-text"> {user.user} {user.enabled ? " (active)" : " (banned)"} </h3>
+                            <p className="black-text"> {user.numReviews} reviews</p>
                         </div>
                     ))
                 )}
