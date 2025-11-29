@@ -121,10 +121,5 @@ export default function IndividualUser(){
                 )}
             </div>
         </div>
-
-
-
-
-
     );
 }
