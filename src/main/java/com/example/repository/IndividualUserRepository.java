@@ -19,7 +19,7 @@ public class IndividualUserRepository {
         Map<String, Object> result = new HashMap<>();
 
         // First, get user information
-        String userSql = "SELECT UserID, Username, JoinDate, Enabled " +
+        String userSql = "SELECT UserID, Username, Enabled " +
                 "FROM users " +
                 "WHERE UserID = ?";
 
@@ -32,7 +32,6 @@ public class IndividualUserRepository {
                 if (rs.next()) {
                     result.put("userId", rs.getInt("UserID"));
                     result.put("username", rs.getString("Username"));
-                    result.put("joinDate", rs.getDate("JoinDate").toString());
                     result.put("enabled", rs.getBoolean("Enabled"));
                 } else {
                     return null; // User not found

@@ -8,10 +8,16 @@ const API_BASE = "http://localhost:8081/api";
 
 export default function IndividualUser(){
 
-    const { userid } = useParams();
+    const { userId } = useParams();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(
+        {
+            userId: userId,
+            username: "Unknown User",
+            enabled: false,
+        }
+    );
     const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
@@ -30,9 +36,8 @@ export default function IndividualUser(){
 
                 // Set user info
                 setUser({
-                    userid: data.userId ?? userId,
+                    userId: data.userId ?? userId,
                     username: data.username ?? "Unknown User",
-                    joinDate: data.joinDate ?? "",
                     enabled: data.enabled ?? false,
                 });
 
@@ -90,7 +95,6 @@ export default function IndividualUser(){
                 <div className="userInfoSection">
                 <h1 className="title black-text"> {user.username}'s profile </h1>
                 <h2 className="status black-text"> Account Status: {user.enabled ? "Enabled" : "Disabled"} </h2>
-                <h3 className="join-date black-text"> Joined on: {user.joinDate[8] + user.joinDate[9] + '/' + user.joinDate[5] + user.joinDate[6] + '/' +  user.joinDate[0] + user.joinDate[1] + user.joinDate[2] + user.joinDate[3] } </h3>
             </div>
             <div className="reviews-container">
                 <h2 className="title black-text"> Reviews by {user.username} </h2>
