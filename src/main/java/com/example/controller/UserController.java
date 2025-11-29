@@ -1,10 +1,13 @@
 package com.example.controller;
 
+import com.example.api.ChangePasswordRequest;
 import com.example.domain.User;
 import com.example.service.UserService;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Put;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
@@ -47,5 +50,29 @@ public class UserController {
         profile.put("profilePictureURL", user.getProfilePictureURL());
 
         return HttpResponse.ok(profile);
+    }
+
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    @Put("/change-password")
+    public HttpResponse<?> changePassword(@Body ChangePasswordRequest request,
+                                          Authentication authentication) {
+
+        // get username from JWT
+        String username = authentication.getName();
+
+        // fetch user from DB
+        User user = userService.getUserByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        try {
+            userService.changePassword(
+                    user.getUsername(),
+                    request.getOldPassword(),
+                    request.getNewPassword()
+            );
+            return HttpResponse.ok(Map.of("message", "Password changed successfully"));
+        } catch (Exception e) {
+            return HttpResponse.badRequest(Map.of("error", e.getMessage()));
+        }
     }
 }

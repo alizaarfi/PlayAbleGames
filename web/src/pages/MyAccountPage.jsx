@@ -22,6 +22,8 @@ export default function MyAccountPage() {
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+    const [passwordError, setPasswordError] = useState(null);
 
 
     useEffect(() => {
@@ -83,6 +85,16 @@ export default function MyAccountPage() {
     };
 
     const handleChangePassword = async () => {
+        setPasswordError(null);
+
+        const validation = validatePasswordChange();
+        if (validation){
+            setPasswordError(validation);
+            return;
+        }
+        const confirm = window.confirm("Are you sure you want to change your password?");
+        if (!confirm) return;
+
         try {
             const res = await fetch(`${API_BASE}/user/change-password`, {
                 method: "POST",
@@ -94,7 +106,9 @@ export default function MyAccountPage() {
             });
 
             if (!res.ok) {
-                alert("Failed to change password");
+                const data = await res.json();
+                setPasswordError(data.error || "Failed to change password.");
+                return;
             } else {
                 alert("Password updated successfully");
                 setOldPassword("");
@@ -105,6 +119,41 @@ export default function MyAccountPage() {
             alert("Error changing password");
         }
     };
+
+    const validatePasswordChange = () => {
+        if (!oldPassword || !newPassword || !confirmNewPassword) {
+            return "Please fill all the fields.";
+        }
+
+
+        // New password length
+        if (newPassword.length < 8) {
+            return "New password must be at least 8 characters.";
+        }
+
+        // Must include uppercase
+        if (!/[A-Z]/.test(newPassword)) {
+            return "New password must contain at least one uppercase letter.";
+        }
+
+        // Must include number
+        if (!/[0-9]/.test(newPassword)) {
+            return "New password must contain at least one number.";
+        }
+
+        // Must match
+        if (newPassword !== confirmNewPassword) {
+            return "New passwords do not match.";
+        }
+
+        // Cannot reuse same password
+        if (oldPassword === newPassword) {
+            return "New password cannot be the same as your current password.";
+        }
+
+        return null;
+    };
+
 
     if (loading) {
         return (
@@ -254,6 +303,18 @@ export default function MyAccountPage() {
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
                                         />
+
+                                        <label>Confirm New Password</label>
+                                        <input
+                                            type="password"
+                                            value={confirmNewPassword}
+                                            onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                        />
+                                        {passwordError && (
+                                            <p className="error-msg" style={{ marginTop: "8px" }}>
+                                                {passwordError}
+                                            </p>
+                                        )}
 
                                         <button className="save-button" onClick={handleChangePassword}>
                                             Update Password

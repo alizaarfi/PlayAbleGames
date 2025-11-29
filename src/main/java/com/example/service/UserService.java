@@ -5,6 +5,7 @@ import com.example.repository.UserRepository;
 import jakarta.inject.Singleton;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -74,4 +75,23 @@ public class UserService {
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public void changePassword(String username, String oldPassword, String newPassword) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // verify old password
+        if (!BCrypt.checkpw(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        // encrypt new password
+        String encrypted = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        user.setPassword(encrypted);
+
+        userRepository.update(user);
+    }
+
+
 }
