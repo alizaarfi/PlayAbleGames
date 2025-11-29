@@ -70,7 +70,7 @@ export default function AdminDashboard(){
                             <h2 className="black-text paddedText"> Users </h2>
                             <h3 className="black-text paddedText"> {dashboard.totalUsers} </h3>
                             <div className="button-box">
-                                <button className="optionButton"> Manage Users </button>
+                                <button className="optionButton"> <a className='black-text' href='/users'> Manage Users </a> </button>
                             </div>
                         </div>
                     </div>
