@@ -58,6 +58,13 @@ public class VoiceCommandController {
                 LOG.warn("audioData is empty/null");
                 return HttpResponse.badRequest();
             }
+
+            // Check min size for a valid WAV audio (44)
+            if (audioData.length < 44) {
+                LOG.warn("audioData too small to be valid audio: {} bytes", audioData.length);
+                return HttpResponse.badRequest();
+            }
+
             LOG.info("Received audioData: {} bytes", audioData.length);
 
             // Now process audio

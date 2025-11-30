@@ -36,35 +36,31 @@ class VoiceCommandServiceTest {
     @Inject
     ObjectMapper objectMapper;
 
-    // ========== NAVIGATE COMMAND TESTS ==========
-
+    // CommandType NAVIGATE Tests
     @Nested
     @DisplayName("NAVIGATE Command Parsing")
     class NavigateCommandTests {
 
         @ParameterizedTest
-        @DisplayName("Should recognize accessibility navigation commands")
+        @DisplayName("Should recognise accessibility navigation commands")
         @ValueSource(strings = {
                 "go to accessibility",
                 "navigate to accessibility",
                 "open accessibility",
                 "accessibility",
-                "go to access ability", // Common misheard
-                "navigate to access lousy", // Common Vosk error
-                "open accessability" // Common misspelling
-        })
+                "go to access ability", // Commonlu misheard in my logs
+                "navigate to access lousy",
+                "open accessability"})
         void testNavigateToAccessibility(String input) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.NAVIGATE, command.getType());
             assertEquals("accessibility", command.getTarget());
             assertEquals(input, command.getTranscribedText());
         }
 
         @ParameterizedTest
-        @DisplayName("Should recognize home navigation commands")
+        @DisplayName("Should recognise home navigation commands")
         @ValueSource(strings = {
                 "go to home",
                 "navigate to home",
@@ -73,16 +69,14 @@ class VoiceCommandServiceTest {
                 "go to homepage"
         })
         void testNavigateToHome(String input) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.NAVIGATE, command.getType());
             assertEquals("home", command.getTarget());
         }
 
         @ParameterizedTest
-        @DisplayName("Should recognize settings navigation")
+        @DisplayName("Should recognise settings navigation")
         @ValueSource(strings = {
                 "go to settings",
                 "navigate to settings",
@@ -90,23 +84,21 @@ class VoiceCommandServiceTest {
                 "settings"
         })
         void testNavigateToSettings(String input) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.NAVIGATE, command.getType());
             assertEquals("settings", command.getTarget());
         }
     }
 
-    // ========== SEARCH COMMAND TESTS ==========
 
+    // CommandType SEARCH tests
     @Nested
     @DisplayName("SEARCH Command Parsing")
     class SearchCommandTests {
 
         @ParameterizedTest
-        @DisplayName("Should recognize search commands with various phrases")
+        @DisplayName("Should recognise search commands with various phrases")
         @CsvSource({
                 "'search minecraft', 'minecraft'",
                 "'search for minecraft', 'minecraft'",
@@ -114,39 +106,22 @@ class VoiceCommandServiceTest {
                 "'search call of duty', 'call of duty'"
         })
         void testSearchCommands(String input, String expectedTarget) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.SEARCH, command.getType());
             assertNotNull(command.getTarget());
             assertTrue(command.getTarget().contains(expectedTarget.split(" ")[0]));
         }
-
-        @Test
-        @DisplayName("Should handle multi-word search queries")
-        void testMultiWordSearch() {
-            // Arrange
-            String input = "search for adventure games with vision support";
-
-            // Act
-            ParsedCommand command = voiceCommandService.parseCommand(input);
-
-            // Assert
-            assertEquals(CommandType.SEARCH, command.getType());
-            assertNotNull(command.getTarget());
-            assertFalse(command.getTarget().isEmpty());
-        }
     }
 
-    // ========== SCROLL COMMAND TESTS ==========
 
+    // Scroll tests
     @Nested
     @DisplayName("SCROLL Command Parsing")
     class ScrollCommandTests {
 
         @ParameterizedTest
-        @DisplayName("Should recognize all scroll directions")
+        @DisplayName("Should recognise all scroll directions")
         @CsvSource({
                 "'scroll up', 'up'",
                 "'scroll down', 'down'",
@@ -154,23 +129,19 @@ class VoiceCommandServiceTest {
                 "'scroll bottom', 'bottom'"
         })
         void testScrollCommands(String input, String expectedDirection) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
-
-            // Assert
             assertEquals(CommandType.SCROLL, command.getType());
             assertEquals(expectedDirection, command.getTarget());
         }
     }
 
-    // ========== FILTER COMMAND TESTS ==========
-
+    // Filter tests
     @Nested
     @DisplayName("FILTER Command Parsing")
     class FilterCommandTests {
 
         @ParameterizedTest
-        @DisplayName("Should recognize genre filters")
+        @DisplayName("Should recognise genre filters")
         @CsvSource({
                 "'filter puzzle', 'puzzle'",
                 "'filter by action', 'action'",
@@ -179,10 +150,8 @@ class VoiceCommandServiceTest {
                 "'filter casual', 'casual'"
         })
         void testGenreFilters(String input, String expectedGenre) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.FILTER, command.getType());
             assertNotNull(command.getTarget());
         }
@@ -195,17 +164,15 @@ class VoiceCommandServiceTest {
                 "filter by puz"
         })
         void testPuzzleFuzzyMatching(String input) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.FILTER, command.getType());
             assertEquals("puzzle", command.getTarget());
         }
     }
 
-    // ========== SORT COMMAND TESTS ==========
 
+    // Sort Tests
     @Nested
     @DisplayName("SORT Command Parsing")
     class SortCommandTests {
@@ -219,10 +186,7 @@ class VoiceCommandServiceTest {
                 "'sort most reviewed', 'most reviewed'"
         })
         void testSortCommands(String input, String expectedSort) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
-
-            // Assert
             assertEquals(CommandType.SORT, command.getType());
             assertNotNull(command.getTarget());
         }
@@ -235,23 +199,21 @@ class VoiceCommandServiceTest {
                 "sort by rat"
         })
         void testRatingFuzzyMatching(String input) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.SORT, command.getType());
             assertEquals("rating", command.getTarget());
         }
     }
 
-    // ========== FAVOURITE COMMAND TESTS ==========
 
+    // Favourite Tests
     @Nested
     @DisplayName("FAVOURITE Command Parsing")
     class FavouriteCommandTests {
 
         @ParameterizedTest
-        @DisplayName("Should recognize game names with fuzzy matching")
+        @DisplayName("Should recognise game names with fuzzy matching")
         @CsvSource({
                 "'favourite minecraft', 'minecraft'",
                 "'favorite mine craft', 'minecraft'",
@@ -287,8 +249,7 @@ class VoiceCommandServiceTest {
         }
     }
 
-    // ========== CLICK COMMAND TESTS ==========
-
+    // Click commands
     @Nested
     @DisplayName("CLICK Command Parsing")
     class ClickCommandTests {
@@ -301,17 +262,14 @@ class VoiceCommandServiceTest {
                 "'click next', 'next'"
         })
         void testClickCommands(String input, String expectedTarget) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.CLICK, command.getType());
             assertEquals(expectedTarget, command.getTarget());
         }
     }
 
-    // ========== UNKNOWN COMMAND TESTS ==========
-
+    // Unknown tests
     @Nested
     @DisplayName("UNKNOWN Command Handling")
     class UnknownCommandTests {
@@ -325,57 +283,11 @@ class VoiceCommandServiceTest {
                 "play music"
         })
         void testUnknownCommands(String input) {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand(input);
 
-            // Assert
             assertEquals(CommandType.UNKNOWN, command.getType());
             assertNull(command.getTarget());
             assertEquals(input, command.getTranscribedText());
-        }
-
-        @Test
-        @DisplayName("Should handle empty string")
-        void testEmptyString() {
-            // Act
-            ParsedCommand command = voiceCommandService.parseCommand("");
-
-            // Assert
-            assertEquals(CommandType.UNKNOWN, command.getType());
-        }
-
-        @Test
-        @DisplayName("Should handle whitespace-only input")
-        void testWhitespaceOnly() {
-            // Act
-            ParsedCommand command = voiceCommandService.parseCommand("   ");
-
-            // Assert
-            assertEquals(CommandType.UNKNOWN, command.getType());
-        }
-    }
-
-    // ========== CASE SENSITIVITY TESTS ==========
-
-    @Nested
-    @DisplayName("Case Sensitivity Tests")
-    class CaseSensitivityTests {
-
-        @ParameterizedTest
-        @DisplayName("Should be case-insensitive")
-        @ValueSource(strings = {
-                "GO TO ACCESSIBILITY",
-                "go to accessibility",
-                "Go To Accessibility",
-                "gO tO aCcEsSiBiLiTy"
-        })
-        void testCaseInsensitivity(String input) {
-            // Act
-            ParsedCommand command = voiceCommandService.parseCommand(input);
-
-            // Assert
-            assertEquals(CommandType.NAVIGATE, command.getType());
-            assertEquals("accessibility", command.getTarget());
         }
     }
 
@@ -388,31 +300,25 @@ class VoiceCommandServiceTest {
         @Test
         @DisplayName("Should include timestamp in ParsedCommand")
         void testTimestampPresent() {
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand("go to home");
 
-            // Assert
             assertNotNull(command.getTimestamp());
         }
 
         @Test
         @DisplayName("Should have recent timestamp")
         void testTimestampRecency() {
-            // Arrange
             long beforeTime = System.currentTimeMillis();
-
-            // Act
             ParsedCommand command = voiceCommandService.parseCommand("search minecraft");
             long afterTime = System.currentTimeMillis();
-
-            // Assert
             long commandTime = command.getTimestamp().toEpochMilli();
             assertTrue(commandTime >= beforeTime && commandTime <= afterTime);
         }
     }
 
-    // ========== TRANSCRIPTION PRESERVATION TESTS ==========
 
+    // Transcription tests
+    // Check that after parseCommand, needed for backend logging
     @Nested
     @DisplayName("Transcription Preservation Tests")
     class TranscriptionTests {

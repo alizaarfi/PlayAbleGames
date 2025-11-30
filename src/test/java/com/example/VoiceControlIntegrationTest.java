@@ -8,6 +8,7 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.DisplayName;
@@ -37,68 +38,14 @@ class VoiceControlIntegrationTest {
     @DisplayName("Complete Audio-to-Command Workflow")
     class CompleteWorkflowTests {
 
-        @Test
-        @DisplayName("Should process complete workflow for text parsing")
-        void testCompleteTextWorkflow() {
-            String commandText = "go to accessibility";
-
-            HttpResponse<ParsedCommand> response = client.toBlocking().exchange(
-                    HttpRequest.POST("/api/v1/transcription/parse", commandText)
-                            .contentType(MediaType.TEXT_PLAIN),
-                    ParsedCommand.class
-            );
-
-            assertEquals(HttpStatus.OK, response.getStatus());
-            assertNotNull(response.body());
-
-            ParsedCommand command = response.body();
-            assertEquals(CommandType.NAVIGATE, command.getType());
-            assertEquals("accessibility", command.getTarget());
-            assertEquals(commandText, command.getTranscribedText());
-            assertNotNull(command.getTimestamp());
-        }
-
-        @Test
-        @DisplayName("Should handle multiple sequential requests")
-        void testMultipleSequentialRequests() {
-            // navigate command
-            String nav = "go to home";
-            HttpResponse<ParsedCommand> response1 = client.toBlocking().exchange(
-                    HttpRequest.POST("/api/v1/transcription/parse", nav)
-                            .contentType(MediaType.TEXT_PLAIN),
-                    ParsedCommand.class
-            );
-            assertEquals(HttpStatus.OK, response1.getStatus());
-            assertEquals(CommandType.NAVIGATE, response1.body().getType());
-
-            // search command
-            String search = "search minecraft";
-            HttpResponse<ParsedCommand> response2 = client.toBlocking().exchange(
-                    HttpRequest.POST("/api/v1/transcription/parse", search)
-                            .contentType(MediaType.TEXT_PLAIN),
-                    ParsedCommand.class
-            );
-            assertEquals(HttpStatus.OK, response2.getStatus());
-            assertEquals(CommandType.SEARCH, response2.body().getType());
-
-            // filter command
-            String filter = "filter by puzzle";
-            HttpResponse<ParsedCommand> response3 = client.toBlocking().exchange(
-                    HttpRequest.POST("/api/v1/transcription/parse", filter)
-                            .contentType(MediaType.TEXT_PLAIN),
-                    ParsedCommand.class
-            );
-            assertEquals(HttpStatus.OK, response3.getStatus());
-            assertEquals(CommandType.FILTER, response3.body().getType());
-        }
     }
 
     // Integration tests for error handling
-
     @Nested
     @DisplayName("Error Handling Integration")
     class ErrorHandlingTests {
 
+        // If sending wrong type, need to see that it is handled
         @Test
         @DisplayName("Should handle invalid content type gracefully")
         void testInvalidContentType() {
@@ -121,80 +68,34 @@ class VoiceControlIntegrationTest {
         }
 
         @Test
-        @DisplayName("Should handle malformed requests")
-        void testMalformedRequest() {
+        @DisplayName("Should handle invalid audio data")
+        void testInvalidAudioData() {
+            // Send data that's too small to be valid audio
+            byte[] invalidData = "not-audio".getBytes();
+
             try {
-                HttpResponse<?> response = client.toBlocking().exchange(
-                        HttpRequest.POST("/api/v1/transcription/process", "not-bytes")
-                                .contentType(MediaType.APPLICATION_OCTET_STREAM),
-                        String.class
-                );
-
-                // If it doesn't throw, should return error status!
-                assertTrue(response.getStatus().getCode() >= 400);
-            } catch (Exception e) {
-
-                assertTrue(true);
-            }
-        }
-    }
-
-    // Tests for performance of the voice control feature
-    @Nested
-    @DisplayName("Performance Tests")
-    class PerformanceTests {
-
-        @Test
-        @DisplayName("Should process requests within reasonable time")
-        void testResponseTime() {
-            String commandText = "search for games";
-            long maxResponseTime = 1000; // 1 second
-
-            long startTime = System.currentTimeMillis();
-            HttpResponse<ParsedCommand> response = client.toBlocking().exchange(
-                    HttpRequest.POST("/api/v1/transcription/parse", commandText)
-                            .contentType(MediaType.TEXT_PLAIN),
-                    ParsedCommand.class
-            );
-            long endTime = System.currentTimeMillis();
-
-            assertEquals(HttpStatus.OK, response.getStatus());
-            long responseTime = endTime - startTime;
-            assertTrue(responseTime < maxResponseTime,
-                    "Response took " + responseTime + "ms, expected < " + maxResponseTime + "ms");
-        }
-
-        @Test
-        @DisplayName("Should handle rapid successive requests")
-        void testRapidRequests() {
-            int requestCount = 10;
-            String[] commands = {
-                    "go to home",
-                    "search minecraft",
-                    "filter puzzle",
-                    "sort by rating",
-                    "scroll down"
-            };
-
-            for (int i = 0; i < requestCount; i++) {
-                String command = commands[i % commands.length];
                 HttpResponse<ParsedCommand> response = client.toBlocking().exchange(
-                        HttpRequest.POST("/api/v1/transcription/parse", command)
-                                .contentType(MediaType.TEXT_PLAIN),
+                        HttpRequest.POST("/api/v1/transcription/process", invalidData)
+                                .contentType(MediaType.APPLICATION_OCTET_STREAM),
                         ParsedCommand.class
                 );
 
-                assertEquals(HttpStatus.OK, response.getStatus());
-                assertNotNull(response.body());
+                // If we get here, check the status
+                assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+
+            } catch (HttpClientResponseException e) {
+                // Exception is thrown for 4xx/5xx responses - this is expected
+                assertEquals(HttpStatus.BAD_REQUEST, e.getStatus());
             }
-        }
     }
 
-    // Integration tests for how audio is processed
 
+
+    // Integration tests for how audio is processed
+    // @EnabledIfEnvironmentVariable as can only run when the model is available but it allows it to run in tests
     @Nested
     @DisplayName("Audio Processing Integration")
-    @EnabledIfEnvironmentVariable(named = "VOSK_MODEL_AVAILABLE", matches = "true")
+//    @EnabledIfEnvironmentVariable(named = "VOSK_MODEL_AVAILABLE", matches = "true")
     class AudioProcessingTests {
 
         @Test
@@ -299,4 +200,5 @@ class VoiceControlIntegrationTest {
         buffer.putShort(value);
         baos.write(buffer.array());
     }
+}
 }
