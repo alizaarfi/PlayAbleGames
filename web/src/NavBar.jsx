@@ -241,7 +241,7 @@ function Navbar() {
                 case 'SORT':
                     console.log(`Sorting by: ${target}`);
 
-                    // Map spoken sort options to your sortOption values
+                    // Map spoken sort options to sortOption values
                     const sortMap = {
                         'rating': 'ratingDesc',
                         'highest rating': 'ratingDesc',

@@ -3,7 +3,7 @@ import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
 
-
+// Not sure why this is here
 const games = [
     {
         id: 1,
@@ -144,6 +144,7 @@ const games = [
 
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
+
     // Initialise from local storage - switch to db when logic added
     const [favorites, setFavorites] = useState(() => {
         const saved = localStorage.getItem('playable-favorites');
@@ -171,7 +172,6 @@ function HomePage() {
         casual: false
     });
     const [sortOption, setSortOption] = useState('ratingDesc');
-
 
 
     const toggleFavorite = (gameId, event) => {
@@ -264,6 +264,7 @@ function HomePage() {
     useEffect(() => {
         const handleVoiceCommand = (event) => {
             // For voice commands, extract all details from the event
+            // Amount, direction for scroll initially
             const {
                 type,
                 gameId,
@@ -317,8 +318,6 @@ function HomePage() {
 
                 setSortOption(sortValue);
             }
-
-            // NEW: Handle SEARCH commands
             if (type === 'SEARCH') {
                 console.log(`🔍 HomePage received SEARCH command: ${searchQuery}`);
                 setSearchQuery(searchQuery);
@@ -330,7 +329,7 @@ function HomePage() {
         return () => {
             window.removeEventListener('voiceCommand', handleVoiceCommand);
         };
-    }, []); // Empty dependency array
+    }, []);
 
 
     return (

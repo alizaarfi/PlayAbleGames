@@ -32,18 +32,18 @@ public class ParsedCommand {
         this.timestamp = timestamp;
     }
 
-//    // Comparing commands
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        ParsedCommand that = (ParsedCommand) o;
-//        return type == that.type && Objects.equals(target, that.target);
-//    }
-//    @Override
-//    public String toString() {
-//        return "ParsedCommand{type=" + type + ", target='" + target + "'}";
-//    }
+    // Comparing commands
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParsedCommand that = (ParsedCommand) o;
+        return type == that.type && Objects.equals(target, that.target);
+    }
+    @Override
+    public String toString() {
+        return "ParsedCommand{type=" + type + ", target='" + target + "'}";
+    }
 
     // ----------- Getters -----------
     // No setters, they need to stay immutable

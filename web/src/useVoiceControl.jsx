@@ -238,7 +238,16 @@ function useVoiceControl() {
         }
     };
 
-    // Convert AudioBuffer to WAV format
+    /**
+     * audioBufferToWave converts the audioBuffer to WAV format
+     * @param buffer
+     * @returns {Blob}
+     * Sources adapted from:
+     *  - M. Deslauriers (2015) "audiobuffer-to-wav"
+     *    Available at: https://github.com/Jam3/audiobuffer-to-wav
+ *      - Adapter from -M. Diamond (2016) "Recorder.js"
+     *    Available at: https://github.com/mattdiamond/Recorderjs
+     */
     const audioBufferToWav = (buffer) => {
         const numberOfChannels = 1; // Mono
         const sampleRate = buffer.sampleRate;

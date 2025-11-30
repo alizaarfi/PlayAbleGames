@@ -43,9 +43,20 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.12.0")
     testImplementation("org.mockito:mockito-junit-jupiter:5.12.0")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
 
     implementation("io.micronaut.security:micronaut-security")
     implementation("org.springframework.security:spring-security-crypto:6.2.0")
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = false
+    }
 }
 
 
@@ -67,9 +78,9 @@ micronaut {
         incremental(true)
         annotations("com.example.*")
     }
-//    testResources {
-//        additionalModules.add("jdbc-mariadb")
-//    }
+    testResources {
+        additionalModules.add("jdbc-mariadb")
+    }
     aot {
         // Please review carefully the optimizations enabled below
         // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
