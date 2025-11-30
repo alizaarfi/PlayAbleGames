@@ -14,14 +14,18 @@ import { FavoritesProvider } from "./FavoritesContext.jsx";
 import FavoritesPage from "./FavoritesPage.jsx";   // imported as FavouritesPage (UK) :contentReference[oaicite:0]{index=0}
 
 import "./style.css";
+import Navbar from "./NavBar.jsx";
 import {AuthProvider} from "./hooks/AuthProvider.jsx";
 
 
 ReactDOM.createRoot(document.getElementById("app")).render(
-    <React.StrictMode>
+    // <React.StrictMode> // disabled for the mic to work
         <BrowserRouter>
             <AuthProvider>
                 <FavoritesProvider>
+                    {/* Navbar outside Routes - persistent across all pages for voice control */}
+                    <Navbar />
+                    
                     <Routes>
                         {/* Homepage */}
                         <Route path="/" element={<HomePage />} />
@@ -51,5 +55,5 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                 </FavoritesProvider>
             </AuthProvider>
         </BrowserRouter>
-    </React.StrictMode>
+    // </React.StrictMode>
 );

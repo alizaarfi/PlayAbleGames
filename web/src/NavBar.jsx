@@ -1,9 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import useSpeech from './UseSpeech';
+import { Link, useNavigate } from 'react-router-dom';
 import "./style.css";
+import useVoiceControl from "./useVoiceControl.jsx";
+import useSpeech from './UseSpeech';
 import {useAuth} from "./hooks/AuthProvider.jsx";
 import ConfirmModal from "./ConfirmModal.jsx";
+
+/**
+ * Navbar as a container component
+ * UI: Logo (home page nav), Visual feedback box, microphone icon for muting/unmuting, accessibility page, community page, profile icon with dropdown
+ */
 
 function Navbar() {
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -11,9 +17,298 @@ function Navbar() {
     const [showConfirmModal, setShowConfirmModal]= useState(false);
     const [showSuccessToast, setShowSuccessToast]= useState(false);
     const dropdownRef = useRef(null);
+    const navigate = useNavigate();
+    const { stream, isRecording, isMicActive, processingState,setProcessingState, transcription, commandData, error, toggleRecording } = useVoiceControl();
     const { isSpeaking, stop, readPage } = useSpeech();
-
     const { isAuthenticated, logout } = useAuth();//for login/logout button
+
+    // When commandData/transcription is received from useVoiceControl hook
+    useEffect(() => {
+        if (commandData) {
+            processVoiceCommand(commandData);
+        } else if (transcription && transcription.length > 0) {
+            // Log when speech was detected but couldn't be parsed into a command
+            console.warn("Speech detected but command not recognised:", transcription);
+        }
+    }, [commandData, transcription]);
+
+    /**
+     * Performs actions based on incoming voice commands from commandData
+     * HomePage and other pages can be mounted/unmounted without breaking voice control
+     * Sets processing states for success or error when UNKNOWN
+     * @param commandData
+     */
+    const processVoiceCommand = (commandData) => {
+        try {
+            if (!commandData || !commandData.type) {
+                console.warn("Invalid command data:", commandData);
+                return; // Don't crash, just exit gracefully
+            }
+
+            // extracts from the backend response
+            const { type, target } = commandData;
+            console.log("Full commandData:", commandData);
+            console.log("Target:", target);
+
+            //switch case for each command type then relevant target
+            switch (type) {
+                case 'NAVIGATE':
+                    console.log("NAVIGATE TYPE")
+                    // unneeded but navigate has very specific targets
+                    if (!target) {
+                        console.warn("Navigate called without target");
+                        break;
+                    }
+                    try {
+                        if (target === 'accessibility') {
+                            navigate('/accessibility');
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
+                        } else if (target === 'home') {
+                            navigate('/');
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
+                        } else {
+                            console.log("Unknown route:", target);
+                            setProcessingState('error');
+                            setTimeout(() => setProcessingState('idle'), 2000);
+                        }
+                    } catch (navError) {
+                        console.error("Navigation failed:", navError);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
+                    break;
+
+                case 'CLICK':
+                    console.log(`Clicking: ${target}`);
+                    // Example: find and click element
+                    break;
+
+                case 'SEARCH':
+                    console.log(`Searching for: ${target}`);
+
+                    // Event pattern
+                    // Dispatch search command
+                    window.dispatchEvent(new CustomEvent('voiceCommand', {
+                        detail: {
+                            type: 'SEARCH',
+                            searchQuery: target
+                        }
+                    }));
+
+                    console.log(`Dispatched SEARCH event for: ${target}`);
+
+                    setTimeout(() => {
+                        setProcessingState('success');
+                        setTimeout(() => setProcessingState('idle'), 1500);
+                    }, 100);
+                    break;
+
+                case 'SCROLL':
+                    console.log(`Scrolling: ${target}`);
+
+                    const scrollActions = {
+                        'up': -500,
+                        'down': 500,
+                        'top': 'top',
+                        'bottom': 'bottom'
+                    };
+
+                    const scrollAmount = scrollActions[target.toLowerCase()];
+
+                    if (scrollAmount !== undefined) {
+                        // Execute scroll directly instead of dispatching event
+                        if (scrollAmount === 'top') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (scrollAmount === 'bottom') {
+                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                        } else {
+                            window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+                        }
+
+                        console.log(`Executed SCROLL: ${target}`);
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.warn(`Unknown scroll direction: ${target}`);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
+                    break;
+
+                case 'UNKNOWN':
+                    console.warn(`Unknown command: ${transcription}`);
+                    setProcessingState('error');
+                    setTimeout(() => setProcessingState('idle'), 2000);
+                    break;
+                // Important: For logged-in users only
+                case 'FAVOURITE':
+                    console.log(`Favouriting game: ${target}`);
+
+                    // Simple game name to ID mapping
+                    // Updates this when adding new games until dataset gets too large
+                    const gameNameToId = {
+                        'minecraft': 1,
+                        'monument valley': 2,
+                        'among us': 3,
+                        'candy crush saga': 4,
+                        'call of duty': 5,
+                        'pokemon go': 6,
+                        'subway surfers': 7,
+                        'clash of clans': 8,
+                        'jigsawscapes': 9,
+                        'my oasis': 10,
+                        'altos odyssey': 11,
+                        'kami 2': 12,
+                        'sky children of light': 13,
+                        'stardew valley': 14,
+                        'a blind legend': 15
+                    };
+
+                    const gameName = target.toLowerCase();
+                    const gameId = gameNameToId[gameName];
+
+                    if (gameId) {
+                        // Dispatch custom event that HomePage will listen to
+                        // Homepage needs to check authentication and handle
+                        window.dispatchEvent(new CustomEvent('voiceCommand', {
+                            detail: {
+                                type: 'FAVOURITE',
+                                gameId: gameId,
+                                gameName: target
+                            }
+                        }));
+
+                        console.log(`Dispatched FAVOURITE event for ${target} (ID: ${gameId})`);
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.warn(`Game not found: ${target}`);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
+                    break;
+
+                case 'FILTER':
+                    console.log(`Filtering by: ${target}`);
+
+                    // Map spoken filter names to the filter keys
+                    const filterMap = {
+                        'vision support': 'visionSupport',
+                        'vision': 'visionSupport',
+                        'hearing support': 'hearingSupport',
+                        'hearing': 'hearingSupport',
+                        'speech support': 'speechSupport',
+                        'speech': 'speechSupport',
+                        'motor support': 'motorSupport',
+                        'motor': 'motorSupport',
+                        'cognitive support': 'cognitiveSupport',
+                        'cognitive': 'cognitiveSupport',
+                        'action': 'action',
+                        'adventure': 'adventure',
+                        'puzzle': 'puzzle',
+                        'strategy': 'strategy',
+                        'casual': 'casual'
+                    };
+
+                    const filterKey = filterMap[target.toLowerCase()];
+
+                    if (filterKey) {
+                        window.dispatchEvent(new CustomEvent('voiceCommand', {
+                            detail: {
+                                type: 'FILTER',
+                                filterKey: filterKey,
+                                filterName: target
+                            }
+                        }));
+
+                        console.log(`Dispatched FILTER event for ${target}`);
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.warn(`Filter not found: ${target}`);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
+                    break;
+
+                case 'SORT':
+                    console.log(`Sorting by: ${target}`);
+
+                    // Map spoken sort options to sortOption values
+                    const sortMap = {
+                        'rating': 'ratingDesc',
+                        'highest rating': 'ratingDesc',
+                        'lowest rating': 'ratingAsc',
+                        'most popular': 'ratingDesc',
+                        'most reviewed': 'reviewsDesc',
+                        'least reviewed': 'reviewsAsc',
+                        'title': 'titleAsc',
+                        'alphabetical': 'titleAsc',
+                        'reverse alphabetical': 'titleDesc'
+                    };
+
+                    const sortValue = sortMap[target.toLowerCase()];
+
+                    if (sortValue) {
+                        window.dispatchEvent(new CustomEvent('voiceCommand', {
+                            detail: {
+                                type: 'SORT',
+                                sortValue: sortValue,
+                                sortName: target
+                            }
+                        }));
+
+                        console.log(`Dispatched SORT event for ${target}`);
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.warn(`Sort option not found: ${target}`);
+                        setProcessingState('error');
+                        setTimeout(() => setProcessingState('idle'), 2000);
+                    }
+                    break;
+
+                default:
+                    console.log(`Command: ${type}, Target: ${target}`);
+                    break;
+            }
+
+        } catch (error) {
+            console.error("Command processing error:", error);
+            setProcessingState('error');
+            setTimeout(() => setProcessingState('idle'), 2000);
+        }
+
+
+
+    };
+
+    // Logs error messages from voice control
+    // In future could give user refined version of errors
+    useEffect(() => {
+        if (error) {
+            console.error("Error:", error);
+            // Optionally show error to user
+        }
+    }, [error]);
 
 
     // Close dropdown when clicking outside
@@ -30,6 +325,7 @@ function Navbar() {
         };
     }, []);
 
+    
     // Check Text-to-Speech setting
     useEffect(() => {
         const checkTTS = () => {
@@ -80,6 +376,7 @@ function Navbar() {
         }
     };
 
+
     return (
         <>
         <header className="main-header">
@@ -100,10 +397,83 @@ function Navbar() {
                     </div>
 
                     <div className="header-nav">
-                        <button className="nav-btn accessibility-btn">
+
+                        {/*VISUAL FEEDBACK CONTAINER TO DISPLAY PROCESSING STATES*/}
+                        <div className={"visual-feedback-container"}>
+                            {/* Show example command when idle */}
+                            {(!processingState || processingState === 'idle') && (
+                                <span className="feedback-text idle">
+                                    Ready - Speak to start
+                                </span>
+                            )}
+
+                            {/*Show recording state when audio wave*/}
+                            {/* Audio wave during recording,
+                            can add more waves but need to update css too*/}
+                            {processingState === 'recording' && (
+                                <div className="feedback-recording">
+                                    <div className="audio-wave">
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                        <span className="wave-bar"></span>
+                                    </div>
+                                    <span className="feedback-text recording">Listening</span>
+                                </div>
+                            )}
+
+                            {/*Need for processing */}
+                            {processingState === 'processing' && (
+                                <span className="feedback-text processing">
+                                    <span className="spinner"></span> Processing...
+                                </span>
+                            )}
+
+                            {/*Need for successful */}
+                            {processingState === 'success' && (
+                                <span className="feedback-text success">
+                                    Done!
+                                </span>
+                            )}
+                            {/*Need for try again */}
+                            {processingState === 'error' && (
+                                <span className="feedback-text error-state">
+                                    Try Again
+                                </span>
+                            )}
+
+                        </div>
+
+                        {/*VoiceControlButton*/}
+                        <button
+                            className={`nav-btn accessibility-btn ${
+                                !stream ? 'mic-error' :
+                                    isMicActive ? 'mic-recording' :  
+                                        'mic-inactive'
+                            }`}
+                            onClick={toggleRecording}
+                            // disabled={!stream}  // Disable if no mic access
+                            title={
+                                !stream ? 'Microphone not available' :
+                                    isRecording ? 'Recording - Click to stop' :
+                                        'Click to start recording'
+                            }
+                        >
+                            {/*Button Icon*/}
+                            {/*Updates  to show based on isMicActive:*/}
                             <svg viewBox="0 0 24 24" fill="currentColor" className="nav-icon">
-                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                {isMicActive ? (
+                                    // Active mic icon
+                                    <>
+                                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                    </>
+                                ) : (
+                                    // Muted mic icon
+                                    <path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/>
+                                )}
                             </svg>
                         </button>
 
@@ -125,6 +495,7 @@ function Navbar() {
                                 </svg>
                             </button>
                         )}
+
 
                         <Link to="/accessibility" className="nav-btn info-btn">
                             <svg viewBox="0 0 24 24" fill="currentColor" className="nav-icon">
@@ -214,21 +585,22 @@ function Navbar() {
                 </div>
             </div>
         </header>
-    {/*Confirmation model*/}
-    <ConfirmModal
-        isOpen={showConfirmModal}
-        message="Are you sure you want to Log Out?"
-        onConfirm={handleConfirmLogout}
-        onCancel={()=> setShowConfirmModal(false)}
-    />
-    {/* Success Toast */}
-    {showSuccessToast && (
-        <div className="success-toast">
-            You have been logged out successfully!
-        </div>
-    )}
-    </>
 
+        {/* Confirmation modal */}
+        <ConfirmModal
+            isOpen={showConfirmModal}
+            message="Are you sure you want to Log Out?"
+            onConfirm={handleConfirmLogout}
+            onCancel={() => setShowConfirmModal(false)}
+        />
+        
+        {/* Success Toast */}
+        {showSuccessToast && (
+            <div className="success-toast">
+                You have been logged out successfully!
+            </div>
+        )}
+        </>
     );
 }
 
