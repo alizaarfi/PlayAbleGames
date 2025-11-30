@@ -3,6 +3,11 @@
 import React, {useState} from "react";
 import { signup } from "../api/auth.js";
 
+/**
+ * Signup page component
+ * Handles user registration with form validation and backend API call
+ */
+
 export default function SignupPage(){
     const [form, setForm]=useState({
         username:"",
@@ -14,6 +19,7 @@ export default function SignupPage(){
     const[message,setMessage] = useState(null);
     const[error, setError]= useState(null);
 
+    // update form state when user types into input fields
     const handleChange = (e) =>{
         setForm({
             ...form,
@@ -21,6 +27,7 @@ export default function SignupPage(){
         });
     };
 
+    //frontend validation
     const validateForm =() => {
         if (!form.email || !form.username|| !form.password){
             return "Please fill all the fields.";
@@ -31,18 +38,24 @@ export default function SignupPage(){
             return "Please enter a valid email address.";
         }
 
+        //password length check
         if (form.password.length <8 ){
             return "Password must be at least 8 characters.";
         }
+
+        //must include at least one uppercase letter
         if (!/[A-Z]/.test(form.password)) {
             return "Password must contain at least one uppercase letter.";
         }
 
+        //must include at least one number
         if (!/[0-9]/.test(form.password)) {
             return "Password must contain at least one number.";
         }
         return null
     }
+
+    //handles form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
@@ -62,8 +75,13 @@ export default function SignupPage(){
                 setError(result.error);
             } else{
                 setMessage(result.message || "Registration Successful!" );
+                // Redirect after 1 second
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 1000);
             }
         } catch (e){
+            //handle backend errors
             const backendError = e.response?.data?.error || "Registration failed";
             setError(backendError);
 
@@ -74,6 +92,12 @@ export default function SignupPage(){
 
     return(
         <div className="signup-page">
+            <button
+            className="login-card-close"
+            onClick={() => window.location.href = "/"}
+        >
+            ✕
+        </button>
             <div className="signup-card">
                 <h2>Create an Account</h2>
                 <p className="signup-subtitle">

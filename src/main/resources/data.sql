@@ -220,6 +220,9 @@ INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRatin
 VALUES (4, 3, 5,5,4,3,3,'Gameplay was fun and engaging, but I found some of the motor controls challenging due to my disability. However, the game is still enjoyable and offers a great multiplayer experience, even without audio.');
 INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText)
 VALUES (4,13,3,5,4,2,3,'I struggled to play this game due to the motor controls and audio cues for dangerous situations. However, the visual design is stunning.');
+INSERT INTO reviews (UserID, GameID, HearingRating, VisionRating, CognitiveRating, MotorRating, GameplayRating, ReviewText, flagged)
+VALUES (4, 15,0,5,3,2,2,'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', TRUE);
+
 
 -- -- populating user_favorites table
 INSERT INTO user_favorites (UserID, GameID)
