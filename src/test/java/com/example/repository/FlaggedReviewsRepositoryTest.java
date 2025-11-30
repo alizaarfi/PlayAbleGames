@@ -39,7 +39,6 @@ public class FlaggedReviewsRepositoryTest {
         when(connection.prepareStatement(ArgumentMatchers.anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // Mock one row of data - USE DATABASE COLUMN NAMES
         when(resultSet.next()).thenReturn(true, false);
         when(resultSet.getInt("ReviewID")).thenReturn(101);           // Database column
         when(resultSet.getInt("UserID")).thenReturn(11);              // Database column
@@ -60,7 +59,6 @@ public class FlaggedReviewsRepositoryTest {
         assertEquals(1, results.size());
         Map<String, Object> r = results.get(0);
 
-        // Assert using MAP KEYS (what was put into the map)
         assertEquals(101, r.get("id"));
         assertEquals(11, r.get("UserID"));
         assertEquals("alice", r.get("user"));
@@ -93,7 +91,6 @@ public class FlaggedReviewsRepositoryTest {
         when(connection.prepareStatement(ArgumentMatchers.anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // No rows
         when(resultSet.next()).thenReturn(false);
 
         FlaggedReviewsRepository repo = new FlaggedReviewsRepository(dataSource);

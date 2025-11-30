@@ -67,6 +67,7 @@ export default function AllUsers(){
         );
 
 
+    // All Users Page html code here
     return (
         <div className="content">
             <div className="admin-nav">

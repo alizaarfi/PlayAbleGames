@@ -34,14 +34,12 @@ export default function IndividualUser(){
                 if (!res.ok) throw new Error("Failed to fetch user data.");
                 const data = await res.json();
 
-                // Set user info
                 setUser({
                     userId: data.userId ?? userId,
                     username: data.username ?? "Unknown User",
                     enabled: data.enabled ?? false,
                 });
 
-                // Normalize reviews
                 let normalized = [];
                 if (Array.isArray(data.reviews)) {
                     normalized = data.reviews;
@@ -100,6 +98,7 @@ export default function IndividualUser(){
             </div>
         );
 
+    // Individual User Page html code here
     return (
         <div className="content">
             <div className="admin-nav">
@@ -118,6 +117,7 @@ export default function IndividualUser(){
                     <div className="no-reviews black-text">No reviews found.</div>
                 ) : (
                     reviews.map((review, idx) => (
+                        // this changes color if flagged or removed
                         <div className={`reviews-box ${review.flagged || review.removed ? 'flagged-review' : ''}`} key={review.id ?? idx}>
                             <div className="review-item">
                                 <div className="topBox">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./style.css";
 import "./Dashboard.css";
+import "./style.css";
+
 
 const API_BASE = "http://localhost:8081/api";
 
@@ -47,7 +48,6 @@ export default function AdminDashboard(){
 
     // Admin Dashboard Page html code here
     return(
-        // <div className="page">
             <div className="content">
                 <h1 className="title black-text"> Welcome back admin</h1>
                 <div className="dashboard">
@@ -78,6 +78,5 @@ export default function AdminDashboard(){
                     <button className="sign-out-button"> Sign Out </button>
                 </div>
             </div>
-        // </div>
     )
 }

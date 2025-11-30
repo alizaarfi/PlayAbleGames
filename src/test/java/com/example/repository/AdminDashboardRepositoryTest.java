@@ -31,9 +31,7 @@ public class AdminDashboardRepositoryTest {
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareCall(ArgumentMatchers.anyString())).thenReturn(callableStatement);
 
-        // registerOutParameter is void — it's fine to keep or omit this stub
         doNothing().when(callableStatement).registerOutParameter(1, java.sql.Types.INTEGER);
-        // execute() returns boolean, stub it to return true
         when(callableStatement.execute()).thenReturn(true);
         when(callableStatement.getInt(1)).thenReturn(7);
 

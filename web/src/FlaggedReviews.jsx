@@ -22,7 +22,6 @@ export default function FlaggedReviews() {
                 if (!res.ok) throw new Error("Failed to fetch flagged reviews data.");
                 const data = await res.json();
 
-                // Normalize response into an array of review objects
                 let normalized = [];
                 if (Array.isArray(data)) {
                     normalized = data;
@@ -32,7 +31,6 @@ export default function FlaggedReviews() {
                     normalized = [data.review];
                 }
 
-                // Ensure each review has expected fields with defaults
                 const mapped = normalized.map((r) => ({
                     id: r.id ?? null,
                     userId: r.userId ?? null,
@@ -60,6 +58,7 @@ export default function FlaggedReviews() {
         return () => controller.abort();
     }, []);
 
+    // Accept review handler
     const handleAccept = async (reviewId) => {
         try {
             const res = await fetch(`${API_BASE}/reviews/${reviewId}/accept`, {
@@ -69,7 +68,6 @@ export default function FlaggedReviews() {
             if (res.ok) {
                 const result = await res.json();
                 if (result.success) {
-                    // Remove from list
                     setReviews(reviews.filter(r => r.id !== reviewId));
                 }
             } else {
@@ -80,6 +78,7 @@ export default function FlaggedReviews() {
         }
     };
 
+    // Decline review handler
     const handleDecline = async (reviewId) => {
         try {
             const res = await fetch(`${API_BASE}/reviews/${reviewId}/decline`, {
@@ -89,7 +88,6 @@ export default function FlaggedReviews() {
             if (res.ok) {
                 const result = await res.json();
                 if (result.success) {
-                    // Remove from list
                     setReviews(reviews.filter(r => r.id !== reviewId));
                 }
             } else {
@@ -118,6 +116,7 @@ export default function FlaggedReviews() {
             </div>
         );
 
+    // Flagged Reviews Page html code here
     return (
             <div className="content">
                 <div className="admin-nav">
