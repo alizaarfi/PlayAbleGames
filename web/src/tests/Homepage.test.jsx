@@ -220,4 +220,25 @@ describe('HomePage', () => {
 
         expect(firstGameTitle).toBe('A Blind Legend');
     });
+
+    test('each game card displays title', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        expect(screen.getByText('Minecraft')).toBeInTheDocument();
+    });
+
+    test('each game card displays description', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        expect(screen.getByText(/A creative sandbox game with flexible controls/i)).toBeInTheDocument();
+    });
+
+    test('each game card displays rating', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        expect(screen.getByText('4.5 (1,231)')).toBeInTheDocument();
+    });
+
+    test('each game card displays tags', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const tags = screen.getAllByText('Sandbox');
+        expect(tags.length).toBeGreaterThan(0);
+    });
 });
