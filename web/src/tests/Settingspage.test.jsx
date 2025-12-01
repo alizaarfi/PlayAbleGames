@@ -109,4 +109,27 @@ describe('SettingsPage', () => {
         expect(screen.getByText('"Open community"')).toBeInTheDocument();
         expect(screen.getByText('"Search puzzle games"')).toBeInTheDocument();
     });
+
+    test('dark mode toggle starts unchecked by default', () => {
+        render(<SettingsPage />);
+        const toggles = screen.getAllByRole('checkbox');
+        const darkModeToggle = toggles[0];
+        expect(darkModeToggle).not.toBeChecked();
+    });
+
+    test('voice commands toggle is disabled (always on)', () => {
+        render(<SettingsPage />);
+        const toggles = screen.getAllByRole('checkbox');
+        const voiceCommandsToggle = toggles[4];
+        expect(voiceCommandsToggle).toBeDisabled();
+        expect(voiceCommandsToggle).toBeChecked();
+    });
+
+    test('screen reader toggle is disabled (always on)', () => {
+        render(<SettingsPage />);
+        const toggles = screen.getAllByRole('checkbox');
+        const screenReaderToggle = toggles[5];
+        expect(screenReaderToggle).toBeDisabled();
+        expect(screenReaderToggle).toBeChecked();
+    });
 });
