@@ -2515,3 +2515,15 @@ body.dark-mode .error-message {
   cursor: pointer;
 }
 
+.password-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.show-hide-btn {
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+

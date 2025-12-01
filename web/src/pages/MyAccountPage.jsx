@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../hooks/AuthProvider.jsx";
-import Navbar from "../NavBar.jsx";
 import "../style.css";
 
 const API_BASE = "http://localhost:8081/api";
@@ -24,6 +23,9 @@ export default function MyAccountPage() {
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
     const [passwordError, setPasswordError] = useState(null);
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
     useEffect(() => {
@@ -291,30 +293,52 @@ export default function MyAccountPage() {
                                         <h4>Change Password</h4>
 
                                         <label>Old Password</label>
-                                        <input
-                                            type="password"
-                                            value={oldPassword}
-                                            onChange={(e) => setOldPassword(e.target.value)}
-                                        />
+                                        <div className="password-input">
+                                            <input
+                                                type={showOldPassword ? "text" : "password"}
+                                                value={oldPassword}
+                                                onChange={(e) => setOldPassword(e.target.value)}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="show-hide-btn"
+                                                onClick={() => setShowOldPassword(!showOldPassword)}
+                                            >
+                                                {showOldPassword ? "Hide" : "Show"}
+                                            </button>
+                                        </div>
 
                                         <label>New Password</label>
-                                        <input
-                                            type="password"
-                                            value={newPassword}
-                                            onChange={(e) => setNewPassword(e.target.value)}
-                                        />
+                                        <div className="password-input">
+                                            <input
+                                                type={showNewPassword ? "text" : "password"}
+                                                value={newPassword}
+                                                onChange={(e) => setNewPassword(e.target.value)}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="show-hide-btn"
+                                                onClick={() => setShowNewPassword(!showNewPassword)}
+                                            >
+                                                {showNewPassword ? "Hide" : "Show"}
+                                            </button>
+                                        </div>
 
                                         <label>Confirm New Password</label>
-                                        <input
-                                            type="password"
-                                            value={confirmNewPassword}
-                                            onChange={(e) => setConfirmNewPassword(e.target.value)}
-                                        />
-                                        {passwordError && (
-                                            <p className="error-msg" style={{ marginTop: "8px" }}>
-                                                {passwordError}
-                                            </p>
-                                        )}
+                                        <div className="password-input">
+                                            <input
+                                                type={showConfirmPassword ? "text" : "password"}
+                                                value={confirmNewPassword}
+                                                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="show-hide-btn"
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            >
+                                                {showConfirmPassword ? "Hide" : "Show"}
+                                            </button>
+                                        </div>
 
                                         <button className="save-button" onClick={handleChangePassword}>
                                             Update Password

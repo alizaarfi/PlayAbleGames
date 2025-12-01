@@ -76,5 +76,5 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                 </FavoritesProvider>
             </AuthProvider>
         </BrowserRouter>
-    </React.StrictMode>
+   // </React.StrictMode>
 );
