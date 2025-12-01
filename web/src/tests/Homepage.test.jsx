@@ -200,4 +200,24 @@ describe('HomePage', () => {
         expect(screen.getByText('Monument Valley')).toBeInTheDocument();
         expect(screen.queryByText('Call Of Duty®: Mobile')).not.toBeInTheDocument();
     });
+
+    test('can change sort option', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const dropdown = screen.getByRole('combobox');
+
+        fireEvent.change(dropdown, { target: { value: 'titleAsc' } });
+        expect(dropdown).toHaveValue('titleAsc');
+    });
+
+    test('sorting by title A-Z changes game order', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const dropdown = screen.getByRole('combobox');
+
+        fireEvent.change(dropdown, { target: { value: 'titleAsc' } });
+
+        const gameCards = screen.getAllByRole('article');
+        const firstGameTitle = gameCards[0].querySelector('h3').textContent;
+
+        expect(firstGameTitle).toBe('A Blind Legend');
+    });
 });
