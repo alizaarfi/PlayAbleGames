@@ -90,4 +90,23 @@ describe('SettingsPage', () => {
         expect(screen.getByText('Screen Reader Support')).toBeInTheDocument();
         expect(screen.getByText('Optimised for screen readers (always enabled)')).toBeInTheDocument();
     });
+
+    test('renders Reset to Defaults button', () => {
+        render(<SettingsPage />);
+        expect(screen.getByText('Reset to Defaults')).toBeInTheDocument();
+    });
+
+    test('renders WCAG compliance link in footer', () => {
+        render(<SettingsPage />);
+        const link = screen.getByText('WCAG 2.1 Level AA');
+        expect(link).toBeInTheDocument();
+        expect(link).toHaveAttribute('href', 'https://accessibility-manual.dwp.gov.uk/accessibility-law/web-content-accessibility-guidelines');
+    });
+
+    test('renders voice command examples', () => {
+        render(<SettingsPage />);
+        expect(screen.getByText('"Go home"')).toBeInTheDocument();
+        expect(screen.getByText('"Open community"')).toBeInTheDocument();
+        expect(screen.getByText('"Search puzzle games"')).toBeInTheDocument();
+    });
 });
