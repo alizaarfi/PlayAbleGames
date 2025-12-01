@@ -165,4 +165,28 @@ describe('SettingsPage', () => {
         fireEvent.click(ttsToggle);
         expect(ttsToggle).toBeChecked();
     });
+
+    test('settings persist to localStorage', () => {
+        render(<SettingsPage />);
+        const toggles = screen.getAllByRole('checkbox');
+        const darkModeToggle = toggles[0];
+
+        fireEvent.click(darkModeToggle);
+
+        expect(localStorage.getItem('darkMode')).toBe('true');
+    });
+
+    test('reset button resets all settings', () => {
+        render(<SettingsPage />);
+        const toggles = screen.getAllByRole('checkbox');
+        const darkModeToggle = toggles[0];
+        const resetButton = screen.getByText('Reset to Defaults');
+
+        fireEvent.click(darkModeToggle);
+        expect(darkModeToggle).toBeChecked();
+
+        fireEvent.click(resetButton);
+
+        expect(darkModeToggle).not.toBeChecked();
+    });
 });
