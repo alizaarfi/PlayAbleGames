@@ -164,4 +164,40 @@ describe('HomePage', () => {
         expect(screen.getByText('Minecraft')).toBeInTheDocument();
         expect(screen.queryByText('Among Us')).not.toBeInTheDocument();
     });
+
+    test('can toggle Vision Support filter', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const checkboxes = screen.getAllByRole('checkbox');
+        const visionCheckbox = checkboxes[0];
+
+        expect(visionCheckbox).not.toBeChecked();
+
+        fireEvent.click(visionCheckbox);
+        expect(visionCheckbox).toBeChecked();
+    });
+
+    test('can toggle Action genre filter', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const checkboxes = screen.getAllByRole('checkbox');
+        const actionCheckbox = checkboxes[5];
+
+        expect(actionCheckbox).not.toBeChecked();
+
+        fireEvent.click(actionCheckbox);
+        expect(actionCheckbox).toBeChecked();
+    });
+
+    test('toggling filter updates displayed games', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const checkboxes = screen.getAllByRole('checkbox');
+        const puzzleCheckbox = checkboxes[7];
+
+        expect(screen.getByText('Minecraft')).toBeInTheDocument();
+        expect(screen.getByText('Monument Valley')).toBeInTheDocument();
+
+        fireEvent.click(puzzleCheckbox);
+
+        expect(screen.getByText('Monument Valley')).toBeInTheDocument();
+        expect(screen.queryByText('Call Of Duty®: Mobile')).not.toBeInTheDocument();
+    });
 });
