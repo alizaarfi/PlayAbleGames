@@ -79,4 +79,34 @@ describe('HomePage', () => {
         expect(screen.getByText('Candy Crush Saga')).toBeInTheDocument();
         expect(screen.getByText('Call Of Duty®: Mobile')).toBeInTheDocument();
     });
+
+    test('renders Action genre filter', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const actionLabels = screen.getAllByText('Action');
+        expect(actionLabels.length).toBeGreaterThan(0);
+    });
+
+    test('renders Adventure genre filter', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const adventureLabels = screen.getAllByText('Adventure');
+        expect(adventureLabels.length).toBeGreaterThan(0);
+    });
+
+    test('renders Puzzle genre filter', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const puzzleLabels = screen.getAllByText('Puzzle');
+        expect(puzzleLabels.length).toBeGreaterThan(0);
+    });
+
+    test('renders Strategy genre filter', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const strategyLabels = screen.getAllByText('Strategy');
+        expect(strategyLabels.length).toBeGreaterThan(0);
+    });
+
+    test('renders Casual genre filter', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const casualLabels = screen.getAllByText('Casual');
+        expect(casualLabels.length).toBeGreaterThan(0);
+    });
 });
