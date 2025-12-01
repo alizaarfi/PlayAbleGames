@@ -16,3 +16,22 @@ module.exports = {
         'node_modules/(?!(react-router-dom)/)',
     ],
 };
+module.exports = {
+    testEnvironment: 'jsdom',
+    setupFiles: ['<rootDir>/jest.setup.js'],
+    setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+    moduleNameMapper: {
+        '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    },
+    transform: {
+        '^.+\\.(js|jsx)$': 'babel-jest',
+    },
+    testMatch: [
+        '**/__tests__/**/*.[jt]s?(x)',
+        '**/?(*.)+(spec|test).[jt]s?(x)',
+    ],
+    moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
+    transformIgnorePatterns: [
+        'node_modules/(?!(react-router-dom)/)',
+    ],
+};
