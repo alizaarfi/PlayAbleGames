@@ -54,4 +54,40 @@ describe('SettingsPage', () => {
         render(<SettingsPage />);
         expect(screen.getByText('Making Games Accessible for Every Player')).toBeInTheDocument();
     });
+
+    test('renders Dark Mode setting', () => {
+        render(<SettingsPage />);
+        expect(screen.getByText('Dark Mode')).toBeInTheDocument();
+        expect(screen.getByText('Switch to a dark colour scheme to reduce eye strain')).toBeInTheDocument();
+    });
+
+    test('renders Blue Light Filter setting', () => {
+        render(<SettingsPage />);
+        expect(screen.getByText('Blue Light Filter')).toBeInTheDocument();
+        expect(screen.getByText('Adds a warm tint to reduce blue light and eye strain at night')).toBeInTheDocument();
+    });
+
+    test('renders Text-to-Speech setting', () => {
+        render(<SettingsPage />);
+        expect(screen.getByText('Text-to-Speech')).toBeInTheDocument();
+        expect(screen.getByText('Have content read aloud as you navigate')).toBeInTheDocument();
+    });
+
+    test('renders Auto-Read on Hover setting', () => {
+        render(<SettingsPage />);
+        expect(screen.getByText('Auto-Read on Hover')).toBeInTheDocument();
+        expect(screen.getByText('Automatically read text when hovering over content')).toBeInTheDocument();
+    });
+
+    test('renders Voice Commands setting', () => {
+        render(<SettingsPage />);
+        expect(screen.getByText('Voice Commands')).toBeInTheDocument();
+        expect(screen.getByText('Microphone for hands-free navigation (always enabled)')).toBeInTheDocument();
+    });
+
+    test('renders Screen Reader Support setting', () => {
+        render(<SettingsPage />);
+        expect(screen.getByText('Screen Reader Support')).toBeInTheDocument();
+        expect(screen.getByText('Optimised for screen readers (always enabled)')).toBeInTheDocument();
+    });
 });
