@@ -4,10 +4,7 @@ import com.example.api.ChangePasswordRequest;
 import com.example.domain.User;
 import com.example.service.UserService;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
@@ -53,7 +50,7 @@ public class UserController {
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
-    @Put("/change-password")
+    @Post("/change-password")
     public HttpResponse<?> changePassword(@Body ChangePasswordRequest request,
                                           Authentication authentication) {
 
@@ -66,7 +63,7 @@ public class UserController {
 
         try {
             userService.changePassword(
-                    user.getUsername(),
+                    user.getUserID(),
                     request.getOldPassword(),
                     request.getNewPassword()
             );

@@ -76,9 +76,9 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public void changePassword(String username, String oldPassword, String newPassword) {
+    public void changePassword(Long userID , String oldPassword, String newPassword) {
 
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // verify old password
@@ -88,9 +88,8 @@ public class UserService {
 
         // encrypt new password
         String encrypted = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-        user.setPassword(encrypted);
 
-        userRepository.update(user);
+        userRepository.updatePassword(userID, encrypted);
     }
 
 
