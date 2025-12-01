@@ -15,6 +15,7 @@ import { FavoritesProvider } from "./FavoritesContext.jsx";
 import FavoritesPage from "./FavoritesPage.jsx";   // imported as FavouritesPage (UK) :contentReference[oaicite:0]{index=0}
 import AllUsersPage from "./AllUsers.jsx";
 import UserPage from "./IndividualUser.jsx";
+import CommunityPage from "./CommunityPage.jsx"
 
 import "./style.css";
 import Navbar from "./NavBar.jsx";
@@ -38,6 +39,9 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                         {/* Accessibility page */}
                         <Route path="/accessibility" element={<AccessibilityPage />} />
+
+                        {/*Community Page*/}
+                        <Route path="/community" element={<CommunityPage />} />
 
                         {/*signup page*/}
                         <Route path="/signup" element={<SignupPage/>} />
