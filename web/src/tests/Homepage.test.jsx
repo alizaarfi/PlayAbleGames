@@ -241,4 +241,20 @@ describe('HomePage', () => {
         const tags = screen.getAllByText('Sandbox');
         expect(tags.length).toBeGreaterThan(0);
     });
+
+    test('favorite button renders on each game card', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const favoriteButtons = screen.getAllByLabelText(/Add to favorites|Remove from favorites/);
+        expect(favoriteButtons.length).toBe(15);
+    });
+
+    test('favorite persists to localStorage', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const favoriteButtons = screen.getAllByLabelText('Add to favorites');
+
+        fireEvent.click(favoriteButtons[0]);
+
+        const saved = localStorage.getItem('playable-favorites');
+        expect(saved).toBeTruthy();
+    });
 });
