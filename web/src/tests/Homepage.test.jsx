@@ -109,4 +109,35 @@ describe('HomePage', () => {
         const casualLabels = screen.getAllByText('Casual');
         expect(casualLabels.length).toBeGreaterThan(0);
     });
+
+    test('renders sort dropdown with default "Most Popular" selected', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const dropdown = screen.getByRole('combobox');
+        expect(dropdown).toHaveValue('ratingDesc');
+    });
+
+    test('sort dropdown contains "Rating (low → high)" option', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        expect(screen.getByText('Rating (low → high)')).toBeInTheDocument();
+    });
+
+    test('sort dropdown contains "Most reviewed" option', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        expect(screen.getByText('Most reviewed')).toBeInTheDocument();
+    });
+
+    test('sort dropdown contains "Least reviewed" option', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        expect(screen.getByText('Least reviewed')).toBeInTheDocument();
+    });
+
+    test('sort dropdown contains "Title (A → Z)" option', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        expect(screen.getByText('Title (A → Z)')).toBeInTheDocument();
+    });
+
+    test('sort dropdown contains "Title (Z → A)" option', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        expect(screen.getByText('Title (Z → A)')).toBeInTheDocument();
+    });
 });
