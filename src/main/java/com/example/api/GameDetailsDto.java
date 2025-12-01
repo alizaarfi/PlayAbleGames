@@ -47,7 +47,7 @@ public record GameDetailsDto(
 
         int count = reviews.size();
 
-        double avgVisual    = count == 0 ? 0 : reviews.stream().mapToInt(r -> n(r.getVisualRating())).average().orElse(0);
+        double avgVisual    = count == 0 ? 0 : reviews.stream().mapToInt(r -> n(r.getVisionRating())).average().orElse(0);
         double avgHearing   = count == 0 ? 0 : reviews.stream().mapToInt(r -> n(r.getHearingRating())).average().orElse(0);
         double avgCognitive = count == 0 ? 0 : reviews.stream().mapToInt(r -> n(r.getCognitiveRating())).average().orElse(0);
         double avgSpeech    = count == 0 ? 0 : reviews.stream().mapToInt(r -> n(r.getSpeechRating())).average().orElse(0);

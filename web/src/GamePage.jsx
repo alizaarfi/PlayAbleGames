@@ -164,7 +164,7 @@ export default function GamePage() {
             hearingRating: formRatings.hearing || 0,
             motorRating: formRatings.motor || 0,
             cognitiveRating: formRatings.cognitive || 0,
-            visualRating: formRatings.vision || 0,
+            visionRating: formRatings.vision || 0,
             gameplayRating: formRatings.gameplay || 0,
             reviewText: safeText,
         };
@@ -392,7 +392,7 @@ export default function GamePage() {
                                         </header>
 
                                         <div className="review-ratings">
-                                            <div>Vision: {r.visualRating ?? "-"} / 5</div>
+                                            <div>Vision: {r.visionRating ?? "-"} / 5</div>
                                             <div>Hearing: {r.hearingRating ?? "-"} / 5</div>
                                             <div>Cognitive: {r.cognitiveRating ?? "-"} / 5</div>
                                             <div>Speech: {r.speechRating ?? "-"} / 5</div>
