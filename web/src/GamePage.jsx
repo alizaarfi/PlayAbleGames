@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "./NavBar.jsx";
+// import Navbar from "./NavBar.jsx"; // this should not be here
 
 import "./style.css";
 
@@ -251,7 +251,7 @@ export default function GamePage() {
     // render
     return (
         <div className="page">
-            <Navbar />
+            {/*<Navbar />*/}
             <main className="content">
                 {/* header: title and rating */}
                 <section className="hero-row">

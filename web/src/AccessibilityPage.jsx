@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from './NavBar';
+// import Navbar from './NavBar';
 import './style.css';
 
 function AccessibilityPage() {
