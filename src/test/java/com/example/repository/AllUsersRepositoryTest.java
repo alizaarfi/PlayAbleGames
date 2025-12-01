@@ -32,6 +32,7 @@ public class AllUsersRepositoryTest {
     @Mock
     ResultSet resultSet;
 
+    //   This test verifies that getAllUsers correctly maps database rows to a list of user maps
     @Test
     public void getAllUsers_returnsMappedRows() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -66,6 +67,7 @@ public class AllUsersRepositoryTest {
         verify(preparedStatement).executeQuery();
     }
 
+    //   This test verifies that getAllUsers throws a RuntimeException when a SQLException occurs
     @Test
     public void getAllUsers_throwsRuntimeExceptionOnSqlError() throws Exception {
         when(dataSource.getConnection()).thenThrow(new SQLException("DB down"));
@@ -75,6 +77,7 @@ public class AllUsersRepositoryTest {
         assertTrue(ex.getMessage().contains("Failed to fetch all users"));
     }
 
+    //   This test verifies that getAllUsers returns an empty list when there are no users
     @Test
     public void getAllUsers_returnsEmptyListWhenNoUsers() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);

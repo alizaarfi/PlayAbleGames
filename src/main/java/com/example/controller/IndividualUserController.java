@@ -11,6 +11,15 @@ import io.micronaut.security.rules.SecurityRule;
 
 import java.util.*;
 
+
+/**
+ * Controller handling operations for a single user and their reviews.
+ *
+ * - Exposes endpoints to fetch a user's details (including reviews) and to ban a user.
+ * - Uses constructor injection to obtain the repository that performs data access.
+ * - Returns Micronaut objects so appropriate HTTP status codes and bodies can be produced.
+ */
+
 @Controller("/api")
 @Secured(SecurityRule.IS_ANONYMOUS) //admin test - no security
 public class IndividualUserController {
@@ -20,6 +29,14 @@ public class IndividualUserController {
     public IndividualUserController(IndividualUserRepository repository) {
         this.repository = repository;
     }
+
+    /**
+     * HTTP GET /api/users/{userId}
+     *
+     * - Retrieves a Map\<String,Object\> representing the user and their reviews.
+     * - If the user is not found, returns 404 Not Found with an error payload.
+     * - If found, returns 200 OK with the user data (Micronaut will serialize the Map to JSON).
+     */
 
     @Get("/users/{userId}")
     public HttpResponse<Map<String, Object>> getUserById(@PathVariable int userId) {
@@ -34,6 +51,15 @@ public class IndividualUserController {
 
         return HttpResponse.ok(userData);
     }
+
+
+    /**
+     * HTTP POST /api/users/{userId}/ban
+     *
+     * - Attempts to ban the user via the repository. The repository returns a boolean indicating success.
+     * - On success: returns 200 OK with a confirmation message and the affected userId.
+     * - On failure: returns 500 Server Error with an error payload. (Adjust status and messages as needed.)
+     */
 
     @Post("/users/{userId}/ban")
     public HttpResponse<Map<String, Object>> banUser(@PathVariable int userId) {

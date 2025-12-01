@@ -33,6 +33,7 @@ public class IndividualUserRepositoryTest {
     @Mock
     ResultSet resultSet;
 
+    //   This test verifies that getUserWithReviews correctly fetches a user and their reviews from the database
     @Test
     public void getUserWithReviews_returnsUserWithReviews() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -95,6 +96,7 @@ public class IndividualUserRepositoryTest {
         verify(preparedStatement, times(2)).executeQuery();
     }
 
+    //   This test verifies that getUserWithReviews returns null when the user is not found
     @Test
     public void getUserWithReviews_returnsNullWhenUserNotFound() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -110,6 +112,7 @@ public class IndividualUserRepositoryTest {
         verify(preparedStatement).executeQuery();
     }
 
+    //   This test verifies that getUserWithReviews returns a user with an empty reviews list when the user has no reviews
     @Test
     public void getUserWithReviews_returnsUserWithEmptyReviewsList() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -134,6 +137,7 @@ public class IndividualUserRepositoryTest {
         assertEquals(0, reviews.size());
     }
 
+    //   This test verifies that getUserWithReviews throws a RuntimeException when a SQLException occurs
     @Test
     public void getUserWithReviews_throwsRuntimeExceptionOnSqlError() throws Exception {
         when(dataSource.getConnection()).thenThrow(new SQLException("DB down"));
@@ -143,6 +147,7 @@ public class IndividualUserRepositoryTest {
         assertTrue(ex.getMessage().contains("Failed to fetch user data for userId: 1"));
     }
 
+    //   This test verifies that banUser correctly updates the user's enabled status to false
     @Test
     public void banUser_returnsTrue_whenUserBannedSuccessfully() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -157,6 +162,7 @@ public class IndividualUserRepositoryTest {
         verify(preparedStatement).executeUpdate();
     }
 
+    //   This test verifies that banUser returns false when no rows are affected (userId does not exist)
     @Test
     public void banUser_returnsFalse_whenNoRowsAffected() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -170,6 +176,7 @@ public class IndividualUserRepositoryTest {
         verify(preparedStatement).executeUpdate();
     }
 
+    //   This test verifies that banUser throws a RuntimeException when a SQLException occurs
     @Test
     public void banUser_throwsRuntimeExceptionOnSqlError() throws Exception {
         when(dataSource.getConnection()).thenThrow(new SQLException("DB down"));

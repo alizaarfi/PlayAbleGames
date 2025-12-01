@@ -16,7 +16,7 @@ public class AllUsersControllerTest {
 
     @Mock
     AllUsersRepository repository;
-
+//   This test verifies that the getAllUsers method returns a map containing the user list
     @Test
     public void getAllUsers_returnsMapWithUserKey() {
         List<Map<String, Object>> mocked = new ArrayList<>();
@@ -36,6 +36,7 @@ public class AllUsersControllerTest {
         verify(repository).getAllUsers();
     }
 
+    //   This test verifies that the getAllUsers method handles an empty user list correctly
     @Test
     public void getAllUsers_returnsEmptyListWhenNoUsers() {
         List<Map<String, Object>> emptyList = new ArrayList<>();

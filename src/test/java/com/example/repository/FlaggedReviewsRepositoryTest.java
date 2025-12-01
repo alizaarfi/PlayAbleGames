@@ -33,6 +33,7 @@ public class FlaggedReviewsRepositoryTest {
     @Mock
     ResultSet resultSet;
 
+    //   This test verifies that getFlaggedReviews correctly maps database rows to a list of review maps
     @Test
     public void getFlaggedReviews_returnsMappedRows() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -76,6 +77,7 @@ public class FlaggedReviewsRepositoryTest {
         verify(preparedStatement).executeQuery();
     }
 
+    //   This test verifies that getFlaggedReviews throws a RuntimeException when a SQLException occurs
     @Test
     public void getFlaggedReviews_throwsRuntimeExceptionOnSqlError() throws Exception {
         when(dataSource.getConnection()).thenThrow(new SQLException("DB down"));
@@ -85,6 +87,7 @@ public class FlaggedReviewsRepositoryTest {
         assertTrue(ex.getMessage().contains("Failed to fetch flagged reviews"));
     }
 
+    //   This test verifies that getFlaggedReviews returns an empty list when there are no flagged reviews
     @Test
     public void getFlaggedReviews_returnsEmptyListWhenNoFlaggedReviews() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);

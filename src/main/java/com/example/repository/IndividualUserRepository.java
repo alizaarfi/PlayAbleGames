@@ -6,14 +6,36 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Repository that loads a single user's profile and their reviews, and performs user updates.
+ *
+ * - Uses constructor injection to obtain a JDBC {@link DataSource}.
+ * - Returns simple Map-based structures that controllers can serialize to JSON.
+ * - Each public operation that touches the database is annotated with {@link Transactional}.
+ */
 @Singleton
 public class IndividualUserRepository {
     private final DataSource dataSource;
 
+    /**
+     * Constructor injection: the framework supplies a DataSource bean.
+     *
+     * @param dataSource JDBC data source used to open connections.
+     */
     public IndividualUserRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Load a user's basic information and their reviews.
+     *
+     * - Queries the users table for the requested userId. If not found, returns null.
+     * - Delegates loading of the user's reviews to a private helper that maps result rows to Maps.
+     * - Returns a Map with keys: "userId", "username", "enabled", and "reviews".
+     *
+     * @param userId id of the user to fetch
+     * @return map of user data and reviews, or null when the user does not exist
+     */
     @Transactional
     public Map<String, Object> getUserWithReviews(int userId) {
         Map<String, Object> result = new HashMap<>();
@@ -49,6 +71,15 @@ public class IndividualUserRepository {
         return result;
     }
 
+    /**
+     * Helper that loads all reviews for a given user and maps each row to a Map.
+     *
+     * - Joins with the games table to include the game's display name.
+     * - Preserves expected response keys used by the controller layer.
+     *
+     * @param userId id of the user whose reviews to fetch
+     * @return list of maps representing reviews (empty list if none)
+     */
     private List<Map<String, Object>> getUserReviews(int userId) {
         List<Map<String, Object>> reviews = new ArrayList<>();
 
@@ -93,6 +124,15 @@ public class IndividualUserRepository {
         return reviews;
     }
 
+
+    /**
+     * Disable (ban) a user by setting Enabled = FALSE.
+     *
+     * - Returns true when a row was updated, false when the user does not exist.
+     *
+     * @param userId id of the user to ban
+     * @return true if the update affected a row, false otherwise
+     */
     @Transactional
     public boolean banUser(int userId) {
         String sql = "UPDATE users SET Enabled = FALSE WHERE UserID = ?";

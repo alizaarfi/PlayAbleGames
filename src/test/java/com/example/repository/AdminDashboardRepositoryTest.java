@@ -26,6 +26,7 @@ public class AdminDashboardRepositoryTest {
     @Mock
     CallableStatement callableStatement;
 
+    //   This test verifies that getTotalFlagged correctly calls the stored procedure and returns the expected value
     @Test
     public void getTotalFlagged_returnsValueFromProcedure() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -47,6 +48,7 @@ public class AdminDashboardRepositoryTest {
         verify(callableStatement).close();
     }
 
+    //   This test verifies that getTotalFlagged throws a RuntimeException when a SQLException occurs
     @Test
     public void getTotalFlagged_throwsRuntimeExceptionOnSqlError() throws Exception {
         when(dataSource.getConnection()).thenThrow(new SQLException("DB down"));

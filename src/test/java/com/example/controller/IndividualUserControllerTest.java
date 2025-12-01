@@ -19,6 +19,7 @@ public class IndividualUserControllerTest {
     @Mock
     IndividualUserRepository repository;
 
+    //   This test verifies that the getUserById method returns OK status with user data when the user exists
     @Test
     public void getUserById_returnsOkWithUserData() {
         int userId = 1;
@@ -37,6 +38,7 @@ public class IndividualUserControllerTest {
         verify(repository).getUserWithReviews(userId);
     }
 
+    //   This test verifies that the getUserById method returns Not Found status with error message when the user does not exist
     @Test
     public void getUserById_returnsNotFoundWhenUserDoesNotExist() {
         int userId = 999;
@@ -53,6 +55,7 @@ public class IndividualUserControllerTest {
         verify(repository).getUserWithReviews(userId);
     }
 
+    //   This test verifies that the banUser method returns OK status when banning is successful
     @Test
     public void banUser_returnsOkWhenSuccessful() {
         int userId = 1;
@@ -69,6 +72,7 @@ public class IndividualUserControllerTest {
         verify(repository).banUser(userId);
     }
 
+    //   This test verifies that the banUser method returns Server Error status when banning fails
     @Test
     public void banUser_returnsServerErrorWhenFailed() {
         int userId = 1;
