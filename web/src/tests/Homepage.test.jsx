@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import HomePage from '../HomePage';
 import { FavoritesProvider } from '../FavoritesContext';
@@ -139,5 +139,29 @@ describe('HomePage', () => {
     test('sort dropdown contains "Title (Z → A)" option', () => {
         render(<HomePage />, { wrapper: Wrapper });
         expect(screen.getByText('Title (Z → A)')).toBeInTheDocument();
+    });
+
+    test('search input starts empty', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const searchInput = screen.getByPlaceholderText('Search games by title, genre, keyword...');
+        expect(searchInput).toHaveValue('');
+    });
+
+    test('can type in search input', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const searchInput = screen.getByPlaceholderText('Search games by title, genre, keyword...');
+
+        fireEvent.change(searchInput, { target: { value: 'Minecraft' } });
+        expect(searchInput).toHaveValue('Minecraft');
+    });
+
+    test('search filters games by title', () => {
+        render(<HomePage />, { wrapper: Wrapper });
+        const searchInput = screen.getByPlaceholderText('Search games by title, genre, keyword...');
+
+        fireEvent.change(searchInput, { target: { value: 'Minecraft' } });
+
+        expect(screen.getByText('Minecraft')).toBeInTheDocument();
+        expect(screen.queryByText('Among Us')).not.toBeInTheDocument();
     });
 });
