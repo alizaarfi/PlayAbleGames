@@ -26,8 +26,8 @@ public class Review {
     @MappedProperty("HearingRating")
     private Integer hearingRating;
 
-    @MappedProperty("VisualRating")
-    private Integer visualRating;
+    @MappedProperty("VisionRating")
+    private Integer visionRating;
 
     @MappedProperty("CognitiveRating")
     private Integer cognitiveRating;
@@ -73,8 +73,8 @@ public class Review {
         return hearingRating;
     }
 
-    public Integer getVisualRating() {
-        return visualRating;
+    public Integer getVisionRating() {
+        return visionRating;
     }
 
     public Integer getCognitiveRating() {
@@ -128,8 +128,8 @@ public class Review {
         this.hearingRating = hearingRating;
     }
 
-    public void setVisualRating(Integer visualRating) {
-        this.visualRating = visualRating;
+    public void setVisionRating(Integer visionRating) {
+        this.visionRating = visionRating;
     }
 
     public void setCognitiveRating(Integer cognitiveRating) {

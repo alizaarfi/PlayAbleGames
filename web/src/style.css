@@ -626,6 +626,163 @@ html {
   transform: translateY(-1px);
 }
 
+/* visual feedback for voice control */
+.visual-feedback-container {
+  min-width: 200px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  padding: 0 16px;
+  border: 1px solid grey;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1));
+  /*background-color: white;*/
+  border-radius: 10px;
+  /*backdrop-filter: blur(10px);*/
+  line-height: 1;
+}
+
+/* Hint text when idle */
+.feedback-text.idle {
+  font-size: 13px;
+  color: black;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Feedback text states (general*/
+.feedback-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  background-color: transparent;  /* ADD THIS */
+  width: auto;  /* ADD THIS */
+  line-height: 1;
+}
+
+/*.feedback-text.recording {*/
+/*  color: #FF5722;*/
+/*  animation: pulse 2s infinite;*/
+/*}*/
+
+.feedback-recording {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feedback-text.recording {
+  color: var(--primary-color, #007aff);
+  font-weight: 500;
+}
+
+.feedback-text.processing,
+.feedback-text.executing {
+  color: #2196F3;
+  align-items: center;
+}
+
+.feedback-text.success {
+  color: #4CAF50;
+  animation: fadeIn 0.3s ease;
+}
+
+.feedback-text.error-state {
+  color: #ff3b30;
+  font-weight: 500;
+  line-height: 1;  /* Add this too */
+}
+
+/* Spinner animation */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(33, 150, 243, 0.3);
+  border-top-color: #2196F3;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.audio-wave {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+}
+
+.wave-bar {
+  width: 3px;
+  height: 100%;
+  background: var(--primary-color, #007aff);
+  border-radius: 2px;
+  animation: wave 1s ease-in-out infinite;
+}
+
+.wave-bar:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.wave-bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.wave-bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.wave-bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.wave-bar:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+.wave-bar:nth-child(6) {
+  animation-delay: 0.5s;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+/*END OF VISUAL FEEDBACK CONTAINER*/
+
+
+
+
+
 .nav-icon {
   width: 20px;
   height: 20px;

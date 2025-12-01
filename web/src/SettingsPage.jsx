@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './NavBar';
+// import Navbar from './NavBar';
 import useHoverSpeech from './UseHoverSpeech';
 import './settings_styles.css';
 
@@ -78,7 +78,7 @@ function SettingsPage() {
 
     return (
         <div className="app">
-            <Navbar />
+            {/*<Navbar />*/}
 
             <main className="settings-page">
                 <div className="settings-hero">

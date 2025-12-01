@@ -1,12 +1,12 @@
 -- -- populating the users table
 INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('admin', 'tempEmail', 'tempPassword');
+VALUES ('admin', 'tempEmail', '$2a$10$Q7DZ9uZBV0o4JuHmTh7xz.XPllXgEuIzvJRPAahDZSxOo2Gf0mb.O');
 INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user1', 'tempEmail1', 'tempPassword1');
+VALUES ('user1', 'tempEmail1', '$2a$10$JA7wAHlGmCXoTFkD9rE9h.s3gCGE2f.M37tFxdRdaRh4Hp0NTs2Oe');
 INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user2', 'tempEmail2', 'tempPassword2');
+VALUES ('user2', 'tempEmail2', '$2a$10$kvTzFIJ4wKhe8A2NuLbR.uZWe.GX4p.A76EIwoj4w18hMxuuygV8i');
 INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user3', 'tempEmail3', 'tempPassword3');
+VALUES ('user3', 'tempEmail3', '$2a$10$IXw73mEWdT1OlaBWO6H9BeKNiKTYU3bo7SjkjO9pbbKpoR7kxVHeG');
 
 -- -- populating the roles table
 INSERT INTO roles (name)
@@ -518,7 +518,6 @@ INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
 VALUES ('Blog title placeholder 2','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
 INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
 VALUES ('Blog title placeholder 3','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
-
 
 
 

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './NavBar.jsx';
 import "./style.css";
 import AccessibilityPage from './AccessibilityPage';
 import ConfirmModal from "./ConfirmModal.jsx";
 import useHoverSpeech from './UseHoverSpeech';
 import { useFavorites } from "./FavoritesContext.jsx";
-
 
 
 export const games = [
@@ -148,8 +147,28 @@ export const games = [
 
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
+
+    // Just renaming for now
+    // Need to switch this to new version in new bug fix issue
+    // Initialise from local storage - switch to db when logic added
+    const [localFavorites, setLocalFavorites] = useState(() => {
+        const saved = localStorage.getItem('playable-favorites');
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    // Save to localStorage whenever favorites change
+    // Update this when I have the my account feature
+    // Then save to the DB instead
+    // Save to localStorage whenever localFavorites change
+    useEffect(() => {
+        localStorage.setItem('playable-favorites', JSON.stringify(localFavorites));
+        console.log("Saved favorites:", localFavorites);
+    }, [localFavorites]);
+
+
     const { favorites, toggleFavorite } = useFavorites();  // ← BACKEND
     const [sortOption, setSortOption] = useState('ratingDesc');
+
     const [filters, setFilters] = useState({
         visionSupport: false,
         hearingSupport: false,
@@ -162,6 +181,19 @@ function HomePage() {
         strategy: false,
         casual: false
     });
+
+    // const [sortOption, setSortOption] = useState('ratingDesc'); was duplicate
+
+
+    // LOCAL toggle for voice commands (renamed)
+    const toggleLocalFavorite = (gameId, event) => {
+        if (event) event.stopPropagation();
+        setLocalFavorites(prev =>
+            prev.includes(gameId)
+                ? prev.filter(id => id !== gameId)
+                : [...prev, gameId]
+        );
+    };
 
     // Enable hover speech when setting is on
     const hoverEnabled = localStorage.getItem('visualCaptions') === 'true';
@@ -225,7 +257,6 @@ function HomePage() {
     });
 
     // Sorting feature
-
     const sortedGames = [...filteredGames].sort((a, b) => {
         switch (sortOption) {
             case 'ratingAsc':
@@ -245,10 +276,85 @@ function HomePage() {
         }
     });
 
+    // Listen for voice commands from Navbar
+    useEffect(() => {
+        const handleVoiceCommand = (event) => {
+            // For voice commands, extract all details from the event
+            // Amount, direction for scroll initially
+            const {
+                type,
+                gameId,
+                gameName,
+                filterKey,
+                filterName,
+                sortValue,
+                sortName,
+                searchQuery,
+                direction,
+                amount
+            } = event.detail;
+
+            // currently repeating, filter, favourite cancels it
+            // if (type === 'FAVOURITE') {
+            //     console.log(`HomePage received FAVOURITE command for game ${gameId}`);
+
+            //     setFavorites(prev => {
+            //         console.log("Current favourites: ", prev);
+            //         console.log("Toggling game ID:", gameId);
+
+            //         const newFavorites = prev.includes(gameId)
+            //             ? prev.filter(id => id !== gameId)
+            //             : [...prev, gameId];
+
+            //         console.log("New favorites:", newFavorites);
+            //         return newFavorites;
+            //     });
+            // }
+            if (type === 'FAVOURITE') {
+                console.log(`HomePage received FAVOURITE command for game ${gameId}`);
+                 toggleLocalFavorite(gameId, null);  // Use the renamed function
+            }
+
+            if (type === 'FILTER') {
+                console.log(`HomePage received FILTER command for ${filterName}`);
+
+                setFilters(prev => {
+                    console.log("Current filters:", prev);
+                    console.log("Toggling filter:", filterKey);
+
+                    const newFilters = {
+                        ...prev,
+                        [filterKey]: !prev[filterKey]
+                    };
+
+                    console.log("New filters:", newFilters);
+                    return newFilters;
+                });
+            }
+
+            if (type === 'SORT') {
+                console.log(`HomePage received SORT command: ${sortName}`);
+                console.log("Setting sort to:", sortValue);
+
+                setSortOption(sortValue);
+            }
+            if (type === 'SEARCH') {
+                console.log(`🔍 HomePage received SEARCH command: ${searchQuery}`);
+                setSearchQuery(searchQuery);
+            }
+        };
+
+        window.addEventListener('voiceCommand', handleVoiceCommand);
+
+        return () => {
+            window.removeEventListener('voiceCommand', handleVoiceCommand);
+        };
+    }, []);
+
 
     return (
         <div className="app">
-            <Navbar />
+            {/*<Navbar />*/}
 
             <main className="container">
                 <section className="hero">
