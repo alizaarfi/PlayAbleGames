@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SettingsPage from '../SettingsPage';
 
@@ -131,5 +131,38 @@ describe('SettingsPage', () => {
         const screenReaderToggle = toggles[5];
         expect(screenReaderToggle).toBeDisabled();
         expect(screenReaderToggle).toBeChecked();
+    });
+
+    test('can toggle dark mode setting', () => {
+        render(<SettingsPage />);
+        const toggles = screen.getAllByRole('checkbox');
+        const darkModeToggle = toggles[0];
+
+        expect(darkModeToggle).not.toBeChecked();
+
+        fireEvent.click(darkModeToggle);
+        expect(darkModeToggle).toBeChecked();
+    });
+
+    test('can toggle blue light filter setting', () => {
+        render(<SettingsPage />);
+        const toggles = screen.getAllByRole('checkbox');
+        const blueLightToggle = toggles[1];
+
+        expect(blueLightToggle).not.toBeChecked();
+
+        fireEvent.click(blueLightToggle);
+        expect(blueLightToggle).toBeChecked();
+    });
+
+    test('can toggle text-to-speech setting', () => {
+        render(<SettingsPage />);
+        const toggles = screen.getAllByRole('checkbox');
+        const ttsToggle = toggles[2];
+
+        expect(ttsToggle).not.toBeChecked();
+
+        fireEvent.click(ttsToggle);
+        expect(ttsToggle).toBeChecked();
     });
 });
