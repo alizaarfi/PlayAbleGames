@@ -33,13 +33,13 @@ public class FlaggedReviewsRepositoryTest {
     @Mock
     ResultSet resultSet;
 
+    //   This test verifies that getFlaggedReviews correctly maps database rows to a list of review maps
     @Test
     public void getFlaggedReviews_returnsMappedRows() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(ArgumentMatchers.anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // Mock one row of data - USE DATABASE COLUMN NAMES
         when(resultSet.next()).thenReturn(true, false);
         when(resultSet.getInt("ReviewID")).thenReturn(101);           // Database column
         when(resultSet.getInt("UserID")).thenReturn(11);              // Database column
@@ -60,7 +60,6 @@ public class FlaggedReviewsRepositoryTest {
         assertEquals(1, results.size());
         Map<String, Object> r = results.get(0);
 
-        // Assert using MAP KEYS (what was put into the map)
         assertEquals(101, r.get("id"));
         assertEquals(11, r.get("UserID"));
         assertEquals("alice", r.get("user"));
@@ -78,6 +77,7 @@ public class FlaggedReviewsRepositoryTest {
         verify(preparedStatement).executeQuery();
     }
 
+    //   This test verifies that getFlaggedReviews throws a RuntimeException when a SQLException occurs
     @Test
     public void getFlaggedReviews_throwsRuntimeExceptionOnSqlError() throws Exception {
         when(dataSource.getConnection()).thenThrow(new SQLException("DB down"));
@@ -87,13 +87,13 @@ public class FlaggedReviewsRepositoryTest {
         assertTrue(ex.getMessage().contains("Failed to fetch flagged reviews"));
     }
 
+    //   This test verifies that getFlaggedReviews returns an empty list when there are no flagged reviews
     @Test
     public void getFlaggedReviews_returnsEmptyListWhenNoFlaggedReviews() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(ArgumentMatchers.anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // No rows
         when(resultSet.next()).thenReturn(false);
 
         FlaggedReviewsRepository repo = new FlaggedReviewsRepository(dataSource);

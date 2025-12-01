@@ -17,6 +17,7 @@ public class FlaggedReviewsControllerTest {
     @Mock
     FlaggedReviewsRepository repository;
 
+    //   This test verifies that the getFlaggedReviews method returns a map containing the reviews list
     @Test
     public void getFlaggedReviews_returnsMapWithReviewsKey() {
         List<Map<String, Object>> mocked = new ArrayList<>();

@@ -2,9 +2,14 @@ package com.example.service;
 
 import com.example.domain.User;
 import com.example.repository.UserRepository;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
@@ -14,9 +19,11 @@ import java.util.Optional;
 @Singleton
 public class UserService {
     private final UserRepository userRepository;
+    private final DataSource dataSource;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, DataSource dataSource) {
         this.userRepository = userRepository;
+        this.dataSource = dataSource;
     }
 
     /**
@@ -27,6 +34,7 @@ public class UserService {
      * @param rawPassword plaintext password
      * @return the saved user object
      */
+    @Transactional
     public User register (String username, String email, String rawPassword){
         Optional<User> existingUser = userRepository.findByUsername(username);
         Optional<User> existingEmail = userRepository.findByEmail(email);
@@ -47,8 +55,32 @@ public class UserService {
         u.setEmail(email);
         u.setPassword(encrypted);
         u.setEnabled(true);
+        User savedUser = userRepository.save(u);
 
-        return userRepository.save(u);
+        insertUserRole(savedUser.getUserID(), 2);
+
+        return savedUser;
+    }
+
+    /**
+     * Insert a user role mapping
+     * @param userId the user's ID
+     * @param roleId the role ID (2 for regular users)
+     */
+
+    public void insertUserRole(Long userId, Integer roleId) {
+        String sql = "INSERT INTO user_roles (userID, roleID) VALUES (?, ?)";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, userId);
+            stmt.setInt(2, roleId);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to assign user role", e);
+        }
     }
 
     /**

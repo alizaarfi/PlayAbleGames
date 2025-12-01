@@ -1,0 +1,10 @@
+.userBox{
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #acacac;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

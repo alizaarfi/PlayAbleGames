@@ -4,9 +4,11 @@ import com.example.domain.User;
 import com.example.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import javax.sql.DataSource;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,10 +20,13 @@ public class UserServiceTest {
     private UserService userService;
     private UserRepository userRepository;
 
+    @Mock
+    DataSource dataSource;
+
     @BeforeEach
     void setUp() {
         userRepository = Mockito.mock(UserRepository.class);
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository,dataSource );
     }
 
     @Test
