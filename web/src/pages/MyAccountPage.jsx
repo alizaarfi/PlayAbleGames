@@ -94,6 +94,7 @@ export default function MyAccountPage() {
             setPasswordError(validation);
             return;
         }
+
         const confirm = window.confirm("Are you sure you want to change your password?");
         if (!confirm) return;
 
@@ -108,17 +109,28 @@ export default function MyAccountPage() {
             });
 
             if (!res.ok) {
-                const data = await res.json();
-                setPasswordError(data.error || "Failed to change password.");
+                // Try to get error message from response
+                let errorMessage = "Failed to change password.";
+                try {
+                    const data = await res.json();
+                    errorMessage = data.error || data.message || errorMessage;
+                } catch (e) {
+                    // If JSON parsing fails, use status text
+                    errorMessage = `Error: ${res.status} ${res.statusText}`;
+                }
+                setPasswordError(errorMessage);
                 return;
-            } else {
-                alert("Password updated successfully");
-                setOldPassword("");
-                setNewPassword("");
-                setShowChangePassword(false);
             }
+
+            alert("Password updated successfully");
+            setOldPassword("");
+            setNewPassword("");
+            setConfirmNewPassword("");
+            setPasswordError(null);
+            setShowChangePassword(false);
         } catch (e) {
-            alert("Error changing password");
+            console.error("Password change error:", e);
+            setPasswordError("Network error: Unable to connect to server");
         }
     };
 
@@ -160,7 +172,6 @@ export default function MyAccountPage() {
     if (loading) {
         return (
             <div className="app">
-                <Navbar />
                 <main className="container">
                     <div className="loading-container">
                         <p>Loading your account...</p>
@@ -173,7 +184,6 @@ export default function MyAccountPage() {
     if (error) {
         return (
             <div className="app">
-                <Navbar />
                 <main className="container">
                     <div className="error-container">
                         <p>Error: {error}</p>
@@ -185,7 +195,6 @@ export default function MyAccountPage() {
 
     return (
         <div className="app">
-            <Navbar />
             <main className="container">
                 <section className="hero">
                     <h2>My Account</h2>
@@ -291,7 +300,18 @@ export default function MyAccountPage() {
                                 {showChangePassword && (
                                     <div className="collapsible-section">
                                         <h4>Change Password</h4>
-
+                                        {passwordError && (
+                                            <div className="error-message" style={{
+                                                color: '#ff4444',
+                                                backgroundColor: '#ffe6e6',
+                                                padding: '10px',
+                                                borderRadius: '5px',
+                                                marginBottom: '15px',
+                                                border: '1px solid #ff4444'
+                                            }}>
+                                                {passwordError}
+                                            </div>
+                                        )}
                                         <label>Old Password</label>
                                         <div className="password-input">
                                             <input
