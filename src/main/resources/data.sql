@@ -1,28 +1,24 @@
--- -- populating the users table
-INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('admin', 'tempEmail', '$2a$10$Q7DZ9uZBV0o4JuHmTh7xz.XPllXgEuIzvJRPAahDZSxOo2Gf0mb.O');
-INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user1', 'tempEmail1', '$2a$10$JA7wAHlGmCXoTFkD9rE9h.s3gCGE2f.M37tFxdRdaRh4Hp0NTs2Oe');
-INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user2', 'tempEmail2', '$2a$10$kvTzFIJ4wKhe8A2NuLbR.uZWe.GX4p.A76EIwoj4w18hMxuuygV8i');
-INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user3', 'tempEmail3', '$2a$10$IXw73mEWdT1OlaBWO6H9BeKNiKTYU3bo7SjkjO9pbbKpoR7kxVHeG');
-
 -- -- populating the roles table
 INSERT INTO roles (name)
 VALUES ('ADMIN');
 INSERT INTO roles (name)
 VALUES ('BASIC');
 
+-- -- populating the users table
+INSERT INTO users (UserID, Username, Email, EncryptedPassword)
+VALUES (1, 'admin', 'tempEmail', '$2a$10$Q7DZ9uZBV0o4JuHmTh7xz.XPllXgEuIzvJRPAahDZSxOo2Gf0mb.O');
+INSERT INTO users (UserID, Username, Email, EncryptedPassword)
+VALUES (2, 'user1', 'tempEmail1', '$2a$10$JA7wAHlGmCXoTFkD9rE9h.s3gCGE2f.M37tFxdRdaRh4Hp0NTs2Oe');
+INSERT INTO users (UserID, Username, Email, EncryptedPassword)
+VALUES (3, 'user2', 'tempEmail2', '$2a$10$kvTzFIJ4wKhe8A2NuLbR.uZWe.GX4p.A76EIwoj4w18hMxuuygV8i');
+INSERT INTO users (UserID, Username, Email, EncryptedPassword)
+VALUES (4, 'user3', 'tempEmail3', '$2a$10$IXw73mEWdT1OlaBWO6H9BeKNiKTYU3bo7SjkjO9pbbKpoR7kxVHeG');
+
+
 -- -- assigning the ADMIN role to the admin user
-INSERT INTO user_roles (UserID, RoleID)
-VALUES (1, 1);
-INSERT INTO user_roles (UserID, RoleID)
-VALUES (2, 2);
-INSERT INTO user_roles (UserID, RoleID)
-VALUES (3, 2);
-INSERT INTO user_roles (UserID, RoleID)
-VALUES (4, 2);
+UPDATE user_roles
+SET RoleID = 1
+WHERE UserID = 1;
 
 -- -- populating the games table
 INSERT INTO games (GameName, Developer, AgeRating, LinkToStore, GameIconURL, GameDescription, ReleaseDate, VersionNumber, AboutVision, AboutHearing, AboutCognitive, AboutSpeech, AboutMotor)
