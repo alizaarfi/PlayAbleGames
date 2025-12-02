@@ -321,6 +321,12 @@ public class VoiceCommandService {
 
             case REVIEW_COMMENT:
                 return target != null ? target.trim() : "activate_text_mode";
+
+            case MIC_MUTE:
+                return "mute";
+
+            case MIC_UNMUTE:
+                return "unmute";
         }
 
 
@@ -442,6 +448,17 @@ public class VoiceCommandService {
         commandPatterns.put(
                 Pattern.compile("sort(?:\\s+by)?\\s+(.+)"),
                 CommandType.SORT
+        );
+
+        // MUTE
+        commandPatterns.put(
+                Pattern.compile("(?:mute|silence|turn off|disable)(?:\\s+(?:mic|microphone))?"),
+                CommandType.MIC_MUTE
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:unmute|turn on|enable|activate)(?:\\s+(?:mic|microphone))?"),
+                CommandType.MIC_UNMUTE
         );
 
 

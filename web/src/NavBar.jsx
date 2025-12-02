@@ -403,6 +403,39 @@ function Navbar() {
                         setTimeout(() => setProcessingState('idle'), 1500);
                     }, 100);
                     break;
+                case 'MIC_MUTE':
+                    console.log('Voice command: Mute microphone');
+
+                    if (isMicActive) {  // Changed from isRecording
+                        toggleRecording();
+                        console.log('Microphone muted');
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.log('ℹ️ Microphone already muted');
+                        setProcessingState('idle');
+                    }
+                    break;
+
+                case 'MIC_UNMUTE':
+                    console.log('Voice command: Unmute microphone');
+
+                    if (!isMicActive) {  // Changed from !isRecording
+                        toggleRecording();
+                        console.log('Microphone activated');
+
+                        setTimeout(() => {
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+                        }, 100);
+                    } else {
+                        console.log('ℹ️ Microphone already active');
+                        setProcessingState('idle');
+                    }
+                    break;
 
 
                 default:
@@ -494,6 +527,17 @@ function Navbar() {
 
         }
     };
+
+    // // was purely to test console if working
+    // useEffect(() => {
+    //     window.testMicCommand = (type) => {
+    //         processVoiceCommand({ type, target: null });
+    //     };
+    //
+    //     return () => {
+    //         delete window.testMicCommand;
+    //     };
+    // }, [isRecording, toggleRecording, setProcessingState]);
 
 
     return (

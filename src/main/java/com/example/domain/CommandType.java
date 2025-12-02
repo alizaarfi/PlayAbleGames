@@ -26,5 +26,6 @@ public enum CommandType {
     REVIEW_CANCEL,
     UNKNOWN,        //Unrecognised prompts retry
     NO_SPEECH,      // No speech
-
+    MIC_MUTE,
+    MIC_UNMUTE,
 }

@@ -263,7 +263,7 @@ export default function GamePage() {
         return () => window.removeEventListener('voiceCommand', handleVoiceReviewCommand);
     }, [isLoggedIn, reviewMode, formRatings, reviewText]);
 
-    // ✅ ADD THIS - Listen for transcriptions to accumulate text
+
     useEffect(() => {
         const handleTranscriptionAccumulation = (event) => {
             const { transcription, commandType } = event.detail;
