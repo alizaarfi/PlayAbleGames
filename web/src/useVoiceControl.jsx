@@ -139,6 +139,8 @@ function useVoiceControl() {
         console.log("----------------------------------------------");
         console.log("AUTO-START RECORDING");
 
+        setProcessingState('recording');
+
         audioChunksRef.current = [];
         setTranscription('');
         setCommandData(null);
@@ -192,7 +194,7 @@ function useVoiceControl() {
         mediaRecorderRef.current.start();
         setIsRecording(true);
         // set recording now for UI
-        setProcessingState('recording');
+        // setProcessingState('recording');
 
         // Setting timing for capturing audio, can edit time for testing
         setTimeout(() => {
@@ -200,7 +202,7 @@ function useVoiceControl() {
                 mediaRecorderRef.current.stop();
                 setIsRecording(false);
             }
-        }, 3000); // 3 seconds
+        }, 4000); // 3 seconds
 
         console.log("Continuous recording started");
     };

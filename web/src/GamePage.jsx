@@ -56,6 +56,7 @@ export default function GamePage() {
         cognitive: 0,
         vision: 0,
         gameplay: 0,
+        speech: 0,
     });
 
     // Logged-in state derived from token.
@@ -165,6 +166,7 @@ export default function GamePage() {
             motorRating: formRatings.motor || 0,
             cognitiveRating: formRatings.cognitive || 0,
             visionRating: formRatings.vision || 0,
+            speechRating: formRatings.speech || 0,
             gameplayRating: formRatings.gameplay || 0,
             reviewText: safeText,
         };
@@ -201,6 +203,8 @@ export default function GamePage() {
                 cognitive: 0,
                 vision: 0,
                 gameplay: 0,
+                speech: 0,
+
             });
             setReviewText("");
 
@@ -337,7 +341,12 @@ export default function GamePage() {
                         <h2 className="section-heading underline">
                             Accessibility Features
                         </h2>
-                        <span className="up-arrow">↑</span>
+                        <button
+                            type="button"
+                            className="up-arrow"
+                            onClick={() => scrollToId("overview")}
+                            aria-label="Back to overview"
+                        >↑</button>
                     </div>
 
                     <div className="accessibility-list">
@@ -358,7 +367,12 @@ export default function GamePage() {
                     <div className="reviews-column">
                         <div className="section-heading-row">
                             <h2 className="section-heading underline">Reviews</h2>
-                            <span className="up-arrow">↑</span>
+                            <button
+                                type="button"
+                                className="up-arrow"
+                                onClick={() => scrollToId("accessibility")}
+                                aria-label="Back to accessibility section"
+                            >↑</button>
                         </div>
 
                         {reviews && reviews.length > 0 ? (
@@ -471,7 +485,14 @@ export default function GamePage() {
                             />
                         </div>
 
+
                         <div className="rating-input-row single">
+                            <span>Speech</span>
+                            <StarRating
+                                value={formRatings.speech}
+                                interactive
+                                onChange={(v) => updateFormRating("speech", v)}
+                            />
                             <span>Gameplay</span>
                             <StarRating
                                 value={formRatings.gameplay}
@@ -510,7 +531,12 @@ export default function GamePage() {
                 <section id="gallery" className="section-block">
                     <div className="section-heading-row">
                         <h2 className="section-heading underline">Gallery</h2>
-                        <span className="up-arrow">↑</span>
+                        <button
+                            type="button"
+                            className="up-arrow"
+                            onClick={() => scrollToId("reviews")}
+                            aria-label="Back to reviews section"
+                        >↑</button>
                     </div>
 
                     <div className="gallery-grid">

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 import HomePage from "./HomePage.jsx";
 import GamePage from "./GamePage.jsx";
@@ -15,6 +16,8 @@ import { FavoritesProvider } from "./FavoritesContext.jsx";
 import FavoritesPage from "./FavoritesPage.jsx";   // imported as FavouritesPage (UK) :contentReference[oaicite:0]{index=0}
 import AllUsersPage from "./AllUsers.jsx";
 import UserPage from "./IndividualUser.jsx";
+import MyAccountPage from './pages/MyAccountPage.jsx';
+import CommunityPage from "./CommunityPage.jsx"
 
 import "./style.css";
 import Navbar from "./NavBar.jsx";
@@ -29,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                 <FavoritesProvider>
                     {/* Navbar outside Routes - persistent across all pages for voice control */}
                     <Navbar />
-                    
+
                     <Routes>
                         {/* Homepage */}
                         <Route path="/" element={<HomePage />} />
@@ -39,6 +42,9 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                         {/* Accessibility page */}
                         <Route path="/accessibility" element={<AccessibilityPage />} />
+
+                        {/*Community Page*/}
+                        <Route path="/community" element={<CommunityPage />} />
 
                         {/*signup page*/}
                         <Route path="/signup" element={<SignupPage/>} />
@@ -52,15 +58,17 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         {/* Flagged Reviews Page */}
                         <Route path="/flaggedReviews" element={<FlaggedReviews />} />
 
-
                         {/*login page*/}
                         <Route path="/login" element={<LoginPage/>} />
 
                         {/* Settings page */}
                         <Route path="/settings" element={<SettingsPage />} />
 
-                        {/* Favorite page */}
-                        <Route path="/favorites" element={<FavoritesPage />} />
+                        {/* Favorite page -requires login */}
+                        <Route path="/favorites" element={
+                            <ProtectedRoute>
+                                <FavoritesPage/>
+                            </ProtectedRoute>} />
 
                         {/* All Users Page */}
                         <Route path="/users" element={<AllUsersPage />} />
@@ -68,9 +76,16 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         {/* Individual User Page */}
                         <Route path="/users/:userId" element={<UserPage />} />
 
+                        {/* My Account - requires login */}
+                        <Route
+                            path="/myaccount"
+                            element={
+                                <ProtectedRoute>
+                                    <MyAccountPage />
+                                </ProtectedRoute>}/>
                     </Routes>
                 </FavoritesProvider>
             </AuthProvider>
         </BrowserRouter>
-    // </React.StrictMode>
+   // </React.StrictMode>
 );

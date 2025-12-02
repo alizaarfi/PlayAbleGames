@@ -10,6 +10,7 @@ import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.util.Map;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -109,6 +110,37 @@ public class UserService {
         }
         return user;
     }
+
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public void changePassword(Long userID , String oldPassword, String newPassword) {
+
+        User user = userRepository.findById(userID)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // verify old password
+        if (!BCrypt.checkpw(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        // encrypt new password
+        String encrypted = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+        userRepository.updatePassword(userID, encrypted);
+    }
+
+    public void verifyPassword(Long userId, String rawPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!BCrypt.checkpw(rawPassword, user.getPassword())) {
+            throw new RuntimeException("Incorrect password");
+        }
+    }
+
+
 
     //get all role names for a user
     public java.util.List<String> getUserRoles(Long userID) {
