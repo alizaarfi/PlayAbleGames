@@ -240,6 +240,43 @@ public class VoiceCommandService {
                 if (fullText.contains("access")) return "accessibility";
                 if (fullText.contains("home")) return "home";
                 if (fullText.contains("setting")) return "settings";
+                if (fullText.contains("communit")) return "community"; // handles "community" or "communities"
+                if (fullText.contains("favor") || fullText.contains("favour")) return "favourites"; // handles all variations
+                if (fullText.contains("account") || fullText.contains("profile")) return "my account";
+
+                // For game pages like "go to minecraft page" or "open monument valley page"
+                // The target will already contain the game name from the regex capture
+                // Just return it as-is for the frontend to handle
+                if (target != null && fullText.contains("page")) {
+                    // Clean up common words that might be captured
+                    String cleanTarget = target
+                            .replace("go to", "")
+                            .replace("open", "")
+                            .replace("navigate to", "")
+                            .replace("game", "")
+                            .replace("page", "")
+                            .trim();
+
+                    // If it's a known game name, return it
+                    if (cleanTarget.contains("minecraft")) return "minecraft";
+                    if (cleanTarget.contains("monument")) return "monument valley";
+                    if (cleanTarget.contains("among")) return "among us";
+                    if (cleanTarget.contains("candy")) return "candy crush saga";
+                    if (cleanTarget.contains("call of") || cleanTarget.contains("duty")) return "call of duty";
+                    if (cleanTarget.contains("pokemon")) return "pokemon go";
+                    if (cleanTarget.contains("subway")) return "subway surfers";
+                    if (cleanTarget.contains("clash")) return "clash of clans";
+                    if (cleanTarget.contains("jigsaw")) return "jigsawscapes";
+                    if (cleanTarget.contains("oasis")) return "my oasis";
+                    if (cleanTarget.contains("alto")) return "altos odyssey";
+                    if (cleanTarget.contains("kami")) return "kami 2";
+                    if (cleanTarget.contains("sky") || cleanTarget.contains("children")) return "sky children of light";
+                    if (cleanTarget.contains("stardew") || cleanTarget.contains("valley")) return "stardew valley";
+                    if (cleanTarget.contains("blind") || cleanTarget.contains("legend")) return "a blind legend";
+
+                    // Return the cleaned target for the frontend to handle
+                    return cleanTarget;
+                }
                 break;
 
             case FILTER:
@@ -290,14 +327,24 @@ public class VoiceCommandService {
                 break;
 
             case REVIEW_RATING:
-                // Extract category and rating from the matched pattern
-                // Pattern captures: "rate hearing 5" -> groups (hearing, 5)
-                // We need to return: "hearing:5"
-                Pattern ratingPattern = Pattern.compile("(hearing|motor|cognitive|vision|speech|gameplay)\\s+(\\d)");
+                Pattern ratingPattern = Pattern.compile("(hearing|motor|cognitive|vision|speech|gameplay)\\s+(\\d|one|two|three|four|five)");
                 Matcher m = ratingPattern.matcher(fullText);
                 if (m.find()) {
                     String category = m.group(1);
                     String rating = m.group(2);
+
+                    // Convert word numbers to digits
+                    Map<String, String> wordToNumber = Map.of(
+                            "one", "1",
+                            "two", "2",
+                            "three", "3",
+                            "four", "4",
+                            "five", "5"
+                    );
+
+                    if (wordToNumber.containsKey(rating.toLowerCase())) {
+                        rating = wordToNumber.get(rating.toLowerCase());
+                    }
 
                     // Validate rating is 1-5
                     int ratingValue = Integer.parseInt(rating);
@@ -306,7 +353,6 @@ public class VoiceCommandService {
                     }
                 }
 
-                // If pattern doesn't match or rating invalid, log warning
                 LOG.warn("Could not parse rating from: '{}'", fullText);
                 return target != null ? target : fullText;
 
@@ -345,23 +391,28 @@ public class VoiceCommandService {
     private void initialiseCommandMappings() {
         // Specific pages with capture groups
 
+        commandPatterns.put(
+                Pattern.compile("favou?rite\\s+(.+)"),  // Captures everything after "favourite"
+                CommandType.FAVOURITE
+        );
+
         // REVIEW COMMANDS moved to  top
 
         // starts the review process
         commandPatterns.put(
-                Pattern.compile("(?:write|leave|create|start)\\s+(?:a\\s+)?review"),
+                Pattern.compile("(?:(?:write|leave|create|start)\\s+(?:a\\s+)?review|review\\s+(?:start|begin))"),
                 CommandType.REVIEW_START
         );
 
         // for each rating
         commandPatterns.put(
-                Pattern.compile("(?:rate|rating)?\\s*(hearing|motor|cognitive|vision|speech|gameplay)\\s+(?:rating\\s+)?(\\d)"),
+                Pattern.compile("(?:rate|rating)?\\s*(hearing|motor|cognitive|vision|speech|gameplay)\\s+(?:rating\\s+)?(\\d|one|two|three|four|five)"),
                 CommandType.REVIEW_RATING
         );
 
         // review comment for comment box
         commandPatterns.put(
-                Pattern.compile("(?:review\\s+text|comment|review\\s+comment)\\s+(.+)"),
+                Pattern.compile("(?:my\\s+)?comment(?:\\s+is)?\\s+(.+)"),
                 CommandType.REVIEW_COMMENT
         );
 
@@ -372,7 +423,7 @@ public class VoiceCommandService {
         );
 
         commandPatterns.put(
-                Pattern.compile("(?:cancel|stop|exit)\\s+review"),
+                Pattern.compile("(?:cancel|stop|exit|close)(?:\\s+review)?"),
                 CommandType.REVIEW_CANCEL
         );
 

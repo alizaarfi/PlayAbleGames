@@ -97,9 +97,41 @@ function Navbar() {
                             setTimeout(() => setProcessingState('idle'), 1500);
 
                         } else {
-                            console.log("Unknown route:", target);
-                            setProcessingState('error');
-                            setTimeout(() => setProcessingState('idle'), 2000);
+                            // ========== GAME NAVIGATION ==========
+                            const gameNameToId = {
+                                'minecraft': 1,
+                                'monument valley': 2,
+                                'among us': 3,
+                                'candy crush saga': 4,
+                                'candy crush': 4,
+                                'call of duty': 5,
+                                'pokemon go': 6,
+                                'subway surfers': 7,
+                                'clash of clans': 8,
+                                'jigsawscapes': 9,
+                                'my oasis': 10,
+                                'altos odyssey': 11,
+                                'kami 2': 12,
+                                'sky children of light': 13,
+                                'stardew valley': 14,
+                                'a blind legend': 15
+                            };
+
+                            const gameId = gameNameToId[target.toLowerCase()];
+
+                            if (gameId) {
+                                navigate(`/games/${gameId}`);
+                                console.log(`Navigating to game: ${target} (ID: ${gameId})`);
+
+                                setTimeout(() => {
+                                    setProcessingState('success');
+                                    setTimeout(() => setProcessingState('idle'), 1500);
+                                }, 100);
+                            } else {
+                                console.log("Unknown route:", target);
+                                setProcessingState('error');
+                                setTimeout(() => setProcessingState('idle'), 2000);
+                            }
                         }
                     } catch (navError) {
                         console.error("Navigation failed:", navError);
@@ -311,8 +343,8 @@ function Navbar() {
                     break;
 
                 // ============================================
-// REVIEW COMMANDS - Dispatch to GamePage
-// ============================================
+                // REVIEW COMMANDS - Dispatch to GamePage
+                // ============================================
 
                 case 'REVIEW_START':
                     console.log('Starting review mode');
@@ -415,7 +447,7 @@ function Navbar() {
                             setTimeout(() => setProcessingState('idle'), 1500);
                         }, 100);
                     } else {
-                        console.log('ℹ️ Microphone already muted');
+                        console.log('ℹMicrophone already muted');
                         setProcessingState('idle');
                     }
                     break;
