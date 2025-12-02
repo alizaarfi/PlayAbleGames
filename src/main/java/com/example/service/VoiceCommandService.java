@@ -240,6 +240,43 @@ public class VoiceCommandService {
                 if (fullText.contains("access")) return "accessibility";
                 if (fullText.contains("home")) return "home";
                 if (fullText.contains("setting")) return "settings";
+                if (fullText.contains("communit")) return "community"; // handles "community" or "communities"
+                if (fullText.contains("favor") || fullText.contains("favour")) return "favourites"; // handles all variations
+                if (fullText.contains("account") || fullText.contains("profile")) return "my account";
+
+                // For game pages like "go to minecraft page" or "open monument valley page"
+                // The target will already contain the game name from the regex capture
+                // Just return it as-is for the frontend to handle
+                if (target != null && fullText.contains("page")) {
+                    // Clean up common words that might be captured
+                    String cleanTarget = target
+                            .replace("go to", "")
+                            .replace("open", "")
+                            .replace("navigate to", "")
+                            .replace("game", "")
+                            .replace("page", "")
+                            .trim();
+
+                    // If it's a known game name, return it
+                    if (cleanTarget.contains("minecraft")) return "minecraft";
+                    if (cleanTarget.contains("monument")) return "monument valley";
+                    if (cleanTarget.contains("among")) return "among us";
+                    if (cleanTarget.contains("candy")) return "candy crush saga";
+                    if (cleanTarget.contains("call of") || cleanTarget.contains("duty")) return "call of duty";
+                    if (cleanTarget.contains("pokemon")) return "pokemon go";
+                    if (cleanTarget.contains("subway")) return "subway surfers";
+                    if (cleanTarget.contains("clash")) return "clash of clans";
+                    if (cleanTarget.contains("jigsaw")) return "jigsawscapes";
+                    if (cleanTarget.contains("oasis")) return "my oasis";
+                    if (cleanTarget.contains("alto")) return "altos odyssey";
+                    if (cleanTarget.contains("kami")) return "kami 2";
+                    if (cleanTarget.contains("sky") || cleanTarget.contains("children")) return "sky children of light";
+                    if (cleanTarget.contains("stardew") || cleanTarget.contains("valley")) return "stardew valley";
+                    if (cleanTarget.contains("blind") || cleanTarget.contains("legend")) return "a blind legend";
+
+                    // Return the cleaned target for the frontend to handle
+                    return cleanTarget;
+                }
                 break;
 
             case FILTER:
@@ -288,7 +325,56 @@ public class VoiceCommandService {
                 if (text.contains("star") || text.contains("valley")) return "stardew valley";
                 if (text.contains("blind") || text.contains("legend")) return "a blind legend";
                 break;
+
+            case REVIEW_RATING:
+                Pattern ratingPattern = Pattern.compile("(hearing|motor|cognitive|vision|speech|gameplay)\\s+(\\d|one|two|three|four|five)");
+                Matcher m = ratingPattern.matcher(fullText);
+                if (m.find()) {
+                    String category = m.group(1);
+                    String rating = m.group(2);
+
+                    // Convert word numbers to digits
+                    Map<String, String> wordToNumber = Map.of(
+                            "one", "1",
+                            "two", "2",
+                            "three", "3",
+                            "four", "4",
+                            "five", "5"
+                    );
+
+                    if (wordToNumber.containsKey(rating.toLowerCase())) {
+                        rating = wordToNumber.get(rating.toLowerCase());
+                    }
+
+                    // Validate rating is 1-5
+                    int ratingValue = Integer.parseInt(rating);
+                    if (ratingValue >= 1 && ratingValue <= 5) {
+                        return category + ":" + rating;  // Returns "hearing:5"
+                    }
+                }
+
+                LOG.warn("Could not parse rating from: '{}'", fullText);
+                return target != null ? target : fullText;
+
+            case REVIEW_START:
+                return "start";
+
+            case REVIEW_SUBMIT:
+                return "submit";
+
+            case REVIEW_CANCEL:
+                return "cancel";
+
+            case REVIEW_COMMENT:
+                return target != null ? target.trim() : "activate_text_mode";
+
+            case MIC_MUTE:
+                return "mute";
+
+            case MIC_UNMUTE:
+                return "unmute";
         }
+
 
         return target != null ? target : fullText;
     }
@@ -304,6 +390,43 @@ public class VoiceCommandService {
      */
     private void initialiseCommandMappings() {
         // Specific pages with capture groups
+
+        commandPatterns.put(
+                Pattern.compile("favou?rite\\s+(.+)"),  // Captures everything after "favourite"
+                CommandType.FAVOURITE
+        );
+
+        // REVIEW COMMANDS moved to  top
+
+        // starts the review process
+        commandPatterns.put(
+                Pattern.compile("(?:(?:write|leave|create|start)\\s+(?:a\\s+)?review|review\\s+(?:start|begin))"),
+                CommandType.REVIEW_START
+        );
+
+        // for each rating
+        commandPatterns.put(
+                Pattern.compile("(?:rate|rating)?\\s*(hearing|motor|cognitive|vision|speech|gameplay)\\s+(?:rating\\s+)?(\\d|one|two|three|four|five)"),
+                CommandType.REVIEW_RATING
+        );
+
+        // review comment for comment box
+        commandPatterns.put(
+                Pattern.compile("(?:my\\s+)?comment(?:\\s+is)?\\s+(.+)"),
+                CommandType.REVIEW_COMMENT
+        );
+
+
+        commandPatterns.put(
+                Pattern.compile("submit\\s+(?:review|my\\s+review)?"),
+                CommandType.REVIEW_SUBMIT
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:cancel|stop|exit|close)(?:\\s+review)?"),
+                CommandType.REVIEW_CANCEL
+        );
+
         commandPatterns.put(
                 Pattern.compile("(?:go to |open |navigate to )?(?:accessibility|access ability|access lousy|access in|accessability)(?:\\s+page)?"),
                 CommandType.NAVIGATE
@@ -316,6 +439,29 @@ public class VoiceCommandService {
 
         commandPatterns.put(
                 Pattern.compile("(?:go to |open |navigate to )?settings"),
+                CommandType.NAVIGATE
+        );
+
+        // Add after the existing settings pattern:
+
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(?:community|communities)(?:\\s+page)?"),
+                CommandType.NAVIGATE
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(?:favou?rites?|favou?rite)(?:\\s+page)?"),
+                CommandType.NAVIGATE
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(?:my account|account|profile)(?:\\s+page)?"),
+                CommandType.NAVIGATE
+        );
+
+    // For individual game pages - add this AFTER specific patterns but BEFORE the generic navigate pattern
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(.+?)\\s+(?:game\\s+)?page"),
                 CommandType.NAVIGATE
         );
 
@@ -354,6 +500,19 @@ public class VoiceCommandService {
                 Pattern.compile("sort(?:\\s+by)?\\s+(.+)"),
                 CommandType.SORT
         );
+
+        // MUTE
+        commandPatterns.put(
+                Pattern.compile("(?:mute|silence|turn off|disable)(?:\\s+(?:mic|microphone))?"),
+                CommandType.MIC_MUTE
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:unmute|turn on|enable|activate)(?:\\s+(?:mic|microphone))?"),
+                CommandType.MIC_UNMUTE
+        );
+
+
 
         LOG.info("Initialised {} command patterns", commandPatterns.size());
     }

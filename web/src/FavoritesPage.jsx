@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./NavBar.jsx";
+// import Navbar from "./NavBar.jsx";
 import { useFavorites } from "./FavoritesContext.jsx";
 import { games } from "./HomePage.jsx";
 
@@ -13,7 +13,7 @@ function FavoritesPage() {
 
     return (
         <div className="app">
-            <Navbar />
+            {/*<Navbar />*/}
 
             <main className="main-layout">
                 <header className="page-header">

@@ -6,6 +6,7 @@ import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.util.Map;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,11 +20,10 @@ import java.util.Optional;
 @Singleton
 public class UserService {
     private final UserRepository userRepository;
-    private final DataSource dataSource;
+//    private final DataSource dataSource;
 
-    public UserService(UserRepository userRepository, DataSource dataSource) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.dataSource = dataSource;
     }
 
     /**
@@ -55,11 +55,11 @@ public class UserService {
         u.setEmail(email);
         u.setPassword(encrypted);
         u.setEnabled(true);
-        User savedUser = userRepository.save(u);
+//        User savedUser = userRepository.save(u);
+//
+//        insertUserRole(savedUser.getUserID(), 2);
 
-        insertUserRole(savedUser.getUserID(), 2);
-
-        return savedUser;
+        return userRepository.save(u);
     }
 
     /**
@@ -68,20 +68,20 @@ public class UserService {
      * @param roleId the role ID (2 for regular users)
      */
 
-    public void insertUserRole(Long userId, Integer roleId) {
-        String sql = "INSERT INTO user_roles (userID, roleID) VALUES (?, ?)";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, userId);
-            stmt.setInt(2, roleId);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to assign user role", e);
-        }
-    }
+//    public void insertUserRole(Long userId, Integer roleId) {
+//        String sql = "INSERT INTO user_roles (userID, roleID) VALUES (?, ?)";
+//
+//        try (Connection conn = dataSource.getConnection();
+//             PreparedStatement stmt = conn.prepareStatement(sql)) {
+//
+//            stmt.setLong(1, userId);
+//            stmt.setInt(2, roleId);
+//            stmt.executeUpdate();
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException("Failed to assign user role", e);
+//        }
+//    }
 
     /**
      * authenticate a user by username and password
@@ -102,4 +102,35 @@ public class UserService {
         }
         return user;
     }
+
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public void changePassword(Long userID , String oldPassword, String newPassword) {
+
+        User user = userRepository.findById(userID)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // verify old password
+        if (!BCrypt.checkpw(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        // encrypt new password
+        String encrypted = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+        userRepository.updatePassword(userID, encrypted);
+    }
+
+    public void verifyPassword(Long userId, String rawPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!BCrypt.checkpw(rawPassword, user.getPassword())) {
+            throw new RuntimeException("Incorrect password");
+        }
+    }
+
+
 }

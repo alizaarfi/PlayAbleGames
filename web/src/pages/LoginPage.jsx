@@ -19,6 +19,7 @@ export default function LoginPage() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [showPassword, setShowPassword]= useState(false);
 
     //updates from state when user types into input fields
     const handleChange = (e) => {
@@ -108,12 +109,19 @@ export default function LoginPage() {
                     <div className="form-group">
                         <label>Password</label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             placeholder="••••••••"
                             value={form.password}
                             onChange={handleChange}
                         />
+                        <button
+                            type="button"
+                            className="show-hide-btn"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? "Hide" : "Show"}
+                        </button>
                     </div>
 
                     {error && <p className="error-msg">{error}</p>}
