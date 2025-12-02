@@ -151,6 +151,7 @@ function HomePage() {
     // Just renaming for now
     // Need to switch this to new version in new bug fix issue
     // Initialise from local storage - switch to db when logic added
+    // Unused now
     const [localFavorites, setLocalFavorites] = useState(() => {
         const saved = localStorage.getItem('playable-favorites');
         return saved ? JSON.parse(saved) : [];
@@ -160,6 +161,7 @@ function HomePage() {
     // Update this when I have the my account feature
     // Then save to the DB instead
     // Save to localStorage whenever localFavorites change
+    // Not used now
     useEffect(() => {
         localStorage.setItem('playable-favorites', JSON.stringify(localFavorites));
         console.log("Saved favorites:", localFavorites);
@@ -186,6 +188,7 @@ function HomePage() {
 
 
     // LOCAL toggle for voice commands (renamed)
+    // Unused using FavoritesContext
     const toggleLocalFavorite = (gameId, event) => {
         if (event) event.stopPropagation();
         setLocalFavorites(prev =>
@@ -294,25 +297,40 @@ function HomePage() {
                 amount
             } = event.detail;
 
-            // currently repeating, filter, favourite cancels it
-            // if (type === 'FAVOURITE') {
-            //     console.log(`HomePage received FAVOURITE command for game ${gameId}`);
-
-            //     setFavorites(prev => {
-            //         console.log("Current favourites: ", prev);
-            //         console.log("Toggling game ID:", gameId);
-
-            //         const newFavorites = prev.includes(gameId)
-            //             ? prev.filter(id => id !== gameId)
-            //             : [...prev, gameId];
-
-            //         console.log("New favorites:", newFavorites);
-            //         return newFavorites;
-            //     });
-            // }
             if (type === 'FAVOURITE') {
                 console.log(`HomePage received FAVOURITE command for game ${gameId}`);
-                 toggleLocalFavorite(gameId, null);  // Use the renamed function
+
+                // Check if user is logged in
+                const token = localStorage.getItem('token') ||
+                    localStorage.getItem('authToken') ||
+                    localStorage.getItem('jwt');
+
+                if (!token) {
+                    console.warn('User must be logged in to favorite games');
+
+                    // Use the same toast notification that FavoritesContext uses
+                    const showToast = (msg) => {
+                        const el = document.createElement("div");
+                        el.className = "toast-notice";
+                        el.textContent = msg;
+                        document.body.appendChild(el);
+
+                        requestAnimationFrame(() => {
+                            el.classList.add("visible");
+                        });
+
+                        setTimeout(() => {
+                            el.classList.remove("visible");
+                            setTimeout(() => el.remove(), 300);
+                        }, 2500);
+                    };
+
+                    showToast("Please log in to save favourites.");
+                    return;
+                }
+
+                // Use the backend favorites function
+                toggleFavorite(gameId, null);
             }
 
             if (type === 'FILTER') {
@@ -349,7 +367,7 @@ function HomePage() {
         return () => {
             window.removeEventListener('voiceCommand', handleVoiceCommand);
         };
-    }, []);
+    }, [toggleFavorite]);
 
 
     return (

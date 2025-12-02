@@ -17,6 +17,7 @@ import FavoritesPage from "./FavoritesPage.jsx";   // imported as FavouritesPage
 import AllUsersPage from "./AllUsers.jsx";
 import UserPage from "./IndividualUser.jsx";
 import MyAccountPage from './pages/MyAccountPage.jsx';
+import CommunityPage from "./CommunityPage.jsx"
 
 import "./style.css";
 import Navbar from "./NavBar.jsx";
@@ -40,6 +41,9 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                         {/* Accessibility page */}
                         <Route path="/accessibility" element={<AccessibilityPage />} />
+
+                        {/*Community Page*/}
+                        <Route path="/community" element={<CommunityPage />} />
 
                         {/*signup page*/}
                         <Route path="/signup" element={<SignupPage/>} />
