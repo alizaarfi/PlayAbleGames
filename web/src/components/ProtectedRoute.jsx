@@ -7,7 +7,12 @@ import { Navigate } from 'react-router-dom';
  * Redirects to login if not authenticated
  */
 export default function ProtectedRoute({ children }) {
-    const { token } = useAuth();
+    const { token , loading} = useAuth();
+
+    //prevent redirect until token is loaded
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     // Not logged in - redirect to login page
     if (!token) {
