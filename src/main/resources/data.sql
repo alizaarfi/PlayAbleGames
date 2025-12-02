@@ -509,15 +509,21 @@ VALUES (3, 2, 'Have you tried Monument Valley? Its a great puzzle game! The moto
 
 -- -- populating faq table
 INSERT INTO faq (Question, Answer)
-VALUES ('How do I navigate the PlayAble website using the voice command system?', 'To navigate the PlayAble website using the voice command system, simply activate the voice command feature and speak your desired action, such as "Go to Games" or "Search for Puzzle Games." The system will interpret your commands and take you to the appropriate section of the website. For best results, speak clearly and use simple phrases. If you encounter any issues, refer to the help section for troubleshooting tips.');
+VALUES ('How do I navigate the PlayAble website using the voice command system?', 'To navigate the PlayAble website using the voice command system, simply activate the voice command feature and speak your desired action, such as "Go to Accessibility Page" or "Scroll Down" The system will interpret your commands and take you to the appropriate section of the website. For best results, speak clearly and use simple phrases. If you encounter any issues, refer to the help section for troubleshooting tips.');
+INSERT INTO faq (Question, Answer)
+VALUES ('What types of games are available on PlayAble?', 'PlayAble offers a diverse selection of games that cater to various accessibility needs. Our library includes games with features such as visual support, cognitive support, verbal support, audio support, and motor support. Additionally, we categorize games by genre, including action, adventure, puzzle, strategy, casual, role-playing, simulation, arcade, sandbox/open world, and multiplayer/online games. This variety ensures that players with different preferences and requirements can find games that suit their needs.');
+INSERT INTO faq (Question, Answer)
+VALUES ('How can I submit a review for a game on PlayAble?', 'To submit a review for a game on PlayAble, first ensure you are logged into your account. Navigate to the game''s page that you wish to review. Scroll down to the review section and click on the "Write a Review" button. Fill out the review form, providing ratings for various accessibility aspects and your overall experience. Once you have completed the form, click "Submit" to post your review. Your review will be visible to other users and will help them make informed decisions about the game.');
+INSERT INTO faq (Question, Answer)
+VALUES ('How do I report inappropriate content or behavior on PlayAble?', 'If you encounter inappropriate content or behavior on PlayAble, you can report it by clicking on the "Report" button located near the content in question.');
 
 -- -- populating blogs table
 INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
-VALUES ('Blog title placeholder','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
+VALUES ('The role of Accessibility in the Mobile Gamin Industry''s Growth', 'https://ablegamers.org/mobile-gaming/', 'This blog post explores how accessibility is helping mobile gaming grow by making games easier for everyone to enjoy. It highlights features like customizable controls, clear text, and assistive options, and showcases accessible titles such as Pokémon GO and Minecraft. The article also reflects AbleGamers’ mission to create inclusive gaming experiences that reduce social isolation and bring more players into the community.', 5);
 INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
-VALUES ('Blog title placeholder 2','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
+VALUES ('Tips for designing for accessibility in mobile gaming','https://mirigrowth.com/blog/designing-an-accessible-mobile-game/', 'This post lays out clear, practical tips for making mobile games accessible to players with different needs (visual, hearing, cognitive, etc.). It covers things like clean UI, colour-blind-friendly palettes, readable text, audio/subtitle options, customizable controls and more — emphasising that accessibility isn’t a luxury, but a design mindset.', 4);
 INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
-VALUES ('Blog title placeholder 3','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
+VALUES ('Assistive Technology and Mobile Gaming: Triumphs and Hurdles','https://ablegamers.org/assistive-technology-and-mobile-gaming/', 'This article explores how assistive technology (e.g. alternative input, adaptive controls, accessibility tools) is being integrated into mobile gaming — discussing both the successes and the ongoing challenges (compatibility, design trade-offs, resource needs). It gives a balanced view of what’s working, what’s still difficult, and why inclusivity matters.', 7);
 
 
 
