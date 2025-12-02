@@ -283,3 +283,16 @@ BEGIN
     FROM users;
 END //
 DELIMITER ;
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create triggers
+
+DELIMITER //
+CREATE TRIGGER add_default_role
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+    INSERT INTO user_roles (UserID, RoleID) VALUES (NEW.UserID, 2);
+END;
+//
+DELIMITER ;
+

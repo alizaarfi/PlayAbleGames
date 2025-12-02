@@ -20,13 +20,10 @@ public class UserServiceTest {
     private UserService userService;
     private UserRepository userRepository;
 
-    @Mock
-    DataSource dataSource;
-
     @BeforeEach
     void setUp() {
         userRepository = Mockito.mock(UserRepository.class);
-        userService = new UserService(userRepository,dataSource );
+        userService = new UserService(userRepository );
     }
 
     @Test
