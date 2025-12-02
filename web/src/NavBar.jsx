@@ -505,21 +505,16 @@ function Navbar() {
                             <span>About Accessibility</span>
                         </Link>
 
-                        <button className="nav-btn community-btn">
-                            <svg viewBox="0 0 24 24" fill="currentColor" className="nav-icon">
-                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+
+                        <Link to="/community" className="nav-btn community">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" className="community-icon">
+                                <path d="M16 11c1.66 0 3-1.57 3-3.5S17.66 4 16 4s-3 1.57-3 3.5S14.34 11 16 11zM8 11c1.66 0 3-1.57 3-3.5S9.66 4 8 4 5 5.57 5 7.5 6.34 11 8 11zm8 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zM8 13c-.29 0-.62.02-.97.07C5.27 13.37 2 14.58 2 17v2h6v-2c0-1.7.87-3.06 2.11-4.06C9.43 13.37 8.76 13 8 13z"/>
                             </svg>
                             <span>Community</span>
-                        </button>
+                        </Link>
 
                         <div className="profile-dropdown-wrapper" ref={dropdownRef}>
-                            <button
-                                className="profile-btn"
-                                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                                aria-expanded={profileDropdownOpen}
-                                aria-label="User menu"
-                            >
+                            <button className="profile-btn" onClick={() => setProfileDropdownOpen(!profileDropdownOpen)} aria-expanded={profileDropdownOpen} aria-label="User menu">
                                 <svg viewBox="0 0 24 24" fill="currentColor" className="profile-icon">
                                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                                 </svg>

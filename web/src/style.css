@@ -221,6 +221,21 @@ body {
   text-underline-offset: 3px;
 }
 
+/*Jump Nav in Community*/
+
+.jump-label2 {
+  color: rgba(0, 0, 0, 0.6);
+}
+.jump-link2 {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ------------------------------ */
 /* SECTION HEADERS + TEXT         */
 /* ------------------------------ */
@@ -779,7 +794,18 @@ html {
 }
 /*END OF VISUAL FEEDBACK CONTAINER*/
 
+/*Community navbar*/
+.nav-btn.community {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
+.community-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
 
 
 
