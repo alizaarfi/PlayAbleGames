@@ -19,6 +19,7 @@ import UserPage from "./IndividualUser.jsx";
 import "./style.css";
 import Navbar from "./NavBar.jsx";
 import {AuthProvider} from "./hooks/AuthProvider.jsx";
+import AdminRoute from "./components/AdminRoute.jsx";
 
 
 ReactDOM.createRoot(document.getElementById("app")).render(
@@ -43,7 +44,10 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route path="/signup" element={<SignupPage/>} />
 
                         {/* AdminDashboard */}
-                        <Route path="/admin" element={<AdminDashboard />} />
+                        <Route path="/admin" element={
+                            <AdminRoute>
+                            <AdminDashboard />
+                            </AdminRoute>} />
 
                         {/* Flagged Reviews Page */}
                         <Route path="/flaggedReviews" element={<FlaggedReviews />} />

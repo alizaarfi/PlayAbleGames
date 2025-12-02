@@ -1,6 +1,6 @@
 -- -- populating the users table
 INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('admin', 'tempEmail', '$2a$10$Q7DZ9uZBV0o4JuHmTh7xz.XPllXgEuIzvJRPAahDZSxOo2Gf0mb.O');
+VALUES ('admin', 'admin@email.com', '$2a$10$Q7DZ9uZBV0o4JuHmTh7xz.XPllXgEuIzvJRPAahDZSxOo2Gf0mb.O');
 INSERT INTO users (Username, Email, EncryptedPassword)
 VALUES ('user1', 'tempEmail1', '$2a$10$JA7wAHlGmCXoTFkD9rE9h.s3gCGE2f.M37tFxdRdaRh4Hp0NTs2Oe');
 INSERT INTO users (Username, Email, EncryptedPassword)
