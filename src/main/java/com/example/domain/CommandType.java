@@ -23,6 +23,7 @@ public enum CommandType {
     REVIEW_RATING,
     REVIEW_COMMENT,
     REVIEW_SUBMIT,
+    REVIEW_CANCEL,
     UNKNOWN,        //Unrecognised prompts retry
     NO_SPEECH,      // No speech
 

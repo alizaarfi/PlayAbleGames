@@ -310,6 +310,101 @@ function Navbar() {
                     }
                     break;
 
+                // ============================================
+// REVIEW COMMANDS - Dispatch to GamePage
+// ============================================
+
+                case 'REVIEW_START':
+                    console.log('Starting review mode');
+
+                    window.dispatchEvent(new CustomEvent('voiceCommand', {
+                        detail: {
+                            type: 'REVIEW_START',
+                            target: target
+                        }
+                    }));
+
+                    console.log('Dispatched REVIEW_START to GamePage');
+
+                    setTimeout(() => {
+                        setProcessingState('success');
+                        setTimeout(() => setProcessingState('idle'), 1500);
+                    }, 100);
+                    break;
+
+                case 'REVIEW_RATING':
+                    console.log(`Rating command: ${target}`); // e.g., "hearing:5"
+
+                    window.dispatchEvent(new CustomEvent('voiceCommand', {
+                        detail: {
+                            type: 'REVIEW_RATING',
+                            target: target // Format: "category:rating"
+                        }
+                    }));
+
+                    console.log(`Dispatched REVIEW_RATING for ${target}`);
+
+                    setTimeout(() => {
+                        setProcessingState('success');
+                        setTimeout(() => setProcessingState('idle'), 1500);
+                    }, 100);
+                    break;
+
+                case 'REVIEW_COMMENT':
+                    console.log(`Review comment: ${target}`);
+
+                    window.dispatchEvent(new CustomEvent('voiceCommand', {
+                        detail: {
+                            type: 'REVIEW_COMMENT',
+                            target: target // The spoken text
+                        }
+                    }));
+
+                    console.log('Dispatched REVIEW_COMMENT to GamePage');
+
+                    setTimeout(() => {
+                        setProcessingState('success');
+                        setTimeout(() => setProcessingState('idle'), 1500);
+                    }, 100);
+                    break;
+
+                case 'REVIEW_SUBMIT':
+                    console.log('Submitting review via voice');
+
+                    window.dispatchEvent(new CustomEvent('voiceCommand', {
+                        detail: {
+                            type: 'REVIEW_SUBMIT',
+                            target: null
+                        }
+                    }));
+
+                    console.log('Dispatched REVIEW_SUBMIT to GamePage');
+
+                    setTimeout(() => {
+                        setProcessingState('success');
+                        setTimeout(() => setProcessingState('idle'), 1500);
+                    }, 100);
+                    break;
+
+                case 'REVIEW_CANCEL':
+                    console.log('Cancelling review mode');
+
+                    window.dispatchEvent(new CustomEvent('voiceCommand', {
+                        detail: {
+                            type: 'REVIEW_CANCEL',
+                            target: null
+                        }
+                    }));
+
+                    console.log('Dispatched REVIEW_CANCEL to GamePage');
+
+                    setTimeout(() => {
+                        setProcessingState('success');
+                        setTimeout(() => setProcessingState('idle'), 1500);
+                    }, 100);
+                    break;
+
+
                 default:
                     console.log(`Command: ${type}, Target: ${target}`);
                     break;

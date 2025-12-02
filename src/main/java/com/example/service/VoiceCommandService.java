@@ -288,7 +288,41 @@ public class VoiceCommandService {
                 if (text.contains("star") || text.contains("valley")) return "stardew valley";
                 if (text.contains("blind") || text.contains("legend")) return "a blind legend";
                 break;
+
+            case REVIEW_RATING:
+                // Extract category and rating from the matched pattern
+                // Pattern captures: "rate hearing 5" -> groups (hearing, 5)
+                // We need to return: "hearing:5"
+                Pattern ratingPattern = Pattern.compile("(hearing|motor|cognitive|vision|speech|gameplay)\\s+(\\d)");
+                Matcher m = ratingPattern.matcher(fullText);
+                if (m.find()) {
+                    String category = m.group(1);
+                    String rating = m.group(2);
+
+                    // Validate rating is 1-5
+                    int ratingValue = Integer.parseInt(rating);
+                    if (ratingValue >= 1 && ratingValue <= 5) {
+                        return category + ":" + rating;  // Returns "hearing:5"
+                    }
+                }
+
+                // If pattern doesn't match or rating invalid, log warning
+                LOG.warn("Could not parse rating from: '{}'", fullText);
+                return target != null ? target : fullText;
+
+            case REVIEW_START:
+                return "start";
+
+            case REVIEW_SUBMIT:
+                return "submit";
+
+            case REVIEW_CANCEL:
+                return "cancel";
+
+            case REVIEW_COMMENT:
+                return target != null ? target.trim() : "activate_text_mode";
         }
+
 
         return target != null ? target : fullText;
     }
@@ -304,6 +338,38 @@ public class VoiceCommandService {
      */
     private void initialiseCommandMappings() {
         // Specific pages with capture groups
+
+        // REVIEW COMMANDS moved to  top
+
+        // starts the review process
+        commandPatterns.put(
+                Pattern.compile("(?:write|leave|create|start)\\s+(?:a\\s+)?review"),
+                CommandType.REVIEW_START
+        );
+
+        // for each rating
+        commandPatterns.put(
+                Pattern.compile("(?:rate|rating)?\\s*(hearing|motor|cognitive|vision|speech|gameplay)\\s+(?:rating\\s+)?(\\d)"),
+                CommandType.REVIEW_RATING
+        );
+
+        // review comment for comment box
+        commandPatterns.put(
+                Pattern.compile("(?:review\\s+text|comment|review\\s+comment)\\s+(.+)"),
+                CommandType.REVIEW_COMMENT
+        );
+
+
+        commandPatterns.put(
+                Pattern.compile("submit\\s+(?:review|my\\s+review)?"),
+                CommandType.REVIEW_SUBMIT
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:cancel|stop|exit)\\s+review"),
+                CommandType.REVIEW_CANCEL
+        );
+
         commandPatterns.put(
                 Pattern.compile("(?:go to |open |navigate to )?(?:accessibility|access ability|access lousy|access in|accessability)(?:\\s+page)?"),
                 CommandType.NAVIGATE
@@ -336,7 +402,7 @@ public class VoiceCommandService {
                 CommandType.NAVIGATE
         );
 
-// For individual game pages - add this AFTER specific patterns but BEFORE the generic navigate pattern
+    // For individual game pages - add this AFTER specific patterns but BEFORE the generic navigate pattern
         commandPatterns.put(
                 Pattern.compile("(?:go to |open |navigate to )?(.+?)\\s+(?:game\\s+)?page"),
                 CommandType.NAVIGATE
@@ -377,6 +443,8 @@ public class VoiceCommandService {
                 Pattern.compile("sort(?:\\s+by)?\\s+(.+)"),
                 CommandType.SORT
         );
+
+
 
         LOG.info("Initialised {} command patterns", commandPatterns.size());
     }
