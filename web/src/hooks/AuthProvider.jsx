@@ -39,6 +39,7 @@ export function AuthProvider({ children }) {
         }finally {
             localStorage.removeItem("token");
             localStorage.removeItem("role");
+            localStorage.removeItem("redirectAfterLogin"); // cleaning up redirect
             setToken(null);
             setRole(null);
 
@@ -55,6 +56,7 @@ export function AuthProvider({ children }) {
             token,
             role,
             isAuthenticated: !!token,
+            isAdmin,
             login,
             logout
         }}>

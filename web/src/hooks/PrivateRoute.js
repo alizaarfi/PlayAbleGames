@@ -1,9 +1,16 @@
-import { authProvider } from "./AuthProvider.jsx";
+import React from "react";
+import { useAuth } from "../hooks/AuthProvider.jsx"; // Fix: use useAuth, not authProvider
 import { Navigate } from "react-router-dom";
 
 function PrivateRoute({ children }) {
-    const { isAuthenticated } = authProvider();
-    return isAuthenticated ? children : <Navigate to="/login" />;
+    const { token } = useAuth(); // Fix: destructure token from useAuth()
+
+    if (!token) {
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        return <Navigate to="/login" replace />;
+    }
+
+    return children;
 }
 
 export default PrivateRoute;
