@@ -66,11 +66,13 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         {/* Individual User Page */}
                         <Route path="/users/:userId" element={<UserPage />} />
 
+                        {/* My Account - requires login */}
                         <Route
                             path="/myaccount"
                             element={
+                                <ProtectedRoute>
                                     <MyAccountPage />
-                            }
+                                </ProtectedRoute>}
                         />
                     </Routes>
                 </FavoritesProvider>
