@@ -92,12 +92,27 @@ function Navbar() {
                             }, 100);
                         } else if (target === 'my account' || target === 'account' || target === 'profile') {
                             // You might need to create this route or handle differently
+                            navigate('/myaccount')
                             console.log("Navigate to account page");
-                            setProcessingState('success');
-                            setTimeout(() => setProcessingState('idle'), 1500);
-
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
+                        } else if (target === "login" || target === "locking my") {
+                            navigate('/login');
+                            console.log("Navigate to login page");
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
+                        } else if (target === "signup" ||target === "sign up"|| target === "register") {
+                            navigate('/signup');
+                            console.log("Navigate to signup page");
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
                         } else {
-                            // ========== GAME NAVIGATION ==========
                             const gameNameToId = {
                                 'minecraft': 1,
                                 'monument valley': 2,
