@@ -70,7 +70,7 @@ class ReviewControllerTest {
 
         Review incoming = new Review();
         incoming.setHearingRating(4);
-        incoming.setVisualRating(3);
+        incoming.setVisionRating(3);
         incoming.setCognitiveRating(5);
         incoming.setSpeechRating(2);
         incoming.setMotorRating(1);
@@ -106,7 +106,7 @@ class ReviewControllerTest {
 
         // Ratings should be preserved here
         assertEquals(4, body.getHearingRating());
-        assertEquals(3, body.getVisualRating());
+        assertEquals(3, body.getVisionRating());
         assertEquals(5, body.getCognitiveRating());
         assertEquals(2, body.getSpeechRating());
         assertEquals(1, body.getMotorRating());

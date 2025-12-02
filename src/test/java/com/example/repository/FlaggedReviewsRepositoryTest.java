@@ -41,10 +41,10 @@ public class FlaggedReviewsRepositoryTest {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
         when(resultSet.next()).thenReturn(true, false);
-        when(resultSet.getInt("ReviewID")).thenReturn(101);           // Database column
-        when(resultSet.getInt("UserID")).thenReturn(11);              // Database column
-        when(resultSet.getString("Username")).thenReturn("alice");    // Database column
-        when(resultSet.getString("GameName")).thenReturn("SpaceGame"); // Database column
+        when(resultSet.getInt("ReviewID")).thenReturn(101);
+        when(resultSet.getInt("UserID")).thenReturn(11);
+        when(resultSet.getString("Username")).thenReturn("alice");
+        when(resultSet.getString("GameName")).thenReturn("SpaceGame");
         when(resultSet.getInt("HearingRating")).thenReturn(3);
         when(resultSet.getInt("VisionRating")).thenReturn(4);
         when(resultSet.getInt("CognitiveRating")).thenReturn(5);
@@ -61,7 +61,7 @@ public class FlaggedReviewsRepositoryTest {
         Map<String, Object> r = results.get(0);
 
         assertEquals(101, r.get("id"));
-        assertEquals(11, r.get("UserID"));
+        assertEquals(11, r.get("userId"));
         assertEquals("alice", r.get("user"));
         assertEquals("SpaceGame", r.get("game"));
         assertEquals(3, r.get("hearingRating"));
