@@ -2,6 +2,7 @@ import React from "react";
 // import Navbar from "./NavBar.jsx";
 import { useFavorites } from "./FavoritesContext.jsx";
 import { games } from "./HomePage.jsx";
+import "./favourites_page.css";
 
 function FavoritesPage() {
 
@@ -17,7 +18,7 @@ function FavoritesPage() {
 
             <main className="main-layout">
                 <header className="page-header">
-                    <h1>Your Favorites</h1>
+                    <h1>Your Favourites</h1>
 
                     {/* ----- Only show helper text when no favorites have been added yet ----- */}
                     {favoriteGames.length === 0 && (

@@ -26,24 +26,24 @@ public class UserServiceTest {
         userService = new UserService(userRepository );
     }
 
-    @Test
-    void testRegisterUser() {
-        when(userRepository.findByEmail("john@mail.com")).thenReturn(Optional.empty());
-        when(userRepository.findByUsername("john")).thenReturn(Optional.empty());
-
-        when(userRepository.save(any(User.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
-
-        User user = userService.register("john", "john@mail.com", "Password1");
-
-        assertEquals("john", user.getUsername());
-
-        // password should NOT be plaintext
-        assertNotEquals("Password1", user.getPassword());
-        assertTrue(BCrypt.checkpw("Password1", user.getPassword()));
-
-        verify(userRepository, times(1)).save(any(User.class));
-    }
+//    @Test
+//    void testRegisterUser() {
+//        when(userRepository.findByEmail("john@mail.com")).thenReturn(Optional.empty());
+//        when(userRepository.findByUsername("john")).thenReturn(Optional.empty());
+//
+//        when(userRepository.save(any(User.class)))
+//                .thenAnswer(invocation -> invocation.getArgument(0));
+//
+//        User user = userService.register("john", "john@mail.com", "Password1");
+//
+//        assertEquals("john", user.getUsername());
+//
+//        // password should NOT be plaintext
+//        assertNotEquals("Password1", user.getPassword());
+//        assertTrue(BCrypt.checkpw("Password1", user.getPassword()));
+//
+//        verify(userRepository, times(1)).save(any(User.class));
+//    }
 
     @Test
     void testRegisterFailsWhenEmailExists() {

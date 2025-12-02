@@ -342,9 +342,22 @@ function useVoiceControl() {
                         confidence: voiceCommand.confidence,
                         timestamp: voiceCommand.timestamp
                     });
+
+                    window.dispatchEvent(new CustomEvent('transcriptionUpdate', {
+                        detail: {
+                            transcription: voiceCommand.transcribedText,
+                            commandType: voiceCommand.type
+                        }
+                    }));
                 } else {
                     // set back if no speech
                     setProcessingState('idle');
+                    window.dispatchEvent(new CustomEvent('transcriptionUpdate', {
+                        detail: {
+                            transcription: '',
+                            commandType: 'NO_SPEECH'
+                        }
+                    }));
                 }
 
             } else {

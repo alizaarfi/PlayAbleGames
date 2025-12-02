@@ -65,6 +65,7 @@ export default function GamePage() {
     // Maximum length for a review.
     const maxChars = 500;
 
+
     // check login state on mount and when token changes in other windows
     useEffect(() => {
         const handleStorage = (event) => {
@@ -140,6 +141,10 @@ export default function GamePage() {
 
     // review submission handler
     const handleSubmitReview = async () => {
+        setIsAccumulatingText(false);
+        setReviewMode(false);
+        setVoicePromptMessage('');
+
         const token = getToken();
         if (!token) {
             showToast("You must log in to leave a review.");
@@ -214,6 +219,137 @@ export default function GamePage() {
             showToast("Network error while submitting review.");
         }
     };
+
+    // VOICE COMMANDS FOR REVIEW
+    // voice reviewing need for states
+    const [reviewMode, setReviewMode] = useState(false);
+    const [voicePromptMessage, setVoicePromptMessage] = useState('');
+    const [isInTextMode, setIsInTextMode] = useState(false);
+    const [isAccumulatingText, setIsAccumulatingText] = useState(false);
+
+    useEffect(() => {
+        const handleVoiceReviewCommand = (event) => {
+            const { type, target } = event.detail;
+
+            if (!isLoggedIn && type.startsWith('REVIEW_')) {
+                showToast('Please log in to write a review');
+                return;
+            }
+
+            switch(type) {
+                case 'REVIEW_START':
+                    startReviewMode();
+                    break;
+
+                case 'REVIEW_RATING':
+                    handleVoiceRating(target); // "hearing:5"
+                    break;
+
+                case 'REVIEW_COMMENT':
+                    handleVoiceText(target);
+                    break;
+
+                case 'REVIEW_SUBMIT':
+                    handleSubmitReview();
+                    break;
+
+                case 'REVIEW_CANCEL':
+                    exitReviewMode();
+                    break;
+            }
+        };
+
+        window.addEventListener('voiceCommand', handleVoiceReviewCommand);
+        return () => window.removeEventListener('voiceCommand', handleVoiceReviewCommand);
+    }, [isLoggedIn, reviewMode, formRatings, reviewText]);
+
+
+    useEffect(() => {
+        const handleTranscriptionAccumulation = (event) => {
+            const { transcription, commandType } = event.detail;
+
+            // Only accumulate if in text mode AND it's raw speech (not a command)
+            if (isAccumulatingText && transcription && commandType === 'UNKNOWN') {
+                // This is raw speech that didn't match a command - add it to review
+                const newText = reviewText
+                    ? `${reviewText} ${transcription}`
+                    : transcription;
+
+                setReviewText(newText.slice(0, maxChars));
+                console.log("Accumulated text:", transcription);
+            }
+
+            // Stop accumulating if user says a recognized command
+            if (isAccumulatingText && commandType &&
+                commandType !== 'NO_SPEECH' &&
+                commandType !== 'UNKNOWN') {
+                setIsAccumulatingText(false);
+                console.log("⏹️ Stopped accumulating - command detected:", commandType);
+            }
+        };
+
+        window.addEventListener('transcriptionUpdate', handleTranscriptionAccumulation);
+        return () => window.removeEventListener('transcriptionUpdate', handleTranscriptionAccumulation);
+    }, [isAccumulatingText, reviewText, maxChars]);
+
+    //All helper functions needed for voice commanded reviews in useEffect aboce
+
+    // Start review mode
+    const startReviewMode = () => {
+        if (!isLoggedIn) {
+            showToast('Please log in to write a review');
+            return;
+        }
+
+        setReviewMode(true);
+        setVoicePromptMessage('Say a category and rating, like "rate hearing 5"');
+        showToast('Review mode active - Start rating');
+
+        // Auto-scroll to review section
+        scrollToId('reviews');
+    };
+
+    // Handle ratings
+    const handleVoiceRating = (target) => {
+        if (!reviewMode) return;
+
+        const [category, ratingStr] = target.split(':');
+        const rating = parseInt(ratingStr);
+
+        if (rating >= 1 && rating <= 5) {
+            updateFormRating(category, rating);
+            showToast(`${category} rated ${rating}/5`);
+            setVoicePromptMessage('Rate another category, or say "review text" to add comments');
+        }
+    };
+
+    // Handle voice text input
+    const handleVoiceText = (text) => {
+        if (!reviewMode) return;
+
+        // for accumulating approach to capture recording chunks
+        setIsAccumulatingText(true);
+        setIsInTextMode(true);
+
+        // Append to existing review text
+        const newText = reviewText
+            ? `${reviewText} ${text}`
+            : text;
+
+        setReviewText(newText.slice(0, maxChars));
+        setVoicePromptMessage('Continue speaking, or say "submit review" when done');
+    };
+
+    // Exit review mode
+    const exitReviewMode = () => {
+        setReviewMode(false);
+        setVoicePromptMessage('');
+        setIsAccumulatingText(false);
+        setIsInTextMode(false);
+        showToast('Review mode cancelled');
+    };
+
+
 
     // loading and error states
     if (loading) {
@@ -427,6 +563,12 @@ export default function GamePage() {
 
                     {/* review form */}
                     <aside className="review-form">
+                        {/* Voice prompt display */}
+                        {reviewMode && voicePromptMessage && (
+                            <div className="voice-prompt-banner">
+                                🎤 {voicePromptMessage}
+                            </div>
+                        )}
                         {!isLoggedIn && (
                             <>
                                 <p className="login-hint">
@@ -501,10 +643,37 @@ export default function GamePage() {
                             />
                         </div>
 
+                        {/*<textarea*/}
+                        {/*    className="review-textarea"*/}
+                        {/*    rows={6}*/}
+                        {/*    placeholder="Share details of your experience with this game"*/}
+                        {/*    value={reviewText}*/}
+                        {/*    onChange={(e) => {*/}
+                        {/*        const value = e.target.value.slice(0, maxChars);*/}
+                        {/*        setReviewText(value);*/}
+                        {/*    }}*/}
+                        {/*/>*/}
+                        {/*/!* Textarea with voice indicator *!/*/}
+                        {/*<textarea*/}
+                        {/*    className={`review-textarea ${reviewMode ? 'voice-active' : ''}`}*/}
+                        {/*    rows={6}*/}
+                        {/*    placeholder={*/}
+                        {/*        reviewMode*/}
+                        {/*            ? "🎤 Speak to add text..."*/}
+                        {/*            : "Share details of your experience with this game"*/}
+                        {/*    }*/}
+                        {/*    value={reviewText}*/}
+                        {/*    onChange={(e) => setReviewText(e.target.value.slice(0, maxChars))}*/}
+                        {/*/>*/}
+
                         <textarea
-                            className="review-textarea"
+                            className={`review-textarea ${reviewMode ? 'voice-active' : ''}`}
                             rows={6}
-                            placeholder="Share details of your experience with this game"
+                            placeholder={
+                                reviewMode
+                                    ? "🎤 Speak to add text..."
+                                    : "Share details of your experience with this game"
+                            }
                             value={reviewText}
                             onChange={(e) => {
                                 const value = e.target.value.slice(0, maxChars);

@@ -1,31 +1,28 @@
--- -- populating the users table
-INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('admin', 'tempEmail', '$2a$10$Q7DZ9uZBV0o4JuHmTh7xz.XPllXgEuIzvJRPAahDZSxOo2Gf0mb.O');
-INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user1', 'tempEmail1', '$2a$10$JA7wAHlGmCXoTFkD9rE9h.s3gCGE2f.M37tFxdRdaRh4Hp0NTs2Oe');
-INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user2', 'tempEmail2', '$2a$10$kvTzFIJ4wKhe8A2NuLbR.uZWe.GX4p.A76EIwoj4w18hMxuuygV8i');
-INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ('user3', 'tempEmail3', '$2a$10$IXw73mEWdT1OlaBWO6H9BeKNiKTYU3bo7SjkjO9pbbKpoR7kxVHeG');
-
 -- -- populating the roles table
 INSERT INTO roles (name)
 VALUES ('ADMIN');
 INSERT INTO roles (name)
 VALUES ('BASIC');
 
+-- -- populating the users table
+INSERT INTO users (UserID, Username, Email, EncryptedPassword)
+VALUES (1, 'admin', 'tempEmail', '$2a$10$Q7DZ9uZBV0o4JuHmTh7xz.XPllXgEuIzvJRPAahDZSxOo2Gf0mb.O');
+INSERT INTO users (UserID, Username, Email, EncryptedPassword)
+VALUES (2, 'user1', 'tempEmail1', '$2a$10$JA7wAHlGmCXoTFkD9rE9h.s3gCGE2f.M37tFxdRdaRh4Hp0NTs2Oe');
+INSERT INTO users (UserID, Username, Email, EncryptedPassword)
+VALUES (3, 'user2', 'tempEmail2', '$2a$10$kvTzFIJ4wKhe8A2NuLbR.uZWe.GX4p.A76EIwoj4w18hMxuuygV8i');
+INSERT INTO users (UserID, Username, Email, EncryptedPassword)
+VALUES (4, 'user3', 'tempEmail3', '$2a$10$IXw73mEWdT1OlaBWO6H9BeKNiKTYU3bo7SjkjO9pbbKpoR7kxVHeG');
+
+
 -- -- assigning the ADMIN role to the admin user
-INSERT INTO user_roles (UserID, RoleID)
-VALUES (1, 1);
-INSERT INTO user_roles (UserID, RoleID)
-VALUES (2, 2);
-INSERT INTO user_roles (UserID, RoleID)
-VALUES (3, 2);
-INSERT INTO user_roles (UserID, RoleID)
-VALUES (4, 2);
+UPDATE user_roles
+SET RoleID = 1
+WHERE UserID = 1;
 
 -- -- populating the games table
 INSERT INTO games (GameName, Developer, AgeRating, LinkToStore, GameIconURL, GameDescription, ReleaseDate, VersionNumber, AboutVision, AboutHearing, AboutCognitive, AboutSpeech, AboutMotor)
+
 VALUES ('Minecraft', 'Mojang Studios', 'PEGI 7', 'https://play.google.com/store/apps/details?id=com.mojang.minecraftpe&hl=en_GB', 'https://play-lh.googleusercontent.com/gfNz1N2GNi5piz24IB08RQ4ZGfUnN_kOH8Edhh7uCiotI2P7IBWBXdHzR8gC01ppNnU=w720-h405-rw', 'Minecraft is an open-world sandbox game where players can build, explore, and survive in procedurally generated environments. With Creative and Survival modes, players of all ages can shape the world block by block, gather resources, craft tools, and adventure with friends. Its freedom-focused design makes it accessible and highly customizable for different playstyles.', '2011-08-16', '1.21.121', 'Visual support incudes features such as text-to-speech menus and an adjustable UI using mod packs.', 'Audio support includes features such as subtitles and visual sound indicators.', 'Cognitive support features include a creative gameplay that removes pressure.', 'No speech is required.', 'Motor support includes customizable controls and compatibility with assistive devices.');
 INSERT INTO games (GameName, Developer, AgeRating, LinkToStore, GameIconURL, GameDescription, ReleaseDate, VersionNumber, AboutVision, AboutHearing, AboutCognitive, AboutSpeech, AboutMotor)
 VALUES ('Monument Valley', 'ustwo games', 'PEGI 3', 'https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley&hl=en_GB', 'https://www.nintendo-insider.com/wp-content/uploads/2025/03/monument_valley_banner-1160x653.jpg', 'Monument Valley is a peaceful puzzle game where players guide Princess Ida through beautiful, minimalist environments filled with optical illusions and shifting geometry. The game focuses on calm, atmospheric exploration and simple interactions, making it approachable and relaxing for a wide audience.', '2014-04-03', 'no version number available', 'There are no features to alter the UI.', 'Music is atmospheric and not necessary to play the game.', 'Relaxed pace and it is easy to undo and retry.', 'No speech is required.', 'There are simple tap/drag controls to navigate the game.');
@@ -55,6 +52,7 @@ INSERT INTO games (GameName, Developer, AgeRating, LinkToStore, GameIconURL, Gam
 VALUES ('Stardew Valley', 'ConcernedApe', 'PEGI 12', 'https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley&hl=en_GB', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzag19Vq5eT2IZPNZZYU-PxjM1xLc6mEJEnQ&s', 'Stardew Valley is a farming and life-simulation game where players restore a rural homestead, grow crops, raise animals, complete quests, and build relationships with villagers. With its open-ended structure and relaxing pace, it supports many different playstyles—from farming to mining to fishing.', '2019-03-14', '1.6.9', 'Limited visual support is available for the app version of this game.', 'No reliance on audio cues.', 'Gameplay is non-linear and self-paced.', 'No speech is required.', 'Controls are simple and compatible with assistive devices.');
 INSERT INTO games (GameName, Developer, AgeRating, LinkToStore, GameIconURL, GameDescription, ReleaseDate, VersionNumber, AboutVision, AboutHearing, AboutCognitive, AboutSpeech, AboutMotor)
 VALUES ('A Blind Legend', 'DOWINO', 'PEGI 3', 'https://a-blind-legend.en.aptoide.com/app', 'https://images.launchbox-app.com/4580cd6a-d441-4745-ac9d-4cc3df4df468.png', 'A Blind Legend is an audio-only action-adventure game designed specifically for blind and low-vision players. Using binaural sound, players navigate the world, fight enemies, and follow the story entirely through directional audio cues for a uniquely immersive experience.', '2015-06-10', '1.2.4', 'Fully accessible, and designed for, players with no/low vision.', 'Fully reliant on audio cues.', 'Gameplay is story structured.', 'No speech is required.', 'Simple tap and swipe controls to navigate the game.');
+
 
 -- -- population gallery table
 -- minecraft images
@@ -509,15 +507,21 @@ VALUES (3, 2, 'Have you tried Monument Valley? Its a great puzzle game! The moto
 
 -- -- populating faq table
 INSERT INTO faq (Question, Answer)
-VALUES ('How do I navigate the PlayAble website using the voice command system?', 'To navigate the PlayAble website using the voice command system, simply activate the voice command feature and speak your desired action, such as "Go to Games" or "Search for Puzzle Games." The system will interpret your commands and take you to the appropriate section of the website. For best results, speak clearly and use simple phrases. If you encounter any issues, refer to the help section for troubleshooting tips.');
+VALUES ('How do I navigate the PlayAble website using the voice command system?', 'To navigate the PlayAble website using the voice command system, simply activate the voice command feature and speak your desired action, such as "Go to Accessibility Page" or "Scroll Down" The system will interpret your commands and take you to the appropriate section of the website. For best results, speak clearly and use simple phrases. If you encounter any issues, refer to the help section for troubleshooting tips.');
+INSERT INTO faq (Question, Answer)
+VALUES ('What types of games are available on PlayAble?', 'PlayAble offers a diverse selection of games that cater to various accessibility needs. Our library includes games with features such as visual support, cognitive support, verbal support, audio support, and motor support. Additionally, we categorize games by genre, including action, adventure, puzzle, strategy, casual, role-playing, simulation, arcade, sandbox/open world, and multiplayer/online games. This variety ensures that players with different preferences and requirements can find games that suit their needs.');
+INSERT INTO faq (Question, Answer)
+VALUES ('How can I submit a review for a game on PlayAble?', 'To submit a review for a game on PlayAble, first ensure you are logged into your account. Navigate to the game''s page that you wish to review. Scroll down to the review section and click on the "Write a Review" button. Fill out the review form, providing ratings for various accessibility aspects and your overall experience. Once you have completed the form, click "Submit" to post your review. Your review will be visible to other users and will help them make informed decisions about the game.');
+INSERT INTO faq (Question, Answer)
+VALUES ('How do I report inappropriate content or behavior on PlayAble?', 'If you encounter inappropriate content or behavior on PlayAble, you can report it by clicking on the "Report" button located near the content in question.');
 
 -- -- populating blogs table
 INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
-VALUES ('Blog title placeholder','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
+VALUES ('The role of Accessibility in the Mobile Gamin Industry''s Growth', 'https://ablegamers.org/mobile-gaming/', 'This blog post explores how accessibility is helping mobile gaming grow by making games easier for everyone to enjoy. It highlights features like customizable controls, clear text, and assistive options, and showcases accessible titles such as Pokémon GO and Minecraft. The article also reflects AbleGamers’ mission to create inclusive gaming experiences that reduce social isolation and bring more players into the community.', 5);
 INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
-VALUES ('Blog title placeholder 2','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
+VALUES ('Tips for designing for accessibility in mobile gaming','https://mirigrowth.com/blog/designing-an-accessible-mobile-game/', 'This post lays out clear, practical tips for making mobile games accessible to players with different needs (visual, hearing, cognitive, etc.). It covers things like clean UI, colour-blind-friendly palettes, readable text, audio/subtitle options, customizable controls and more — emphasising that accessibility isn’t a luxury, but a design mindset.', 4);
 INSERT INTO blog (BlogTitle, LinkToBlog, BlogDescription, ReadTime)
-VALUES ('Blog title placeholder 3','linkPlaceholder', 'This is a placeholder description for the blog. The actual description will provide a brief overview of the blog content to entice readers to click and read more.', 5);
+VALUES ('Assistive Technology and Mobile Gaming: Triumphs and Hurdles','https://ablegamers.org/assistive-technology-and-mobile-gaming/', 'This article explores how assistive technology (e.g. alternative input, adaptive controls, accessibility tools) is being integrated into mobile gaming — discussing both the successes and the ongoing challenges (compatibility, design trade-offs, resource needs). It gives a balanced view of what’s working, what’s still difficult, and why inclusivity matters.', 7);
 
 
 

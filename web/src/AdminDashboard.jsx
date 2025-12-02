@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
-import "./style.css";
+// import "./style.css";
 
 
 const API_BASE = "http://localhost:8081/api";
@@ -49,7 +49,7 @@ export default function AdminDashboard(){
     // Admin Dashboard Page html code here
     return(
             <div className="content">
-                <h1 className="title black-text"> Welcome back admin</h1>
+                <h1 className="title black-text"> Welcome Back Admin</h1>
                 <div className="dashboard">
                         <div className="dashboard-item">
                             <h2 className="black-text paddedText"> Flagged items </h2>
