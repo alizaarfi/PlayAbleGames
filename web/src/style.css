@@ -2728,3 +2728,32 @@ body.dark-mode .error-message {
 }
 
 
+/* FIX broken buttons inside form */
+.review-form button,
+.review-form .submit-btn,
+.report-btn,
+.jump-link,
+.up-arrow {
+  all: unset;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.review-form .submit-btn {
+  padding: 10px 18px;
+  background: #9ca3af;
+  border-radius: 6px;
+  color: #111;
+}
+
+
+/* restore star hover behavior */
+.star-row.interactive .star:hover {
+  color: #22c55e !important;
+}
+.star-row.interactive .star.filled {
+  color: #22c55e !important;
+}
+
+
+
