@@ -17,6 +17,7 @@ public class AdminDashboardControllerTest {
     @Mock
     AdminDashboardRepository repository;
 
+//    This test verifies that the getDashboardData method returns the expected map structure
     @Test
     public void getDashboardData_returnsExpectedMap() {
         when(repository.getTotalFlagged()).thenReturn(2);

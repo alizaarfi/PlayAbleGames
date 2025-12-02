@@ -51,7 +51,7 @@ public class ReviewController {
         // Reject completely empty reviews (no text and no ratings).
         boolean allRatingsMissing =
                 incoming.getHearingRating()   == null &&
-                        incoming.getVisualRating()    == null &&
+                        incoming.getVisionRating()    == null &&
                         incoming.getCognitiveRating() == null &&
                         incoming.getSpeechRating()    == null &&
                         incoming.getMotorRating()     == null &&
@@ -68,7 +68,7 @@ public class ReviewController {
         review.setUserId(fakeUserId);
 
         review.setHearingRating(normaliseRating(incoming.getHearingRating()));
-        review.setVisualRating(normaliseRating(incoming.getVisualRating()));
+        review.setVisionRating(normaliseRating(incoming.getVisionRating()));
         review.setCognitiveRating(normaliseRating(incoming.getCognitiveRating()));
         review.setSpeechRating(normaliseRating(incoming.getSpeechRating()));
         review.setMotorRating(normaliseRating(incoming.getMotorRating()));

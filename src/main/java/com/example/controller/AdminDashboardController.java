@@ -5,12 +5,23 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.server.cors.CrossOrigin;
 import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.security.authentication.Authentication;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller("/api")
+/**
+ * REST controller for managing administrative dashboard operations.
+ *
+ * This controller provides endpoints to retrieve aggregated statistics
+ * for the admin dashboard, including user counts, game counts, and
+ * flagged content metrics.
+ *
+ */
+
+ @Controller("/api")
+@Secured(SecurityRule.IS_ANONYMOUS) //admin test - no security
 public class AdminDashboardController {
 
     private final AdminDashboardRepository repository;
@@ -20,6 +31,23 @@ public class AdminDashboardController {
     }
 
     @Secured("ADMIN")
+    /**
+     * HTTP GET endpoint at /api/admin
+     *
+     * - Collects aggregated counts from the repository.
+     * - Builds a small JSON-like response (Map) with a "dashboard" key.
+     * - Returns a Map\<String, Object\> that Micronaut will serialize to JSON.
+     *
+     * Response shape example:
+     * {
+     *   "dashboard": {
+     *     "totalFlaggedItems": 5,
+     *     "totalUsers": 123,
+     *     "totalGames": 42
+     *   }
+     * }
+     */
+
     @Get("/admin")
     public Map<String, Object> getDashboardData(Authentication authentication) {
         Map<String, Object> dashboard = new HashMap<>();

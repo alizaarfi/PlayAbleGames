@@ -2,7 +2,6 @@
 Drop Database if exists AppDB;
 Create Database AppDB;
 USE AppDB;
-
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create Tables
 -- -- This is the users table, this holds all the user information for both
 -- -- admins and regular users.
@@ -284,3 +283,16 @@ BEGIN
     FROM users;
 END //
 DELIMITER ;
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- Create triggers
+
+DELIMITER //
+CREATE TRIGGER add_default_role
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+    INSERT INTO user_roles (UserID, RoleID) VALUES (NEW.UserID, 2);
+END;
+//
+DELIMITER ;
+

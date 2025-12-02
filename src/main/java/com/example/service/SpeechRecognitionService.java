@@ -41,7 +41,7 @@
 //    private volatile boolean initialized = false;
 //
 //    @PostConstruct
-//    public void initialize() {
+//    public void initialise() {
 //        try {
 //            LOG.info("Initializing Vosk speech recognition with model: {}", modelPath);
 //
@@ -54,8 +54,8 @@
 //
 //            LOG.info("Vosk model loaded successfully");
 //        } catch (Exception e) {
-//            LOG.error("Failed to initialize Vosk model: {}", e.getMessage(), e);
-//            throw new RuntimeException("Could not initialize speech recognition", e);
+//            LOG.error("Failed to initialise Vosk model: {}", e.getMessage(), e);
+//            throw new RuntimeException("Could not initialise speech recognition", e);
 //        }
 //    }
 //

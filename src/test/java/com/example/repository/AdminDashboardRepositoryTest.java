@@ -26,14 +26,13 @@ public class AdminDashboardRepositoryTest {
     @Mock
     CallableStatement callableStatement;
 
+    //   This test verifies that getTotalFlagged correctly calls the stored procedure and returns the expected value
     @Test
     public void getTotalFlagged_returnsValueFromProcedure() throws Exception {
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareCall(ArgumentMatchers.anyString())).thenReturn(callableStatement);
 
-        // registerOutParameter is void — it's fine to keep or omit this stub
         doNothing().when(callableStatement).registerOutParameter(1, java.sql.Types.INTEGER);
-        // execute() returns boolean, stub it to return true
         when(callableStatement.execute()).thenReturn(true);
         when(callableStatement.getInt(1)).thenReturn(7);
 
@@ -49,6 +48,7 @@ public class AdminDashboardRepositoryTest {
         verify(callableStatement).close();
     }
 
+    //   This test verifies that getTotalFlagged throws a RuntimeException when a SQLException occurs
     @Test
     public void getTotalFlagged_throwsRuntimeExceptionOnSqlError() throws Exception {
         when(dataSource.getConnection()).thenThrow(new SQLException("DB down"));
