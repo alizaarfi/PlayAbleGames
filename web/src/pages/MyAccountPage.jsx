@@ -33,6 +33,8 @@ export default function MyAccountPage() {
     //for edit profile
     const [profileError, setProfileError] = useState(null);
     const [profileSuccess, setProfileSuccess] = useState(null);
+    const [originalUsername, setOriginalUsername] = useState("");
+
 
     //for detele account
     const [deleteConfirmPassword, setDeleteConfirmPassword] = useState("");
@@ -99,6 +101,8 @@ export default function MyAccountPage() {
 
         const validation = validateProfileUpdate();
 
+        const isUsernameChanging = profile.username !== originalUsername;
+
         if(validation){
             setProfileError(validation);
             return
@@ -125,11 +129,19 @@ export default function MyAccountPage() {
                 return;
 
             }
-            setProfileSuccess("Profile updated successfully!");
-            setTimeout(() => {
-                setProfileSuccess(null);
-                setShowEditProfile(false);
-            }, 2000);
+            const data = await res.json();
+
+            // If username changed, force re-login
+            if (data.usernameChanged) {
+                alert("Username updated successfully! Please log in again with your new username.");
+                await logout();
+                window.location.href = "/login";
+            } else {
+                setProfileSuccess("Profile updated successfully!");
+                setTimeout(() => {
+                    setProfileSuccess(null);
+                    setShowEditProfile(false);
+                }, 2000);}
         } catch (e) {
             console.error("Profile update error:", e);
             setProfileError("Network error: Unable to connect to server");

@@ -85,11 +85,14 @@ public class UserController {
             User user = userRepository.findByUsername(currentUsername)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
+            boolean usernameChanged = false;
+
             // Validate that new username is not taken (if changed)
             if (!user.getUsername().equals(updateDTO.getUsername())) {
                 if (userRepository.findByUsername(updateDTO.getUsername()).isPresent()) {
                     return HttpResponse.badRequest(Map.of("error", "Username already taken"));
                 }
+                usernameChanged = true;
             }
 
             // Check if there are any actual changes
@@ -101,7 +104,12 @@ public class UserController {
             user.setUsername(updateDTO.getUsername());
             userRepository.update(user);
 
-            return HttpResponse.ok(Map.of("message", "Profile updated successfully"));
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Profile updated successfully");
+            response.put("usernameChanged", usernameChanged); //telling frontend to re-login
+
+            return HttpResponse.ok(response);
+
         } catch (Exception e) {
             return HttpResponse.serverError(Map.of("error", e.getMessage()));
         }
