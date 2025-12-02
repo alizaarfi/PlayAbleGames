@@ -50,15 +50,17 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         {/* Flagged Reviews Page */}
                         <Route path="/flaggedReviews" element={<FlaggedReviews />} />
 
-
                         {/*login page*/}
                         <Route path="/login" element={<LoginPage/>} />
 
                         {/* Settings page */}
                         <Route path="/settings" element={<SettingsPage />} />
 
-                        {/* Favorite page */}
-                        <Route path="/favorites" element={<FavoritesPage />} />
+                        {/* Favorite page -requires login */}
+                        <Route path="/favorites" element={
+                            <ProtectedRoute>
+                                <FavoritesPage/>
+                            </ProtectedRoute>} />
 
                         {/* All Users Page */}
                         <Route path="/users" element={<AllUsersPage />} />
@@ -72,8 +74,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                             element={
                                 <ProtectedRoute>
                                     <MyAccountPage />
-                                </ProtectedRoute>}
-                        />
+                                </ProtectedRoute>}/>
                     </Routes>
                 </FavoritesProvider>
             </AuthProvider>
