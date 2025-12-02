@@ -1,4 +1,10 @@
 package com.example.repository;
 
-public class FAQRepository {
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
+import io.micronaut.data.repository.CrudRepository;
+import com.example.domain.FAQ;
+
+@JdbcRepository(dialect = Dialect.MYSQL)
+public interface FAQRepository extends CrudRepository<FAQ, Long> {
 }

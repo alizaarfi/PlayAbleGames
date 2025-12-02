@@ -13,19 +13,21 @@ public class Reply {
     @MappedProperty("ReplyID")
     private Long replyID;
 
-    @Relation(value = Relation.Kind.MANY_TO_ONE)
     @MappedProperty("UserID")
-    private User user;
+    private Long userID;
 
-    @Relation(value = Relation.Kind.MANY_TO_ONE)
     @MappedProperty("DiscussionID")
-    private Discussion discussion;
+    private Long discussionID;
 
     @MappedProperty("ReplyText")
     private String replyText;
 
     @MappedProperty("DateCreated")
     private LocalDateTime dateCreated;
+
+    // Transient field for username (populated by query join)
+    @Transient
+    private String username;
 
     // Constructors
     public Reply() {}
@@ -34,15 +36,18 @@ public class Reply {
     public Long getReplyID() { return replyID; }
     public void setReplyID(Long replyID) { this.replyID = replyID; }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public Long getUserID() { return userID; }
+    public void setUserID(Long userID) { this.userID = userID; }
 
-    public Discussion getDiscussion() { return discussion; }
-    public void setDiscussion(Discussion discussion) { this.discussion = discussion; }
+    public Long getDiscussionID() { return discussionID; }
+    public void setDiscussionID(Long discussionID) { this.discussionID = discussionID; }
 
     public String getReplyText() { return replyText; }
     public void setReplyText(String replyText) { this.replyText = replyText; }
 
     public LocalDateTime getDateCreated() { return dateCreated; }
     public void setDateCreated(LocalDateTime dateCreated) { this.dateCreated = dateCreated; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 }
