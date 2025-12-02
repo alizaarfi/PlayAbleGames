@@ -1,10 +1,118 @@
-.userBox{
-    border: 1px solid black;
-    padding: 10px;
-    margin: 10px;
-    border-radius: 5px;
-    background-color: #acacac;
+.userBox {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    gap: 1rem;
+}
+
+.userBox:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.userBox .user-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.userBox .user-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary, #1a1a1a);
+}
+
+.userBox .user-email {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #666666);
+}
+
+.userBox button {
+    background-color: var(--primary-color, #5856d6);
+    color: white;
+    border: none;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.userBox button:hover {
+    background-color: var(--primary-hover, #4745c7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(88, 86, 214, 0.3);
+}
+
+.userBox button:active {
+    transform: translateY(0);
+}
+
+.userBox button.danger {
+    background-color: transparent;
+    color: #dc2626;
+    border: 2px solid #dc2626;
+}
+
+.userBox button.danger:hover {
+    background-color: #dc2626;
+    color: white;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.dark-mode .userBox {
+    background: var(--dark-card-bg, #2a2a2a);
+    border-color: var(--dark-border, #444444);
+}
+
+.dark-mode .userBox:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .userBox .user-name {
+    color: var(--dark-text, #e0e0e0);
+}
+
+.dark-mode .userBox .user-email {
+    color: var(--dark-text-secondary, #b0b0b0);
+}
+
+@media (max-width: 768px) {
+    .userBox {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1.25rem;
+    }
+
+    .userBox button {
+        width: 100%;
+    }
+}
+
+.userBox button:focus {
+    outline: 3px solid var(--primary-color, #5856d6);
+    outline-offset: 2px;
+}
+
+.userBox button.danger:focus {
+    outline-color: #dc2626;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .userBox,
+    .userBox button {
+        transition: none !important;
+    }
 }
