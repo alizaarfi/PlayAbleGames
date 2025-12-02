@@ -319,6 +319,29 @@ public class VoiceCommandService {
                 CommandType.NAVIGATE
         );
 
+        // Add after the existing settings pattern:
+
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(?:community|communities)(?:\\s+page)?"),
+                CommandType.NAVIGATE
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(?:favou?rites?|favou?rite)(?:\\s+page)?"),
+                CommandType.NAVIGATE
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(?:my account|account|profile)(?:\\s+page)?"),
+                CommandType.NAVIGATE
+        );
+
+// For individual game pages - add this AFTER specific patterns but BEFORE the generic navigate pattern
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(.+?)\\s+(?:game\\s+)?page"),
+                CommandType.NAVIGATE
+        );
+
         // Generic navigation with capture group
         commandPatterns.put(
                 Pattern.compile("(?:go to|open|navigate to)\\s+(\\w+(?:\\s+\\w+)?)\\s*(?:page)?"),

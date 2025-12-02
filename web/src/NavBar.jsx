@@ -72,6 +72,30 @@ function Navbar() {
                                 setProcessingState('success');
                                 setTimeout(() => setProcessingState('idle'), 1500);
                             }, 100);
+                        } else if (target === 'settings') {
+                            navigate('/settings');
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
+                        } else if (target === 'community' || target === 'communities') {
+                            navigate('/community');
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
+                        } else if (target === 'favourites' || target === 'favorites' || target === 'favourite') {
+                            navigate('/favorites');
+                            setTimeout(() => {
+                                setProcessingState('success');
+                                setTimeout(() => setProcessingState('idle'), 1500);
+                            }, 100);
+                        } else if (target === 'my account' || target === 'account' || target === 'profile') {
+                            // You might need to create this route or handle differently
+                            console.log("Navigate to account page");
+                            setProcessingState('success');
+                            setTimeout(() => setProcessingState('idle'), 1500);
+
                         } else {
                             console.log("Unknown route:", target);
                             setProcessingState('error');
