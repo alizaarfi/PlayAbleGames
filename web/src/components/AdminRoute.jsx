@@ -10,6 +10,11 @@ import { Navigate } from "react-router-dom";
 function AdminRoute({ children }) {
     const { token, role } = useAuth();
 
+    // Wait for auth to load
+    if (loading) {
+        return <div className="loading-container">Loading...</div>;
+    }
+
     // if not logged in then redirect to login
     if (!token) {
         localStorage.setItem("redirectAfterLogin", window.location.pathname);

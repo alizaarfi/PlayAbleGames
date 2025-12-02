@@ -39,7 +39,6 @@ public class LoginController {
      * @param loginRequest contains username and password
      * @return JWT token if successful, or error response if failed
      */
-    @Secured(SecurityRule.IS_ANONYMOUS) // allow unauthenticated users
     @Post("/login")
     public HttpResponse<?> login(@Body LoginRequest loginRequest) {
         try {

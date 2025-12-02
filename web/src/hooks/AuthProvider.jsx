@@ -9,18 +9,13 @@ export function AuthProvider({ children }) {
 
 
     useEffect(() => {
-        const saved = localStorage.getItem("token");
-        if (saved){
-            setToken(saved);
-        }
-        setLoading(false);
-
         const savedToken = localStorage.getItem("token");
         const savedRole = localStorage.getItem("role");
         if (savedToken) {
             setToken(savedToken);
             setRole(savedRole);
         }
+        setLoading(false);
     }, []);
 
     const login = (newToken, newRole) => {
@@ -48,8 +43,6 @@ export function AuthProvider({ children }) {
             localStorage.removeItem("redirectAfterLogin"); // cleaning up redirect
             setToken(null);
             setRole(null);
-
-            return Promise.resolve();
         }
     };
 
@@ -58,15 +51,7 @@ export function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ token,loading, isAuthenticated: !!token, login, logout }}>
-        <AuthContext.Provider value={{
-            token,
-            role,
-            isAuthenticated: !!token,
-            isAdmin,
-            login,
-            logout
-        }}>
+        <AuthContext.Provider value={{ token, role, loading, isAuthenticated: !!token, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
