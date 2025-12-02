@@ -61,6 +61,9 @@ export default function LoginPage() {
             } else {
                 //auth context
                 saveToken(result.token);
+
+                window.dispatchEvent(new Event("storage"));
+
                 //redirect after login
                 const redirectPath = localStorage.getItem("redirectAfterLogin");
 

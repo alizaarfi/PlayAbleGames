@@ -36,7 +36,7 @@ class GameDetailsDtoTest {
 
         // --- arrange reviews---
         Review r1 = new Review();
-        r1.setVisualRating(3);
+        r1.setVisionRating(3);
         r1.setHearingRating(5);
         r1.setCognitiveRating(4);
         r1.setSpeechRating(0);
@@ -44,7 +44,7 @@ class GameDetailsDtoTest {
         r1.setGameplayRating(5);
 
         Review r2 = new Review();
-        r2.setVisualRating(5);
+        r2.setVisionRating(5);
         r2.setHearingRating(5);
         r2.setCognitiveRating(3);
         r2.setSpeechRating(null);

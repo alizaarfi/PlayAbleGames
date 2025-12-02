@@ -5,10 +5,10 @@ import { games } from "./HomePage.jsx";
 
 function FavoritesPage() {
 
-    // ----- Access global favorites state and toggle function
+    //  Access global favorites state and toggle function
     const { favorites, toggleFavorite, loading } = useFavorites();
 
-    // ----- Filter the full games list to only those marked as favorites
+    //  Filter the full games list to only those marked as favorites
     const favoriteGames = games.filter((g) => favorites.includes(g.id));
 
     return (
