@@ -243,6 +243,9 @@ public class VoiceCommandService {
                 if (fullText.contains("communit")) return "community"; // handles "community" or "communities"
                 if (fullText.contains("favor") || fullText.contains("favour")) return "favourites"; // handles all variations
                 if (fullText.contains("account") || fullText.contains("profile")) return "my account";
+                if (fullText.contains("login") || fullText.contains("log in") || fullText.contains("sign in")) return "login";
+                if (fullText.contains("signup") || fullText.contains("sign up") || fullText.contains("register")) return "signup";
+
 
                 // For game pages like "go to minecraft page" or "open monument valley page"
                 // The target will already contain the game name from the regex capture
@@ -459,9 +462,19 @@ public class VoiceCommandService {
                 CommandType.NAVIGATE
         );
 
-    // For individual game pages - add this AFTER specific patterns but BEFORE the generic navigate pattern
+        // For individual game pages - add this AFTER specific patterns but BEFORE the generic navigate pattern
         commandPatterns.put(
                 Pattern.compile("(?:go to |open |navigate to )?(.+?)\\s+(?:game\\s+)?page"),
+                CommandType.NAVIGATE
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(?:log ?in|sign ?in|login)(?:\\s+page)?"),
+                CommandType.NAVIGATE
+        );
+
+        commandPatterns.put(
+                Pattern.compile("(?:go to |open |navigate to )?(?:sign ?up|signup|register|registration)(?:\\s+page)?"),
                 CommandType.NAVIGATE
         );
 
