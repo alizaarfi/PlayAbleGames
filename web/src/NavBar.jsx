@@ -91,6 +91,7 @@ function Navbar() {
                                 setTimeout(() => setProcessingState('idle'), 1500);
                             }, 100);
                         } else if (target === 'my account' || target === 'account' || target === 'profile') {
+                            navigate('/myaccount');
                             // You might need to create this route or handle differently
                             console.log("Navigate to account page");
                             setProcessingState('success');
