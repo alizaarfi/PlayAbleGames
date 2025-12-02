@@ -18,6 +18,7 @@ export default function SignupPage(){
     const [loading, setLoading]=useState(false);
     const[message,setMessage] = useState(null);
     const[error, setError]= useState(null);
+    const [showPassword, setShowPassword]= useState(false);
 
     // update form state when user types into input fields
     const handleChange = (e) =>{
@@ -130,12 +131,19 @@ export default function SignupPage(){
                     <div className="form-group">
                         <label>Password</label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             placeholder="••••••••"
                             value={form.password}
                             onChange={handleChange}
                         />
+                        <button
+                            type="button"
+                            className="show-hide-btn"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? "Hide" : "Show"}
+                        </button>
                     </div>
 
                     {error && <p className="error-msg">{error}</p>}
