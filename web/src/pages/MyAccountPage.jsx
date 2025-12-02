@@ -105,7 +105,7 @@ export default function MyAccountPage() {
         }
         try {
             const res = await fetch(`${API_BASE}/user/profile`, {
-                method: "PUT",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
@@ -403,6 +403,7 @@ export default function MyAccountPage() {
                                         <input
                                             type="email"
                                             value={profile.email}
+                                            readOnly
                                             onChange={(e) =>
                                                 setProfile({ ...profile, email: e.target.value })
                                             }

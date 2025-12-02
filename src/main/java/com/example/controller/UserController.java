@@ -81,8 +81,8 @@ public class UserController {
     @Secured(SecurityRule.IS_AUTHENTICATED)
     public HttpResponse<?> updateProfile(@Body UserProfileUpdateDTO updateDTO, Authentication authentication) {
         try {
-            String username = authentication.getName();
-            User user = userRepository.findByUsername(username)
+            String currentUsername = authentication.getName();
+            User user = userRepository.findByUsername(currentUsername)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             // Validate that new username is not taken (if changed)
@@ -92,16 +92,13 @@ public class UserController {
                 }
             }
 
-            // Validate that new email is not taken (if changed)
-            if (!user.getEmail().equals(updateDTO.getEmail())) {
-                if (userRepository.findByEmail(updateDTO.getEmail()).isPresent()) {
-                    return HttpResponse.badRequest(Map.of("error", "Email already in use"));
-                }
+            // Check if there are any actual changes
+            if (user.getUsername().equals(updateDTO.getUsername())) {
+                return HttpResponse.badRequest(Map.of("error", "No changes to save"));
             }
 
             // Update user
             user.setUsername(updateDTO.getUsername());
-            user.setEmail(updateDTO.getEmail());
             userRepository.update(user);
 
             return HttpResponse.ok(Map.of("message", "Profile updated successfully"));
