@@ -19,6 +19,9 @@ export default function MyAccountPage() {
 
     const [showEditProfile, setShowEditProfile] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
+    const [showDeleteAccount, setShowDeleteAccount]= useState(false);
+
+    //for change password
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -27,6 +30,14 @@ export default function MyAccountPage() {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    //for edit profile
+    const [profileError, setProfileError] = useState(null);
+    const [profileSuccess, setProfileSuccess] = useState(null);
+
+    //for detele account
+    const [deleteConfirmPassword, setDeleteConfirmPassword] = useState("");
+    const [showDeletePassword, setShowDeletePassword] = useState(false);
+    const [deleteError, setDeleteError] = useState(null);
 
     useEffect(() => {
         async function fetchProfile() {
@@ -64,7 +75,34 @@ export default function MyAccountPage() {
         window.location.href = "/";
     };
 
+    const validateProfileUpdate = () => {
+        if (!profile.username || !profile.email) {
+            return "Username and email are required.";
+        }
+
+        if (profile.username.length < 3) {
+            return "Username must be at least 3 characters long.";
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(profile.email)) {
+            return "Please enter a valid email address.";
+        }
+
+        return null;
+    };
+
     const handleSaveProfile = async () => {
+        setProfileError(null);
+        setProfileSuccess(null);
+
+        const validation = validateProfileUpdate();
+
+        if(validation){
+            setProfileError(validation);
+            return
+        }
         try {
             const res = await fetch(`${API_BASE}/user/profile`, {
                 method: "PUT",
@@ -76,13 +114,25 @@ export default function MyAccountPage() {
             });
 
             if (!res.ok) {
-                alert("Failed to update profile");
-            } else {
-                alert("Profile updated successfully");
-                setShowEditProfile(false);
+                let errorMessage = "Failed to update profile";
+                try {
+                    const data = await res.json();
+                    errorMessage = data.error || data.message || errorMessage;
+                } catch (e) {
+                    errorMessage= `Error: ${res.status} ${res.statusText}`;
+                }
+                setProfileError(errorMessage);
+                return;
+
             }
+            setProfileSuccess("Profile updated successfully!");
+            setTimeout(() => {
+                setProfileSuccess(null);
+                setShowEditProfile(false);
+            }, 2000);
         } catch (e) {
-            alert("Error updating profile");
+            console.error("Profile update error:", e);
+            setProfileError("Network error: Unable to connect to server");
         }
     };
 
@@ -168,6 +218,53 @@ export default function MyAccountPage() {
         return null;
     };
 
+    const handleDeleteAccount = async () => {
+        setDeleteError(null);
+
+        if (!deleteConfirmPassword) {
+            setDeleteError("Please enter your password to confirm account deletion.");
+            return;
+        }
+
+        const confirmText = window.prompt(
+            'This action cannot be undone. Type "DELETE" to confirm account deletion:'
+        );
+
+        if (confirmText !== "DELETE") {
+            setDeleteError("Account deletion cancelled or incorrect confirmation.");
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/user/delete-account`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ password: deleteConfirmPassword })
+            });
+
+            if (!res.ok) {
+                let errorMessage = "Failed to delete account.";
+                try {
+                    const data = await res.json();
+                    errorMessage = data.error || data.message || errorMessage;
+                } catch (e) {
+                    errorMessage = `Error: ${res.status} ${res.statusText}`;
+                }
+                setDeleteError(errorMessage);
+                return;
+            }
+
+            alert("Account deleted successfully. You will be logged out.");
+            await logout();
+            window.location.href = "/";
+        } catch (e) {
+            console.error("Delete account error:", e);
+            setDeleteError("Network error: Unable to connect to server");
+        }
+    };
 
     if (loading) {
         return (
@@ -255,6 +352,9 @@ export default function MyAccountPage() {
                                     onClick={() => {
                                         setShowEditProfile(!showEditProfile);
                                         setShowChangePassword(false);
+                                        setShowDeleteAccount(false);
+                                        setProfileError(null);
+                                        setProfileSuccess(null);
                                     }}
                                 >
                                     Edit Profile
@@ -263,6 +363,32 @@ export default function MyAccountPage() {
                                 {showEditProfile && (
                                     <div className="collapsible-section">
                                         <h4>Edit Profile</h4>
+
+                                        {profileError && (
+                                            <div className="error-message" style={{
+                                                color: '#ff4444',
+                                                backgroundColor: '#ffe6e6',
+                                                padding: '10px',
+                                                borderRadius: '5px',
+                                                marginBottom: '15px',
+                                                border: '1px solid #ff4444'
+                                            }}>
+                                                {profileError}
+                                            </div>
+                                        )}
+
+                                        {profileSuccess && (
+                                            <div className="success-message" style={{
+                                                color: '#00aa00',
+                                                backgroundColor: '#e6ffe6',
+                                                padding: '10px',
+                                                borderRadius: '5px',
+                                                marginBottom: '15px',
+                                                border: '1px solid #00aa00'
+                                            }}>
+                                                {profileSuccess}
+                                            </div>
+                                        )}
 
                                         <label>Username</label>
                                         <input
@@ -373,6 +499,83 @@ export default function MyAccountPage() {
                                 >
                                     Sign Out
                                 </button>
+
+                                <button
+                                    className="action-button delete-account"
+                                    style={{
+                                        backgroundColor: '#ff4444',
+                                        color: 'white'
+                                    }}
+                                    onClick={() => {
+                                        setShowDeleteAccount(!showDeleteAccount);
+                                        setShowEditProfile(false);
+                                        setShowChangePassword(false);
+                                        setDeleteError(null);
+                                        setDeleteConfirmPassword("");
+                                    }}
+                                >
+                                    Delete Account
+                                </button>
+
+                                {showDeleteAccount && (
+                                    <div className="collapsible-section" style={{
+                                        borderLeft: '3px solid #ff4444'
+                                    }}>
+                                        <h4 style={{ color: '#ff4444' }}>⚠️ Delete Account</h4>
+
+                                        <p style={{
+                                            backgroundColor: '#fff3cd',
+                                            padding: '10px',
+                                            borderRadius: '5px',
+                                            border: '1px solid #ffc107',
+                                            marginBottom: '15px'
+                                        }}>
+                                            <strong>Warning:</strong> This action is permanent and cannot be undone.
+                                            All your data, favorites, and reviews will be permanently deleted.
+                                        </p>
+
+                                        {deleteError && (
+                                            <div className="error-message" style={{
+                                                color: '#ff4444',
+                                                backgroundColor: '#ffe6e6',
+                                                padding: '10px',
+                                                borderRadius: '5px',
+                                                marginBottom: '15px',
+                                                border: '1px solid #ff4444'
+                                            }}>
+                                                {deleteError}
+                                            </div>
+                                        )}
+
+                                        <label>Enter your password to confirm</label>
+                                        <div className="password-input">
+                                            <input
+                                                type={showDeletePassword ? "text" : "password"}
+                                                value={deleteConfirmPassword}
+                                                onChange={(e) => setDeleteConfirmPassword(e.target.value)}
+                                                placeholder="Enter your current password"
+                                            />
+                                            <button
+                                                type="button"
+                                                className="show-hide-btn"
+                                                onClick={() => setShowDeletePassword(!showDeletePassword)}
+                                            >
+                                                {showDeletePassword ? "Hide" : "Show"}
+                                            </button>
+                                        </div>
+
+                                        <button
+                                            className="save-button"
+                                            style={{
+                                                backgroundColor: '#ff4444',
+                                                border: 'none'
+                                            }}
+                                            onClick={handleDeleteAccount}
+                                        >
+                                            Permanently Delete My Account
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

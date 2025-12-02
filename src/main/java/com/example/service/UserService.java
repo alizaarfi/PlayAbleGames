@@ -123,5 +123,14 @@ public class UserService {
         userRepository.updatePassword(userID, encrypted);
     }
 
+    public void verifyPassword(Long userId, String rawPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!BCrypt.checkpw(rawPassword, user.getPassword())) {
+            throw new RuntimeException("Incorrect password");
+        }
+    }
+
 
 }

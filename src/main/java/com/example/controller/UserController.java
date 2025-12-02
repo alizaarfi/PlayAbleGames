@@ -1,8 +1,10 @@
 package com.example.controller;
 
 import com.example.api.ChangePasswordRequest;
+import com.example.api.UserProfileUpdateDTO;
 import com.example.domain.User;
 import com.example.service.UserService;
+import com.example.repository.UserRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -72,4 +76,64 @@ public class UserController {
             return HttpResponse.badRequest(Map.of("error", e.getMessage()));
         }
     }
+
+    @Post("/profile")
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    public HttpResponse<?> updateProfile(@Body UserProfileUpdateDTO updateDTO, Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Validate that new username is not taken (if changed)
+            if (!user.getUsername().equals(updateDTO.getUsername())) {
+                if (userRepository.findByUsername(updateDTO.getUsername()).isPresent()) {
+                    return HttpResponse.badRequest(Map.of("error", "Username already taken"));
+                }
+            }
+
+            // Validate that new email is not taken (if changed)
+            if (!user.getEmail().equals(updateDTO.getEmail())) {
+                if (userRepository.findByEmail(updateDTO.getEmail()).isPresent()) {
+                    return HttpResponse.badRequest(Map.of("error", "Email already in use"));
+                }
+            }
+
+            // Update user
+            user.setUsername(updateDTO.getUsername());
+            user.setEmail(updateDTO.getEmail());
+            userRepository.update(user);
+
+            return HttpResponse.ok(Map.of("message", "Profile updated successfully"));
+        } catch (Exception e) {
+            return HttpResponse.serverError(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @Delete("/delete-account")
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    public HttpResponse<?> deleteAccount(@Body Map<String, String> request, Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            String password = request.get("password");
+
+            if (password == null || password.isEmpty()) {
+                return HttpResponse.badRequest(Map.of("error", "Password is required"));
+            }
+
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            //verifying password using UserService
+            userService.verifyPassword(user.getUserID(), password);
+
+            // Delete user (this will cascade delete related data if configured)
+            userRepository.delete(user);
+
+            return HttpResponse.ok(Map.of("message", "Account deleted successfully"));
+        } catch (Exception e) {
+            return HttpResponse.serverError(Map.of("error", "Failed to delete account: " + e.getMessage()));
+        }
+    }
+
 }
