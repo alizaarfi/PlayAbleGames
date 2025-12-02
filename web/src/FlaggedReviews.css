@@ -1,71 +1,168 @@
-.reviews-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 30px;
+
+.reviews-container {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 0 2rem;
 }
 
-.no-reviews{
+.no-reviews {
     text-align: center;
-    margin-top: 50px;
-    font-size: 18px;
+    margin-top: 3rem;
+    font-size: 1.1rem;
+    color: var(--text-secondary, #666666);
 }
 
-.reviews-box{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    background-color:#acacac;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    width: 80%;
-    padding: 20px;
+.reviews-box {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
 }
 
-.ratings{
+.reviews-box:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.ratings {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 10px;
+    gap: 1rem;
+    margin-top: 0.75rem;
 }
 
-.rating-text{
-    padding: 5px;
+.rating-text {
+    padding: 0.4rem 0.8rem;
+    background: var(--hover-bg, #f1f3f5);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: var(--text-primary, #1a1a1a);
+    font-weight: 500;
 }
 
-.reviewText{
-    margin-top: 15px;
-    border-top: black 1px solid;
-    padding : 5px;
-    padding-right: 10px;
-    padding-left: 10px;
+.reviewText {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color, #e0e0e0);
+    line-height: 1.6;
+    color: var(--text-primary, #1a1a1a);
 }
 
-.options-box{
+.options-box {
     display: flex;
     flex-direction: column;
-    margin-top: 15px;
-    align-items:center;
-    width: 90%;
+    margin-top: 1rem;
+    align-items: center;
+    width: 100%;
+    gap: 0.75rem;
 }
 
-.button-box{
+.button-box {
     display: flex;
     flex-direction: row;
-    margin-top: 10px;
-    justify-content: space-between;
-    align-items:center;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    flex-wrap: wrap;
+}
+
+.button-box button {
+    background-color: var(--primary-color, #5856d6);
+    color: white;
+    border: none;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.button-box button:hover {
+    background-color: var(--primary-hover, #4745c7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(88, 86, 214, 0.3);
+}
+
+.button-box button:active {
+    transform: translateY(0);
 }
 
 .black-text {
-    color: black;
+    color: var(--text-primary, #1a1a1a);
 }
 
-.white-text{
+.white-text {
     color: white;
+}
+
+/* Dark Mode Support */
+.dark-mode .reviews-box {
+    background: var(--dark-card-bg, #2a2a2a);
+    border-color: var(--dark-border, #444444);
+}
+
+.dark-mode .reviews-box:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .rating-text {
+    background: var(--dark-card-bg, #333333);
+    color: var(--dark-text, #e0e0e0);
+}
+
+.dark-mode .reviewText {
+    border-top-color: var(--dark-border, #444444);
+    color: var(--dark-text, #e0e0e0);
+}
+
+.dark-mode .black-text {
+    color: var(--dark-text, #e0e0e0);
+}
+
+.dark-mode .no-reviews {
+    color: var(--dark-text-secondary, #b0b0b0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .reviews-container {
+        padding: 0 1rem;
+        margin: 2rem auto;
+    }
+
+    .reviews-box {
+        padding: 1.25rem;
+    }
+
+    .button-box {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .button-box button {
+        width: 100%;
+    }
+
+    .ratings {
+        gap: 0.75rem;
+    }
+}
+
+.button-box button:focus {
+    outline: 3px solid var(--primary-color, #5856d6);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reviews-box,
+    .button-box button {
+        transition: none !important;
+    }
 }
