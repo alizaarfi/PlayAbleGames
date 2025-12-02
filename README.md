@@ -77,7 +77,41 @@ Requirements can be found [here](https://git.cardiff.ac.uk/c23038311/group-8-acc
 - Users dont need to use voice commands to register or login to the application.
 
 ## Usage
+- **Register and Login**: Register at `/signup` and login at `/login`.
+- **Browse games**: Navigate to the home page to explore available games.
+- **Search and filter**: Use the search bar and filters to find specific games.
+- **Game details**: Click on a game to view its details, reviews, and ratings.
+- **Add reviews**: After playing a game, leave a review and rating.
+- **Use voice commands**: Say commands like `Go to accessability page`, `Go to home page` and `scroll down` to navigate. _(Make sure your microphone is enabled on your browser)_
+- **Admin functions**: Access the admin panel at `/admin` for user and review management.
+- **Community forums**: Visit `/community` to participate in discussions.
+- **Adjust settings**: Go to `/settings` to customize your experience.
+- **Accessibility information and feedback**: Visit `/accessability` for resources and to provide feedback.
+- **Favorite games**: Add games to your favorites list for quick access.
 
+
+## Testing
+
+- **Backend Testing**: Run backend tests using the command:
+```bash
+./gradlew test
+```
+- **Frontend Testing**: Run frontend tests using the command:
+```bash
+cd web 
+npm test
+```
+
+## Technologies Stack
+
+For the tech stack used in this project, please find it in the [tech stack wiki page](https://git.cardiff.ac.uk/c23038311/group-8-accessible-app-store/-/wikis/our-tech-stack).
+
+## Contributing
+
+- Create an issue on the Issue Board to discuss your proposed changes.
+- Create a new branch for your feature or bug fix.
+- Make your changes, with tests, and commit them with clear messages.
+- Wait for review and approval before merging into the main branch.
 
 ## Support
 
@@ -112,3 +146,5 @@ This project was developed by:
 ## Project Status
 
 This project was developed as part of Commercial Frameworks, Languages and Tools at Cardiff University, 2025.
+
+Version [number] | Status: MVP Complete
