@@ -113,7 +113,7 @@
 }
 
 .dark-mode .rating-text {
-    background: var(--dark-hover-bg, #333333);
+    background: var(--dark-card-bg, #333333);
     color: var(--dark-text, #e0e0e0);
 }
 
