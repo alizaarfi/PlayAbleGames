@@ -47,10 +47,10 @@ Before installing, ensure you have the following:
 
 
 3. **Backend Setup**
-    - In IntelliJ IDEA, open the cloned project
-    - Navigate to gradle, on the right side bar
-    - Press the run button in application file to start the backend server
- ![img.png](img.png)
+```bash
+    ./gradlew run
+```
+
 
 
 4. **Frontend Setup**
