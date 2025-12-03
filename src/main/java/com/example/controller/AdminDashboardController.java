@@ -21,7 +21,6 @@ import java.util.Map;
  */
 
  @Controller("/api")
-@Secured(SecurityRule.IS_ANONYMOUS) //admin test - no security
 public class AdminDashboardController {
 
     private final AdminDashboardRepository repository;
@@ -30,7 +29,6 @@ public class AdminDashboardController {
         this.repository = repository;
     }
 
-    @Secured("ADMIN")
     /**
      * HTTP GET endpoint at /api/admin
      *
@@ -49,7 +47,7 @@ public class AdminDashboardController {
      */
 
     @Get("/admin")
-    public Map<String, Object> getDashboardData(Authentication authentication) {
+    public Map<String, Object> getDashboardData() {
         Map<String, Object> dashboard = new HashMap<>();
         dashboard.put("totalFlaggedItems", repository.getTotalFlagged());
         dashboard.put("totalUsers", repository.getTotalUsers());
