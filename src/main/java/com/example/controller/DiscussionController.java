@@ -68,8 +68,6 @@ public class DiscussionController {
             @Body CreateDiscussionRequest request,
             Authentication authentication) {
 
-//        // Get user ID from authentication
-//        Long userId = Long.parseLong(authentication.getName()); // Adjust based on your User setup
 
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).orElseThrow();
