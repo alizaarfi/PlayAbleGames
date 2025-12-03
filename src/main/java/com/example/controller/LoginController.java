@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.api.LoginRequest;
 import com.example.api.LoginResponse;
+import com.example.domain.User;
 import com.example.service.UserService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
@@ -13,6 +14,8 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.security.token.jwt.generator.JwtTokenGenerator;
 import jakarta.inject.Inject;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,9 +29,9 @@ import java.util.Optional;
 public class LoginController {
 
     private final UserService userService;
-    @Inject
     private final JwtTokenGenerator jwtTokenGenerator;
 
+    @Inject
     public LoginController(UserService userService, JwtTokenGenerator jwtTokenGenerator) {
         this.userService = userService;
         this.jwtTokenGenerator=jwtTokenGenerator;
@@ -41,48 +44,70 @@ public class LoginController {
      */
     @Post("/login")
     public HttpResponse<?> login(@Body LoginRequest loginRequest) {
+
+        System.out.println("=== LOGIN ATTEMPT ===");
+        System.out.println("Username: " + loginRequest.getUsername());
+
+        //validation
+        if (loginRequest == null || loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
+            System.out.println("ERROR: Missing username or password");
+            return HttpResponse.badRequest(
+                    new LoginResponse(null, "Missing username or password", null));
+        }
+
         try {
-            //authenticate user credentials
-            var user = userService.authenticate(
+            //Authenticate user controller -> service
+            Optional<User> userOpt = userService.authenticate(
                     loginRequest.getUsername(),
-                    loginRequest.getPassword());
-            if (user.isEmpty()) {
-                //return 400 bad request
-                return HttpResponse.badRequest(new LoginResponse(null, "Invalid username or password. Please try again.", null));
-            }
+                    loginRequest.getPassword()
+            );
 
-            //get the user's roles from database
-            java.util.List<String> roles = userService.getUserRoles(user.get().getUserID());
-
-            // Check if user has any roles
-            if (roles.isEmpty()) {
+            if (userOpt.isEmpty()) {
+                System.out.println("ERROR: User authentication failed");
                 return HttpResponse.badRequest(
-                        new LoginResponse(null, "User has no assigned roles.", null));
+                        new LoginResponse(null, "Invalid username or password", null));
+            }
+            User user = userOpt.get();
+            System.out.println("User authenticated: " + user.getUsername() + " (ID: " + user.getUserID() + ")");
+
+            //get user roles from database (controller -> service-> repository)
+            List<String> roles = userService.getUserRoles(user.getUserID());
+            System.out.println("User roles: " + roles);
+
+            if (roles.isEmpty()) {
+                System.out.println("ERROR: User has no roles");
+                return HttpResponse.badRequest(
+                        new LoginResponse(null, "User has no assigned roles", null));
             }
 
-            // If user has ADMIN role, they're an admin. else use first role
-            String primaryRole = roles.contains("ADMIN") ? "ADMIN" : roles.get(0);
+            // determine primary role (Admin takes precedence)
+            String primaryRole = roles.contains("ADMIN") ? "ADMIN" : "BASIC";
+            System.out.println("Primary role: " + primaryRole);
 
-
-            // Create JWT token with username and roles
-            java.util.Map<String, Object> claims = new java.util.HashMap<>();
-            claims.put("sub", loginRequest.getUsername());
-            claims.put("userId", user.get().getUserID());
+            //generate JWT token
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("sub", user.getUsername());
+            claims.put("userId", user.getUserID());
             claims.put("roles", roles);
 
             Optional<String> tokenOpt = jwtTokenGenerator.generateToken(claims);
 
             if (tokenOpt.isEmpty()) {
+                System.out.println("ERROR: Token generation failed");
                 return HttpResponse.serverError("Token generation failed");
             }
 
-            // Return token, message, AND role
-            return HttpResponse.ok(
-                    new LoginResponse(tokenOpt.get(), "Login Successful", primaryRole));
+            System.out.println("Login successful! Token generated.");
 
+            //return response with token and role
+            return HttpResponse.ok(new LoginResponse(tokenOpt.get(), "Login Successful", primaryRole));
         } catch (RuntimeException e) {
+            System.out.println("ERROR: Exception during login: " + e.getMessage());
+            e.printStackTrace();
+
             return HttpResponse.badRequest(
-                    new LoginResponse(null, "Invalid username or password. Please try again.", null));
+                    new LoginResponse(null, "Invalid username or password", null)
+            );
         }
     }
 

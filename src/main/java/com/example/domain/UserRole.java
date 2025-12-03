@@ -18,9 +18,15 @@ public class UserRole {
     private Long userId;
 
     @MappedProperty("RoleID")
-    private Long roleId;
+    private Integer roleId;
+
+    public UserRole() {}
 
     public Long getId() { return id; }
     public Long getUserId() { return userId; }
-    public Long getRoleId() { return roleId; }
+    public Integer getRoleId() { return roleId; }
+
+    public void setId(Long id) { this.id = id; }
+    public void setUserId(Long userId) { this.userId = userId; }
+    public void setRoleId(Integer roleId) { this.roleId = roleId; }
 }

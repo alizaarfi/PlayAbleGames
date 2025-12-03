@@ -7,10 +7,10 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const [role, setRole]= useState(null);
 
-
     useEffect(() => {
         const savedToken = localStorage.getItem("token");
         const savedRole = localStorage.getItem("role");
+
         if (savedToken) {
             setToken(savedToken);
             setRole(savedRole);
@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
         setLoading(false);
     }, []);
 
-    const login = (newToken, newRole) => {
+    const login= (newToken, newRole)=> {
         setToken(newToken);
         setRole(newRole);
         localStorage.setItem("token", newToken);
@@ -43,15 +43,23 @@ export function AuthProvider({ children }) {
             localStorage.removeItem("redirectAfterLogin"); // cleaning up redirect
             setToken(null);
             setRole(null);
+
         }
     };
 
     const isAdmin = () =>{
-        return role === "ADMIN"
+        return role === "ADMIN"  // check role
     }
 
     return (
-        <AuthContext.Provider value={{ token, role, loading, isAuthenticated: !!token, login, logout }}>
+        <AuthContext.Provider value={{
+            token,
+            role,
+            loading,
+            isAuthenticated: !!token,
+            isAdmin,
+            login,
+            logout }}>
             {children}
         </AuthContext.Provider>
     );

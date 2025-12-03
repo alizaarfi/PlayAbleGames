@@ -52,6 +52,7 @@ export async function login(credentials){
         return{
             token: data.token,
             role: data.role,
+            username: data.username,
             message: data.message
         };
     } catch (err){

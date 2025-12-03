@@ -9,5 +9,5 @@ import java.util.List;
 
 @JdbcRepository(dialect = Dialect.MYSQL)
 public interface UserRoleRepository extends CrudRepository<UserRole, Long> {
-    List<UserRole> findByUserId(Long userID);
+    List<UserRole> findByUserId(Long userId);
 }

@@ -60,7 +60,7 @@ export default function LoginPage() {
             if (result.error) {
                 setError(result.error);
             } else {
-                //auth context
+                //auth context pass token and role as separate parameters
                 saveToken(result.token, result.role);
 
                 //redirect after login

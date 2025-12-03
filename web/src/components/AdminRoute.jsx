@@ -8,7 +8,7 @@ import { Navigate } from "react-router-dom";
  * Redirects to home if authenticated but not admin
  */
 function AdminRoute({ children }) {
-    const { token, role } = useAuth();
+    const { token, role, loading} = useAuth();
 
     // Wait for auth to load
     if (loading) {

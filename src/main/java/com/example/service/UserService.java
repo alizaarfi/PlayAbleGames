@@ -63,11 +63,14 @@ public class UserService {
         u.setEmail(email);
         u.setPassword(encrypted);
         u.setEnabled(true);
-//        User savedUser = userRepository.save(u);
-//
-//        insertUserRole(savedUser.getUserID(), 2);
+        User savedUser = userRepository.save(u);
 
-        return userRepository.save(u);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(savedUser.getUserID());
+        userRole.setRoleId(2); // basic role as admin wouldnt signup
+        userRoleRepository.save(userRole);
+
+        return savedUser;
     }
 
     /**
@@ -106,7 +109,7 @@ public class UserService {
         boolean matches = BCrypt.checkpw(rawPassword, user.get().getPassword());
 
         if (!matches){
-            throw new RuntimeException("Invalid password");
+            return Optional.empty();
         }
         return user;
     }
@@ -143,11 +146,11 @@ public class UserService {
 
 
     //get all role names for a user
-    public java.util.List<String> getUserRoles(Long userID) {
-        java.util.List<UserRole> userRoles = userRoleRepository.findByUserId(userID);
+    public java.util.List<String> getUserRoles(Long UserID) {
+        java.util.List<UserRole> userRoles = userRoleRepository.findByUserId(UserID);
 
         return userRoles.stream()
-                .map(ur -> roleRepository.findById(ur.getRoleId()))
+                .map(ur -> roleRepository.findById(ur.getRoleId().longValue()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(Role::getName)
