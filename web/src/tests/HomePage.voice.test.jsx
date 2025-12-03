@@ -26,6 +26,20 @@ describe('HomePage - Voice Command Event Listeners', () => {
     beforeEach(() => {
         localStorage.clear();
         jest.clearAllMocks();
+
+       // added this as was missing fetch globally here
+        global.fetch = jest.fn((url) => {
+            if (url.includes('/api/favorites')) {
+                return Promise.resolve({
+                    ok: true,
+                    json: async () => ([]),
+                });
+            }
+            return Promise.resolve({
+                ok: true,
+                json: async () => ({}),
+            });
+        });
     });
 
     test('SEARCH voice command updates search input', async () => {
