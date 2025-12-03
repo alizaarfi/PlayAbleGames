@@ -51,9 +51,9 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                         {/* AdminDashboard */}
                         <Route path="/admin" element={
-                            <AdminRoute>
-                            <AdminDashboard />
-                            </AdminRoute>} />
+                            <AdminRoute><AdminDashboard />
+                            </AdminRoute>
+                        } />
 
                         {/* Flagged Reviews Page */}
                         <Route path="/flaggedReviews" element={

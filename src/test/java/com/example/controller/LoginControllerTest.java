@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,9 +37,19 @@ class LoginControllerTest {
         req.setUsername("user");
         req.setPassword("Password1");
 
-        when(userService.authenticate("user", "Password1"))
-                .thenReturn(Optional.of(new com.example.domain.User()));
+        // Mock user object with ID and username
+        com.example.domain.User mockUser = new com.example.domain.User();
+        mockUser.setUserID(1L);
+        mockUser.setUsername("user");
 
+        when(userService.authenticate("user", "Password1"))
+                .thenReturn(Optional.of(mockUser));
+
+        // Mock user roles
+        when(userService.getUserRoles(1L))
+                .thenReturn(List.of("BASIC"));
+
+        // Mock token generation
         when(jwtTokenGenerator.generateToken(anyMap()))
                 .thenReturn(Optional.of("mocktoken"));
 
@@ -46,8 +57,10 @@ class LoginControllerTest {
 
         assertEquals(200, response.getStatus().getCode());
         LoginResponse body = (LoginResponse) response.getBody().get();
+
         assertEquals("mocktoken", body.getToken());
         assertEquals("Login Successful", body.getMessage());
+        assertEquals("BASIC", body.getRole());
     }
 
     @Test

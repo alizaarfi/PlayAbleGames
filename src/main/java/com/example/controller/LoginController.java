@@ -49,10 +49,12 @@ public class LoginController {
         System.out.println("Username: " + loginRequest.getUsername());
 
         //validation
-        if (loginRequest == null || loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
+        if (loginRequest == null ||
+                loginRequest.getUsername() == null || loginRequest.getUsername().trim().isEmpty() ||
+                loginRequest.getPassword() == null || loginRequest.getPassword().trim().isEmpty()) {
             System.out.println("ERROR: Missing username or password");
             return HttpResponse.badRequest(
-                    new LoginResponse(null, "Missing username or password", null));
+                    new LoginResponse(null, "Invalid username or password. Please try again.", null));
         }
 
         try {
@@ -65,7 +67,7 @@ public class LoginController {
             if (userOpt.isEmpty()) {
                 System.out.println("ERROR: User authentication failed");
                 return HttpResponse.badRequest(
-                        new LoginResponse(null, "Invalid username or password", null));
+                        new LoginResponse(null, "Invalid username or password. Please try again.", null));
             }
             User user = userOpt.get();
             System.out.println("User authenticated: " + user.getUsername() + " (ID: " + user.getUserID() + ")");
@@ -106,7 +108,7 @@ public class LoginController {
             e.printStackTrace();
 
             return HttpResponse.badRequest(
-                    new LoginResponse(null, "Invalid username or password", null)
+                    new LoginResponse(null, "Invalid username or password. Please try again.", null)
             );
         }
     }
