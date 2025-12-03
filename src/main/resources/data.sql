@@ -6,7 +6,7 @@ VALUES ('BASIC');
 
 -- -- populating the users table
 INSERT INTO users (Username, Email, EncryptedPassword)
-VALUES ( 'admin', 'admin@email.com', '$2a$10$Q7DZ9uZBV0o4JuHmTh7xz.XPllXgEuIzvJRPAahDZSxOo2Gf0mb.O');
+VALUES ( 'admin', 'admin@email.com', '$2a$12$rY7fWHnCvm/hzNIqlQv7LOfsi0mgGa06acOdUIvSkh27SFjjoaFPG');
 INSERT INTO users (Username, Email, EncryptedPassword)
 VALUES ( 'user1', 'user1@email.com', '$2a$10$JA7wAHlGmCXoTFkD9rE9h.s3gCGE2f.M37tFxdRdaRh4Hp0NTs2Oe');
 INSERT INTO users ( Username, Email, EncryptedPassword)
@@ -14,11 +14,6 @@ VALUES ( 'user2', 'user2@email.com', '$2a$10$kvTzFIJ4wKhe8A2NuLbR.uZWe.GX4p.A76E
 INSERT INTO users ( Username, Email, EncryptedPassword)
 VALUES ( 'user3', 'user3@email.com', '$2a$10$IXw73mEWdT1OlaBWO6H9BeKNiKTYU3bo7SjkjO9pbbKpoR7kxVHeG');
 
--- -- assigning the ADMIN role to the admin user]
-insert into user_roles(userid, roleid)  values (1,1);
-insert into user_roles(userid, roleid)  values (2,2);
-insert into user_roles(userid, roleid)  values (3,2);
-insert into user_roles(userid, roleid)  values (4,2);
 
 
 UPDATE user_roles

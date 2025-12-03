@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "./hooks/AuthProvider.jsx";
 import "./style.css";
 import "./IndividualUser.css"
 import "./FlaggedReviews.css"
@@ -8,6 +9,7 @@ const API_BASE = "http://localhost:8081/api";
 
 export default function IndividualUser(){
 
+    const { token } = useAuth();
     const { userId } = useParams();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -29,6 +31,10 @@ export default function IndividualUser(){
             try {
                 const res = await fetch(`${API_BASE}/users/${userId}`, {
                     signal: controller.signal,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 });
 
                 if (!res.ok) throw new Error("Failed to fetch user data.");
@@ -70,12 +76,16 @@ export default function IndividualUser(){
 
         fetchUserData();
         return () => controller.abort();
-    }, [userId]);
+    }, [userId, token]);
 
     const banUser = async (userId) => {
         try {
             const res = await fetch(`${API_BASE}/users/${userId}/ban`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
             if (!res.ok) throw new Error("Failed to ban user.");
             alert("User has been banned successfully.");

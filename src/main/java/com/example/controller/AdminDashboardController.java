@@ -47,6 +47,7 @@ public class AdminDashboardController {
      */
 
     @Get("/admin")
+    @Secured("ADMIN")
     public Map<String, Object> getDashboardData() {
         Map<String, Object> dashboard = new HashMap<>();
         dashboard.put("totalFlaggedItems", repository.getTotalFlagged());

@@ -20,7 +20,6 @@ import java.util.*;
  */
 
 @Controller("/api")
-@Secured(SecurityRule.IS_ANONYMOUS) //admin test - no security
 public class FlaggedReviewsController {
 
     private final FlaggedReviewsRepository repository;
@@ -38,6 +37,7 @@ public class FlaggedReviewsController {
      */
 
     @Get("/flaggedReviews")
+    @Secured("ADMIN")
     public Map<String, Object> getFlaggedReviews() {
         List<Map<String, Object>> reviews = repository.getFlaggedReviews();
 
@@ -56,6 +56,7 @@ public class FlaggedReviewsController {
      */
 
     @Put("/reviews/{reviewId}/accept")
+    @Secured("ADMIN")
     public Map<String, Object> acceptReview(@PathVariable int reviewId) {
         boolean success = repository.acceptReview(reviewId);
 
@@ -81,6 +82,7 @@ public class FlaggedReviewsController {
      */
 
     @Put("/reviews/{reviewId}/decline")
+    @Secured("ADMIN")
     public Map<String, Object> declineReview(@PathVariable int reviewId) {
         boolean success = repository.declineReview(reviewId);
 

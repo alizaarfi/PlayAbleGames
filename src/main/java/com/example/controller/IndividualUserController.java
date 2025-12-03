@@ -21,7 +21,6 @@ import java.util.*;
  */
 
 @Controller("/api")
-@Secured(SecurityRule.IS_ANONYMOUS) //admin test - no security
 public class IndividualUserController {
 
     private final IndividualUserRepository repository;
@@ -39,6 +38,7 @@ public class IndividualUserController {
      */
 
     @Get("/users/{userId}")
+    @Secured("ADMIN")
     public HttpResponse<Map<String, Object>> getUserById(@PathVariable int userId) {
         Map<String, Object> userData = repository.getUserWithReviews(userId);
 
@@ -62,6 +62,7 @@ public class IndividualUserController {
      */
 
     @Post("/users/{userId}/ban")
+    @Secured("ADMIN")
     public HttpResponse<Map<String, Object>> banUser(@PathVariable int userId) {
         boolean success = repository.banUser(userId);
 
@@ -73,7 +74,7 @@ public class IndividualUserController {
         } else {
             response.put("error", "Failed to ban user");
             response.put("userId", userId);
-            return HttpResponse.serverError(response);  // Changed this line
+            return HttpResponse.serverError(response);
         }
     }
 }

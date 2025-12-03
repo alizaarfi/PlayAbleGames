@@ -18,7 +18,6 @@ import java.util.*;
  */
 
 @Controller("/api")
-@Secured(SecurityRule.IS_ANONYMOUS) //admin test - no security
 public class AllUsersController {
 
     private final AllUsersRepository repository;
@@ -45,6 +44,7 @@ public class AllUsersController {
      */
 
     @Get("/users")
+    @Secured("ADMIN")
     public Map<String, Object> getAllUsers() {
         List<Map<String, Object>> users = repository.getAllUsers();
 
