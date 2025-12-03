@@ -276,7 +276,7 @@ export default function GamePage() {
                     : transcription;
 
                 setReviewText(newText.slice(0, maxChars));
-                console.log("✅ Accumulated text:", transcription);
+                console.log("Accumulated text:", transcription);
             }
 
             // Stop accumulating if user says a recognized command
