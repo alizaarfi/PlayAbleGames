@@ -12,6 +12,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * BlogRepositoryTest tests the repo's operations t :
+ */
+
 @MicronautTest
 class BlogRepositoryTest {
 
@@ -20,7 +24,7 @@ class BlogRepositoryTest {
 
     @BeforeEach
     void setup() {
-        // Clean database before each test
+        // makes sure to clean database before each test
         blogRepository.deleteAll();
     }
 
@@ -33,11 +37,9 @@ class BlogRepositoryTest {
         blog.setBlogDescription("Helpful guide on when dark mode helps");
         blog.setReadTime(5);
 
-        // Save blog
         Blog savedBlog = blogRepository.save(blog);
         assertNotNull(savedBlog.getBlogId());
 
-        // Find by ID
         Optional<Blog> retrieved = blogRepository.findById(savedBlog.getBlogId());
         assertTrue(retrieved.isPresent());
         assertEquals("Dark Mode Tips", retrieved.get().getBlogTitle());
@@ -66,7 +68,7 @@ class BlogRepositoryTest {
 
         List<Blog> blogs = blogRepository.findAllOrderByDateCreatedDesc();
 
-        // Assert: latest blog first
+        // now asset to ensure the latest created blog is first
         assertEquals(2, blogs.size());
         assertEquals("Blog2: xbox future haptic feedback", blogs.get(1).getBlogTitle());
         assertEquals("Blog1: New ps4 accessibility features", blogs.get(0).getBlogTitle());

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DiscussionTest tests the Discussion entity's behaviour, getters, setters
- * Does: the constructor, fields, handling for null strings, empty strings, long strings, special characters and for the username field behaviour
+ * Tests: the constructor, fields, handling for null strings, empty strings, long strings, special characters and for the username field behaviour
  * Keeps with Arrange, Act, Assert pattern/structure to testing.
  */
 public class DiscussionTest {

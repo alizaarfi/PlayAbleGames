@@ -13,6 +13,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * BlogControllerTest tests the controllers REST endpoints, following similar structure
+ * to DiscussionController and FAQController.
+ */
+
 @MicronautTest
 class BlogControllerTest {
 
@@ -37,7 +42,8 @@ class BlogControllerTest {
         blog1.setReadTime(5);
         blogRepository.save(blog1);
 
-        Thread.sleep(10); // Ensure different timestamp
+        // Ensure different timestamp
+        Thread.sleep(10);
         Blog blog2 = new Blog();
         blog2.setBlogTitle("Blog2: xbox future haptic feedback");
         blog2.setDateCreated(LocalDateTime.now());
@@ -66,14 +72,12 @@ class BlogControllerTest {
         blog.setReadTime(5);
         Blog saved = blogRepository.save(blog);
 
-
-
-        // Valid ID
+        // Do for ValidID
         HttpResponse<Blog> response = blogController.getBlog(saved.getBlogId());
         assertEquals(200, response.getStatus().getCode());
         assertEquals("Single Blog", response.body().getBlogTitle());
 
-        // Invalid ID
+        // Do for Invalid ID
         HttpResponse<Blog> notFound = blogController.getBlog(999L);
         assertEquals(404, notFound.getStatus().getCode());
     }
