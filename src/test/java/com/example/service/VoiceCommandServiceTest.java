@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Fuzzy matching: Test common misheard phrases
  * - Edge cases: Test boundary conditions and unusual inputs
  * - Target assignment: Test correct target extraction for each command type
+ * Tests the various commands e.g navigate, sort, filter etc.
  *
  * Note: Audio processing tests require a valid Vosk model
  * These tests focus on the parseCommand method which doesn't require audio

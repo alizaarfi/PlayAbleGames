@@ -160,6 +160,7 @@ class VoiceCommandControllerTest {
         @Test
         @DisplayName("Should return BAD_REQUEST for null audio data")
         void testProcessAudio_NullAudio_ReturnsBadRequest() {
+
             assertThrows(HttpClientResponseException.class, () -> {
                 client.toBlocking().exchange(
                         HttpRequest.POST("/api/v1/transcription/process", null)
@@ -176,12 +177,13 @@ class VoiceCommandControllerTest {
             byte[] emptyAudio = new byte[0];
 
             try {
-                HttpResponse<?> response = client.toBlocking().exchange(
+                // modified to avoid specifying a body type because Micronaut
+                // will rerun it to the controller and trigger the service mocks so it was causing issues.
+                client.toBlocking().exchange(
                         HttpRequest.POST("/api/v1/transcription/process", emptyAudio)
-                                .contentType(MediaType.APPLICATION_OCTET_STREAM),
-                        String.class
+                                .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 );
-                assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+                fail("Expected BAD_REQUEST");
             } catch (HttpClientResponseException e) {
                 assertEquals(HttpStatus.BAD_REQUEST, e.getStatus());
             }

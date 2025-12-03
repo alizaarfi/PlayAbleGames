@@ -24,6 +24,17 @@ function CommunityPage() {
     const [newReplyText, setNewReplyText] = useState('');
     const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+
+    const showToastMessage = (message) => {
+        setToastMessage(message);
+        setShowToast(true);
+        setTimeout(() => {
+            setShowToast(false);
+        }, 3000);
+    };
+
     // fetching each from backend
     useEffect(() => {
         fetchDiscussions();
@@ -78,8 +89,9 @@ function CommunityPage() {
 
     const handleCreateDiscussion = async () => {
         if (!newDiscussionTitle.trim() || !newDiscussionText.trim()) {
-            setErrorMessage('Please fill in both title and text');
-            setShowErrorModal(true);
+            // setErrorMessage('Please fill in both title and text');
+            // setShowErrorModal(true);
+            showToastMessage('Please fill in both title and text');
             return;
         }
 
@@ -106,11 +118,13 @@ function CommunityPage() {
                 setShowNewDiscussionForm(false);
                 // Refresh discussions
                 await fetchDiscussions();
+                showToastMessage('Discussion created successfully!');
             } else if (response.status === 401) {
-                setShowLoginModal(true);
+                showToastMessage('Please log in to create a discussion');
             } else {
-                setErrorMessage('Failed to create discussion. Please try again.');
-                setShowErrorModal(true);
+                // setErrorMessage('Failed to create discussion. Please try again.');
+                // setShowErrorModal(true);
+                showToastMessage('Failed to create discussion. Please try again.');
                 console.log("Failed, try again");
             }
         } catch (error) {
@@ -124,8 +138,9 @@ function CommunityPage() {
 
     const handleAddReply = async () => {
         if (!newReplyText.trim()) {
-            setErrorMessage('Please enter a reply');
-            setShowErrorModal(true);
+            // setErrorMessage('Please enter a reply');
+            // setShowErrorModal(true);
+            showToastMessage('Please enter a reply');
             return;
         }
 
@@ -147,11 +162,13 @@ function CommunityPage() {
             if (response.ok) {
                 setNewReplyText('');
                 await fetchReplies(selectedDiscussion.discussionID);
+                showToastMessage('Reply created successfully');
             } else if (response.status === 401) {
-                setShowLoginModal(true);
+                showToastMessage('Please login to reply to a discussion');
             } else {
-                setErrorMessage('Failed to add reply. Please try again.');
-                setShowErrorModal(true);
+                // setErrorMessage('Failed to add reply. Please try again.');
+                // setShowErrorModal(true);
+                showToastMessage('Failed to reply. Please try again.');
                 console.log("Failed, try again");
             }
         } catch (error) {
@@ -422,6 +439,11 @@ function CommunityPage() {
                 confirmText="Go to Login"
                 cancelText="Cancel"
             />
+            {showToast && (
+                <div className="toast">
+                    {toastMessage}
+                </div>
+            )}
 
             {/*<ConfirmModal*/}
             {/*    isOpen={showErrorModal}*/}
@@ -433,6 +455,7 @@ function CommunityPage() {
             {/*    cancelText="" // Empty string should hide cancel button*/}
             {/*/>*/}
         </div>
+
     )
 }
 
