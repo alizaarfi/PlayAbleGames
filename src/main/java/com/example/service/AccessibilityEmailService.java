@@ -11,7 +11,7 @@ public class AccessibilityEmailService {
 
     // CHANGE THESE:
     private static final String ADMIN_EMAIL = "playablegames123@gmail.com";
-    private static final String SMTP_USERNAME = "playablegamesapp@gmail.com";
+    private static final String SMTP_USERNAME = "playablegames123@gmail.com";
     private static final String SMTP_PASSWORD = "dyvw vbmc tvey oyvu";
 
     public void sendFeedbackEmail(AccessibilityFeedbackDTO feedback) {
