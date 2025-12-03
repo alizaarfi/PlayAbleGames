@@ -386,7 +386,8 @@ export default function GamePage() {
         avgGameplayRating,
     } = data;
 
-    const overallRating = avgGameplayRating ?? 0;
+    const hasRating = avgGameplayRating != null && avgGameplayRating > 0;
+    const overallRating = hasRating ? avgGameplayRating : 0;
 
     // render
     return (
@@ -401,17 +402,15 @@ export default function GamePage() {
                         <div className="top-rating-row">
                             <StarRating value={overallRating} />
                             <span className="rating-number">
-                                {overallRating.toFixed(1)} / 5
+                                {hasRating ? `${overallRating.toFixed(1)} / 5` : "No rating yet"}
                             </span>
                             {ageRating && (
-                                <span
-                                    className="rating-number"
-                                    style={{ marginLeft: "8px" }}
-                                >
+                                <span className="rating-number age-pill">
                                     • {ageRating}
                                 </span>
                             )}
                         </div>
+
                     </div>
 
                     {linkToStore && (

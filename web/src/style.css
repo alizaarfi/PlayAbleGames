@@ -207,13 +207,13 @@ body {
 }
 
 .star {
-  font-size: 18px;
-  color: #4b5563;
+  color: #4b5563 !important;
 }
 
 .star.filled {
-  color: #22c55e;
+  color: #22c55e !important;
 }
+
 
 /* Download button */
 .download-btn {
@@ -2244,6 +2244,7 @@ body.dark-mode .error-message {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
+
 /*Jump arrows*/
 .section-block {
   scroll-margin-top: 120px;
@@ -2753,6 +2754,12 @@ body.dark-mode .error-message {
 }
 .star-row.interactive .star.filled {
   color: #22c55e !important;
+}
+
+.stars {
+  color: var(--star-color);
+  font-size: 16px;
+  letter-spacing: 2px;
 }
 
 
