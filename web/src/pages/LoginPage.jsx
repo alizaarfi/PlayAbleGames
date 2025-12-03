@@ -60,8 +60,13 @@ export default function LoginPage() {
             if (result.error) {
                 setError(result.error);
             } else {
-                //auth context pass token and role as separate parameters
-                saveToken(result.token, result.role);
+                //auth context
+                saveToken(result.token);
+
+                window.dispatchEvent(new Event("storage"));
+
+                //redirect after login
+                const redirectPath = localStorage.getItem("redirectAfterLogin");
 
                 //redirect after login
                 if (result.role ==='ADMIN'){

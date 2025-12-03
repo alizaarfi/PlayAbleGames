@@ -40,7 +40,7 @@ public class ReviewController {
 
         Long fakeUserId = 1L;
 
-        // ---  server-side validation ----------------------------------
+        //   server-side validation
         // Ensure we never store null ratings or excessively long text.
         String rawText = incoming.getReviewText();
         String safeText = rawText == null ? "" : rawText.trim();
@@ -61,7 +61,7 @@ public class ReviewController {
             return HttpResponse.badRequest();
         }
 
-        // --- construct persisted review object -----------------------------
+        //  construct persisted review object
         // Only copy the fields that are allowed to be set by the client.
         Review review = new Review();
         review.setGameId(gameId);

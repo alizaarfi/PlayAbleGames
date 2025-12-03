@@ -7,6 +7,9 @@ import React, {
 
 const FavoritesContext = createContext();
 
+// base URL for backend API
+const API_BASE = "http://localhost:8081";
+
 // read auth token from localStorage
 const getToken = () =>
     localStorage.getItem("authToken") ||
@@ -21,7 +24,6 @@ const showToast = (msg) => {
 
     document.body.appendChild(el);
 
-    // trigger CSS transition
     requestAnimationFrame(() => {
         el.classList.add("visible");
     });
@@ -33,26 +35,18 @@ const showToast = (msg) => {
 };
 
 export function FavoritesProvider({ children }) {
-    // track whether a token exists
+    // whether a token exists (used as our "logged in" flag)
     const [hasToken, setHasToken] = useState(!!getToken());
 
-    // initial favourites: only load if logged in
-    const [favorites, setFavorites] = useState(() => {
-        if (!getToken()) return [];
-        const saved = localStorage.getItem("favorites");
-        return saved ? JSON.parse(saved) : [];
-    });
+    // list of favourite game IDs for the current user
+    const [favorites, setFavorites] = useState([]);
 
-    // persist favourites only when logged in
-    useEffect(() => {
-        if (hasToken) {
-            localStorage.setItem("favorites", JSON.stringify(favorites));
-        } else {
-            localStorage.removeItem("favorites");
-        }
-    }, [favorites, hasToken]);
+    // loading flag for initial fetch
+    const [loading, setLoading] = useState(false);
 
-    // watch for logout: clear favourites when token disappears
+    // ---------------------------------------------------------
+    // Watch for token changes (login/logout)
+    // ---------------------------------------------------------
     useEffect(() => {
         const handleStorage = (event) => {
             if (!event.key) return;
@@ -65,20 +59,18 @@ export function FavoritesProvider({ children }) {
                 setHasToken(nowHasToken);
                 if (!nowHasToken) {
                     setFavorites([]);
-                    localStorage.removeItem("favorites");
                 }
             }
         };
 
         window.addEventListener("storage", handleStorage);
 
-        // simple poll for changes in the same tab that performed logout
+        // polling for same-tab logout
         const intervalId = setInterval(() => {
             setHasToken((prev) => {
                 const nowHasToken = !!getToken();
                 if (prev && !nowHasToken) {
                     setFavorites([]);
-                    localStorage.removeItem("favorites");
                 }
                 return nowHasToken;
             });
@@ -90,34 +82,105 @@ export function FavoritesProvider({ children }) {
         };
     }, []);
 
-    // Toggle favourite for a game
-    // Requires login
-    const toggleFavorite = (gameId, event) => {
+    // ---------------------------------------------------------
+    // When the user is logged in, load favourites from the backend
+    // ---------------------------------------------------------
+    useEffect(() => {
+        const token = getToken();
+
+        if (!token) {
+            setFavorites([]);
+            setLoading(false);
+            return;
+        }
+
+        setLoading(true);
+
+        fetch(`${API_BASE}/api/favorites`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then(async (res) => {
+                if (!res.ok) {
+                    const text = await res.text().catch(() => "");
+                    console.error("Failed to load favourites:", res.status, text);
+                    showToast("Could not load favourites from server.");
+                    setFavorites([]);
+                    return;
+                }
+                return res.json();
+            })
+            .then((list) => {
+                if (Array.isArray(list)) {
+                    setFavorites(list);
+                }
+            })
+            .catch((err) => {
+                console.error("Network error fetching favourites:", err);
+                showToast("Network error while loading favourites.");
+                setFavorites([]);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [hasToken]);
+
+    // ---------------------------------------------------------
+    // Toggle favourite for a game (DB + local state)
+    // ---------------------------------------------------------
+    const toggleFavorite = async (gameId, event) => {
         if (event && event.stopPropagation) {
             event.stopPropagation();
         }
 
-        if (!hasToken) {
+        const token = getToken();
+
+        if (!token) {
             showToast("Please log in to save favourites.");
+            setHasToken(false);
             return;
         }
 
-        setFavorites((prev) => {
-            const isFav = prev.includes(gameId);
-            const next = isFav
-                ? prev.filter((id) => id !== gameId)
-                : [...prev, gameId];
+        setHasToken(true);
+
+        const isFav = favorites.includes(gameId);
+        const method = isFav ? "DELETE" : "POST";
+
+        // optimistic update
+        setFavorites((prev) =>
+            isFav ? prev.filter((id) => id !== gameId) : [...prev, gameId]
+        );
+
+        try {
+            const res = await fetch(`${API_BASE}/api/favorites/${gameId}`, {
+                method,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                const text = await res.text().catch(() => "");
+                console.error("Failed to update favourite:", res.status, text);
+                showToast("Could not update favourites (server error).");
+                return;
+            }
 
             showToast(
                 isFav ? "Removed from favourites." : "Added to favourites."
             );
-
-            return next;
-        });
+        } catch (err) {
+            console.error("Network error updating favourite:", err);
+            showToast("Network error while updating favourites.");
+        }
     };
 
     return (
-        <FavoritesContext.Provider value={{ favorites, toggleFavorite }}>
+        <FavoritesContext.Provider
+            value={{ favorites, toggleFavorite, loading }}
+        >
             {children}
         </FavoritesContext.Provider>
     );

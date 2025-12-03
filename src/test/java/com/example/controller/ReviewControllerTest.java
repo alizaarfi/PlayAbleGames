@@ -6,18 +6,18 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-
+/**
+ * Unit tests for the ReviewController.
+ */
 class ReviewControllerTest {
 
     private ReviewRepository reviewRepository;
@@ -25,15 +25,13 @@ class ReviewControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Use a mock repository so we do not need a real database.
+        // Use mock repository
         reviewRepository = mock(ReviewRepository.class);
         reviewController = new ReviewController(reviewRepository);
     }
 
-
-     // Verifies that listForGame delegates to ReviewRepository.findByGameId
-     // and returns the same list of reviews.
-
+    // Verifies that listForGame delegates to ReviewRepository.findByGameId
+    // and returns the same list of reviews.
     @Test
     void testListReviewsForGame() {
         Long gameId = 42L;
@@ -58,12 +56,10 @@ class ReviewControllerTest {
         verify(reviewRepository, times(1)).findByGameId(gameId);
     }
 
-
-     //  Verifies that create():
-     //  - normalises the incoming data,
-     //  - sets metadata fields (gameId, userId, date, flags),
-     //  - and returns HTTP 201 CREATED with the saved Review.
-
+    //  Verifies that create():
+    //  - normalises the incoming data,
+    //  - sets metadata fields (gameId, userId, date, flags),
+    //  - and returns HTTP 201 CREATED with the saved Review.
     @Test
     void testCreateReview() {
         Long gameId = 5L;
@@ -77,7 +73,7 @@ class ReviewControllerTest {
         incoming.setGameplayRating(5);
         incoming.setReviewText("  Great accessibility features!  ");
 
-        // When the controller calls save(), we simulate the DB assigning an id.
+        // When the controller calls save(), simulate the DB assigning an id.
         when(reviewRepository.save(any(Review.class)))
                 .thenAnswer(invocation -> {
                     Review toSave = invocation.getArgument(0);
@@ -98,7 +94,6 @@ class ReviewControllerTest {
 
         assertEquals("Great accessibility features!", body.getReviewText(),
                 "Review text should be trimmed by the controller");
-
 
         assertNotNull(body.getReviewDate(), "Controller should set the review date");
         assertTrue(body.getReviewDate().isBefore(LocalDateTime.now().plusSeconds(1)),
@@ -130,7 +125,7 @@ class ReviewControllerTest {
                 "Empty review should be rejected with BAD_REQUEST");
         assertNull(response.body(), "Rejected request should not have a body");
 
-        // Ensure we did not try to save anything.
+        // Ensure nothing is saved
         verify(reviewRepository, never()).save(any(Review.class));
     }
 }

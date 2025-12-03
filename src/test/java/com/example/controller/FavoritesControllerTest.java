@@ -3,14 +3,17 @@ package com.example.controller;
 import com.example.service.UserFavoriteService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.security.authentication.Authentication;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 // Unit tests for the favourites controller.
 @ExtendWith(MockitoExtension.class)
@@ -22,25 +25,46 @@ class FavoritesControllerTest {
     @InjectMocks
     FavoritesController controller;
 
-    // Verifies service delegation despite current failure in response creation.
+    @Mock
+    Authentication authentication;
+
+    // Verifies service delegation for adding a favourite.
     @Test
-    void add_throwsDueToNullLocation() {
-        Long userId = 1L;
+    void add_callsServiceAndReturnsOk() {
         Long gameId = 42L;
 
-        assertThrows(NullPointerException.class, () -> controller.add(userId, gameId));
-        verify(service).addFavorite(userId, gameId);
+        when(authentication.getName()).thenReturn("testuser");
+
+        HttpResponse<?> response = controller.add(gameId, authentication);
+
+        verify(service).addFavoriteForUsername("testuser", gameId);
+        assertEquals(HttpStatus.OK, response.getStatus());
     }
 
-    // Verifies service delegation and HTTP 204 response.
+    // Verifies service delegation and HTTP 200 response for removal.
     @Test
-    void remove_returnsNoContent() {
-        Long userId = 1L;
+    void remove_callsServiceAndReturnsOk() {
         Long gameId = 42L;
 
-        HttpResponse<?> response = controller.remove(userId, gameId);
+        when(authentication.getName()).thenReturn("testuser");
 
-        verify(service).removeFavorite(userId, gameId);
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
+        HttpResponse<?> response = controller.remove(gameId, authentication);
+
+        verify(service).removeFavoriteForUsername("testuser", gameId);
+        assertEquals(HttpStatus.OK, response.getStatus());
+    }
+
+    // Verifies GET endpoint loads favourites for the authenticated user.
+    @Test
+    void list_returnsOkAndDelegatesToService() {
+        when(authentication.getName()).thenReturn("testuser");
+        when(service.getFavoritesForUsername("testuser"))
+                .thenReturn(Collections.singletonList(5L));
+
+        HttpResponse<?> response = controller.list(authentication);
+
+        verify(service).getFavoritesForUsername("testuser");
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals(Collections.singletonList(5L), response.getBody().orElse(null));
     }
 }
