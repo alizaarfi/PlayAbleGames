@@ -10,9 +10,9 @@ import java.util.Properties;
 public class AccessibilityEmailService {
 
     // CHANGE THESE:
-    private static final String ADMIN_EMAIL = "playablegamesapp@gmail.com";
-    private static final String SMTP_USERNAME = "playablegamesapp@gmail.com";
-    private static final String SMTP_PASSWORD = "dyvw vbmc tvey oyvu";
+    private static final String ADMIN_EMAIL = "playablegames123@gmail.com";
+    private static final String SMTP_USERNAME = "playablegames123@gmail.com";
+    private static final String SMTP_PASSWORD = "bgxm yiva txft odpl";
 
     public void sendFeedbackEmail(AccessibilityFeedbackDTO feedback) {
         Properties props = new Properties();
