@@ -3,7 +3,20 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CommunityPage from '../CommunityPage';
 
-// Mock ConfirmModal component
+
+/**
+ * CommunityPage.test tests the main components
+ *
+ * Tests the func on the community page e.g:
+ * - Page rendering for the headings, sections, navigation
+ * - Data fetching for discussions, blogs, FAQs
+ * - Discussion form for creating, submitting and validating validation
+ * - Toggle FAQs to hide/open answers and see discussions
+ * - Authentication handling for confirm modal (to login)
+ */
+
+
+// using jest.mock mock required components like ConfirmModal
 jest.mock('../ConfirmModal', () => {
     return function ConfirmModal({ isOpen, title, message, onConfirm, onClose, confirmText, cancelText }) {
         if (!isOpen) return null;
@@ -18,7 +31,6 @@ jest.mock('../ConfirmModal', () => {
     };
 });
 
-// Mock CSS import after
 jest.mock('../community.css', () => ({}));
 
 beforeEach(() => {
