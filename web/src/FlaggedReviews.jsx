@@ -69,7 +69,11 @@ export default function FlaggedReviews() {
     const handleAccept = async (reviewId) => {
         try {
             const res = await fetch(`${API_BASE}/reviews/${reviewId}/accept`, {
-                method: 'PUT'
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
             if (res.ok) {
@@ -89,7 +93,11 @@ export default function FlaggedReviews() {
     const handleDecline = async (reviewId) => {
         try {
             const res = await fetch(`${API_BASE}/reviews/${reviewId}/decline`, {
-                method: 'PUT'
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
             if (res.ok) {
