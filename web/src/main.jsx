@@ -22,6 +22,7 @@ import CommunityPage from "./CommunityPage.jsx"
 import "./style.css";
 import Navbar from "./NavBar.jsx";
 import {AuthProvider} from "./hooks/AuthProvider.jsx";
+import AdminRoute from "./components/AdminRoute.jsx";
 
 
 ReactDOM.createRoot(document.getElementById("app")).render(
@@ -49,10 +50,17 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route path="/signup" element={<SignupPage/>} />
 
                         {/* AdminDashboard */}
-                        <Route path="/admin" element={<AdminDashboard />} />
+                        <Route path="/admin" element={
+                            <AdminRoute><AdminDashboard />
+                            </AdminRoute>
+                        } />
 
                         {/* Flagged Reviews Page */}
-                        <Route path="/flaggedReviews" element={<FlaggedReviews />} />
+                        <Route path="/flaggedReviews" element={
+                            <AdminRoute>
+                            <FlaggedReviews />
+                            </AdminRoute>
+                            } />
 
                         {/*login page*/}
                         <Route path="/login" element={<LoginPage/>} />
@@ -67,10 +75,16 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                             </ProtectedRoute>} />
 
                         {/* All Users Page */}
-                        <Route path="/users" element={<AllUsersPage />} />
+                        <Route path="/users" element={
+                            <AdminRoute>
+                                <AllUsersPage />
+                            </AdminRoute>} />
 
                         {/* Individual User Page */}
-                        <Route path="/users/:userId" element={<UserPage />} />
+                        <Route path="/users/:userId" element={
+                            <AdminRoute>
+                                <UserPage />
+                            </AdminRoute>} />
 
                         {/* My Account - requires login */}
                         <Route

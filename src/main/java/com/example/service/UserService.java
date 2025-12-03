@@ -1,7 +1,11 @@
 package com.example.service;
 
 import com.example.domain.User;
+import com.example.domain.Role;
+import com.example.domain.UserRole;
+import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
+import com.example.repository.UserRoleRepository;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -20,10 +24,14 @@ import java.util.Optional;
 @Singleton
 public class UserService {
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final RoleRepository roleRepository;
 //    private final DataSource dataSource;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.roleRepository = roleRepository;
     }
 
     /**
@@ -55,11 +63,14 @@ public class UserService {
         u.setEmail(email);
         u.setPassword(encrypted);
         u.setEnabled(true);
-//        User savedUser = userRepository.save(u);
-//
-//        insertUserRole(savedUser.getUserID(), 2);
+        User savedUser = userRepository.save(u);
 
-        return userRepository.save(u);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(savedUser.getUserID());
+        userRole.setRoleId(2); // basic role as admin wouldnt signup
+        userRoleRepository.save(userRole);
+
+        return savedUser;
     }
 
     /**
@@ -98,7 +109,7 @@ public class UserService {
         boolean matches = BCrypt.checkpw(rawPassword, user.get().getPassword());
 
         if (!matches){
-            throw new RuntimeException("Invalid password");
+            return Optional.empty();
         }
         return user;
     }
@@ -133,4 +144,22 @@ public class UserService {
     }
 
 
+
+    //get all role names for a user
+    public java.util.List<String> getUserRoles(Long UserID) {
+        java.util.List<UserRole> userRoles = userRoleRepository.findByUserId(UserID);
+
+        return userRoles.stream()
+                .map(ur -> roleRepository.findById(ur.getRoleId().longValue()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Role::getName)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    // check if user is an admin
+    public boolean isAdmin(Long userID) {
+        java.util.List<String> roles=getUserRoles(userID);
+        return roles.contains("ADMIN");
+    }
 }
