@@ -131,8 +131,10 @@ public class UserController {
 
             //verifying password using UserService
             userService.verifyPassword(user.getUserID(), password);
-
-            // Delete user (this will cascade delete related data if configured)
+            
+            // delete roles first
+            userRepository.deleteRolesByUserId(user.getUserID());
+            // now delete user
             userRepository.delete(user);
 
             return HttpResponse.ok(Map.of("message", "Account deleted successfully"));

@@ -16,6 +16,11 @@ public interface UserRepository extends CrudRepository<User, Long>{
         //pasword update only
         @Query("UPDATE users SET EncryptedPassword =:password WHERE UserID= :id")
         void updatePassword(long id, String password);
+
+        //DELETE ACC
+        @Query("DELETE FROM user_roles WHERE UserID = :userId")
+        void deleteRolesByUserId(Long userId);
+
 }
 
 
