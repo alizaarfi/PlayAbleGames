@@ -68,12 +68,20 @@ export default function LoginPage() {
                 //redirect after login
                 const redirectPath = localStorage.getItem("redirectAfterLogin");
 
-                if (redirectPath) {
-                    localStorage.removeItem("redirectAfterLogin");
-                    window.location.href = redirectPath;
-                } else {
-                    window.location.href = "/";
+                //redirect after login
+                if (result.role ==='ADMIN'){
+                    window.location.href="/admin";
+                } else{
+                    const redirectPath = localStorage.getItem("redirectAfterLogin");
+
+                    if (redirectPath) {
+                        localStorage.removeItem("redirectAfterLogin");
+                        window.location.href = redirectPath;
+                    } else {
+                        window.location.href = "/";
+                    }
                 }
+
             }
         } catch (err) {
             //handle backend errors

@@ -34,25 +34,30 @@ export async function signup(data) {
 
 
 export async function login(credentials){
-    const res = await fetch("http://localhost:8081/user/login", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(credentials)
-    });
+    try{
+        const res = await fetch("http://localhost:8081/user/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(credentials)
+        });
 
-    const data= await res.json();
+        const data= await res.json();
 
-    if (!res.ok){
-        // Return the specific error message from the backend
-        throw {
-            response: {
-                data: {
-                    error: data.message
-                }
-            }
+        if (!res.ok) {
+            return {error: data.message || 'Login failed'}
+            // Return the specific error message from the backend
+        }
+
+            //return both token and role:
+        return{
+            token: data.token,
+            role: data.role,
+            username: data.username,
+            message: data.message
         };
+    } catch (err){
+        return{ error: 'Network error. Please try again'}
     }
-    return data;
 }
 
 export async function logout(){
