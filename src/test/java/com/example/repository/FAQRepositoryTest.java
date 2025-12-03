@@ -29,8 +29,8 @@ class FAQRepositoryTest {
         // Retrieve by ID
         Optional<FAQ> retrieved = faqRepository.findById(savedFaq.getFaqID());
         assertTrue(retrieved.isPresent());
-        assertEquals("What is Micronaut?", retrieved.get().getQuestion());
-        assertEquals("A modern JVM framework.", retrieved.get().getAnswer());
+        assertEquals("What is haptic feedback?", retrieved.get().getQuestion());
+        assertEquals("Tech that simulates touch senses through vibrations, motions and forces.", retrieved.get().getAnswer());
     }
 
     @Test
