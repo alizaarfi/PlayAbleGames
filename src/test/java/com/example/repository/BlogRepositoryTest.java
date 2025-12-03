@@ -70,8 +70,10 @@ class BlogRepositoryTest {
 
         // now asset to ensure the latest created blog is first
         assertEquals(2, blogs.size());
-        assertEquals("Blog2: xbox future haptic feedback", blogs.get(1).getBlogTitle());
+//        assertEquals("Blog2: xbox future haptic feedback", blogs.get(1).getBlogTitle());
+//        assertEquals("Blog1: New ps4 accessibility features", blogs.get(0).getBlogTitle());
         assertEquals("Blog1: New ps4 accessibility features", blogs.get(0).getBlogTitle());
+        assertEquals("Blog2: xbox future haptic feedback", blogs.get(1).getBlogTitle());
     }
 
 }

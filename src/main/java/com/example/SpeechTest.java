@@ -7,12 +7,13 @@ import org.vosk.Recognizer;
 import javax.sound.sampled.*;
 import java.io.ByteArrayOutputStream;
 
+// This was purely to test the vosk library in the beginning
 public class SpeechTest {
 
     public static void main(String[] args) {
         LibVosk.setLogLevel(LogLevel.INFO);
 
-        // Define commands to listen for
+        // Defines commands to listen for
         String grammar = "[\"go home\", \"go back\", \"scroll up\", \"scroll down\", \"next page\", \"search\", \"open menu\", \"[unk]\"]";
 
         try (Model model = new Model("model")) {
@@ -29,11 +30,8 @@ public class SpeechTest {
             microphone.open(format);
             microphone.start();
 
-            System.out.println("=================================");
             System.out.println("Vosk Voice Command Test");
             System.out.println("Say commands like: go home, go back, scroll up, next page");
-            System.out.println("Press Ctrl+C to stop");
-            System.out.println("=================================\n");
 
             // Use grammar-constrained recognition
             try (Recognizer recognizer = new Recognizer(model, 16000, grammar)) {
@@ -68,7 +66,7 @@ public class SpeechTest {
     }
 
     private static String extractText(String json) {
-        // Extract "text" value from JSON like {"text": "go home"}
+        // Extract text from JSON response
         int start = json.indexOf("\"text\"");
         if (start == -1) return "";
 
@@ -83,7 +81,7 @@ public class SpeechTest {
     }
 
     private static String extractPartial(String json) {
-        // Extract "partial" value from JSON
+        // Extract partial value
         int start = json.indexOf("\"partial\"");
         if (start == -1) return "";
 
