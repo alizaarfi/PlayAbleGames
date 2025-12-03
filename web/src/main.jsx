@@ -51,8 +51,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
 
                         {/* AdminDashboard */}
                         <Route path="/admin" element={
-                            <AdminRoute><AdminDashboard />
-                            </AdminRoute>
+                            <AdminDashboard />
                         } />
 
                         {/* Flagged Reviews Page */}

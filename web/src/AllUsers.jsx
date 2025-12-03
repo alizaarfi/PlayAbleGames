@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "./hooks/AuthProvider.jsx";
 import "./style.css";
 import "./AllUsers.css"
 
@@ -6,6 +7,7 @@ const API_BASE = "http://localhost:8081/api";
 
 export default function AllUsers(){
 
+    const { token } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [user, setUsers] = useState([]);
@@ -18,6 +20,10 @@ export default function AllUsers(){
             try {
                 const res = await fetch(`${API_BASE}/users`, {
                     signal: controller.signal,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,  // ADD THIS!
+                        'Content-Type': 'application/json'
+                    }
                 });
                 if (!res.ok) throw new Error("Failed to fetch users data.");
                 const data = await res.json();
@@ -47,7 +53,7 @@ export default function AllUsers(){
 
         fetchAllUsers();
         return () => controller.abort();
-    }, []);
+    }, [token]);
 
     function goToUserPage(userId) {
         window.location.href = `/users/${userId}`;

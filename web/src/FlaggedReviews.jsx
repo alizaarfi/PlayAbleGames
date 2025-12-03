@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "./hooks/AuthProvider.jsx";
 import "./style.css";
 import "./FlaggedReviews.css";
 
 const API_BASE = "http://localhost:8081/api";
 
 export default function FlaggedReviews() {
+
+    const { token } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [reviews, setReviews] = useState([]);
@@ -18,6 +21,10 @@ export default function FlaggedReviews() {
             try {
                 const res = await fetch(`${API_BASE}/flaggedReviews`, {
                     signal: controller.signal,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 });
                 if (!res.ok) throw new Error("Failed to fetch flagged reviews data.");
                 const data = await res.json();
@@ -56,7 +63,7 @@ export default function FlaggedReviews() {
 
         fetchFlaggedReviews();
         return () => controller.abort();
-    }, []);
+    }, [token]);
 
     // Accept review handler
     const handleAccept = async (reviewId) => {

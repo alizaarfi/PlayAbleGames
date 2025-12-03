@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "./hooks/AuthProvider.jsx";
 import "./Dashboard.css";
 // import "./style.css";
 
@@ -7,6 +8,7 @@ const API_BASE = "http://localhost:8081/api";
 
 export default function AdminDashboard(){
 
+    const { token } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [dashboard, setDashboard] = useState({
@@ -24,6 +26,10 @@ export default function AdminDashboard(){
             try {
                 const res = await fetch(`${API_BASE}/admin`, {
                     signal: controller.signal,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 });
                 if (!res.ok) throw new Error('Failed to fetch admin dashboard data.');
                 const data = await res.json();
@@ -40,7 +46,7 @@ export default function AdminDashboard(){
         }
         fetchDashboard();
         return () => controller.abort();
-    }, []);
+    }, [token]);
 
     if (loading) return <div className="page"> <div className="content"> Loading... </div></div>;
     if (error) return <div className="page"> <div className="content">  Error: {error} </div> </div>;
