@@ -60,17 +60,23 @@ export default function LoginPage() {
             if (result.error) {
                 setError(result.error);
             } else {
-                //auth context
-                saveToken(result.token);
-                //redirect after login
-                const redirectPath = localStorage.getItem("redirectAfterLogin");
+                //auth context pass token and role as separate parameters
+                saveToken(result.token, result.role);
 
-                if (redirectPath) {
-                    localStorage.removeItem("redirectAfterLogin");
-                    window.location.href = redirectPath;
-                } else {
-                    window.location.href = "/";
+                //redirect after login
+                if (result.role ==='ADMIN'){
+                    window.location.href="/admin";
+                } else{
+                    const redirectPath = localStorage.getItem("redirectAfterLogin");
+
+                    if (redirectPath) {
+                        localStorage.removeItem("redirectAfterLogin");
+                        window.location.href = redirectPath;
+                    } else {
+                        window.location.href = "/";
+                    }
                 }
+
             }
         } catch (err) {
             //handle backend errors

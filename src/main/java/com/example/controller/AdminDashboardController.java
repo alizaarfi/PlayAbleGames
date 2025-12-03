@@ -6,6 +6,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.server.cors.CrossOrigin;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import io.micronaut.security.authentication.Authentication;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,6 @@ import java.util.Map;
  */
 
  @Controller("/api")
-@Secured(SecurityRule.IS_ANONYMOUS) //admin test - no security
 public class AdminDashboardController {
 
     private final AdminDashboardRepository repository;

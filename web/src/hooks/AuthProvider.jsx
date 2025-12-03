@@ -5,18 +5,24 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
     const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [role, setRole]= useState(null);
 
     useEffect(() => {
-        const saved = localStorage.getItem("token");
-        if (saved){
-            setToken(saved);
+        const savedToken = localStorage.getItem("token");
+        const savedRole = localStorage.getItem("role");
+
+        if (savedToken) {
+            setToken(savedToken);
+            setRole(savedRole);
         }
         setLoading(false);
     }, []);
 
-    const login = (jwt) => {
-        localStorage.setItem("token", jwt);
-        setToken(jwt);
+    const login= (newToken, newRole)=> {
+        setToken(newToken);
+        setRole(newRole);
+        localStorage.setItem("token", newToken);
+        localStorage.setItem("role", newRole);
     };
 
     const logout = async () => {
@@ -33,14 +39,27 @@ export function AuthProvider({ children }) {
             console.error("Logout error:", err);
         }finally {
             localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            localStorage.removeItem("redirectAfterLogin"); // cleaning up redirect
             setToken(null);
+            setRole(null);
 
-            return Promise.resolve();
         }
     };
 
+    const isAdmin = () =>{
+        return role === "ADMIN"  // check role
+    }
+
     return (
-        <AuthContext.Provider value={{ token,loading, isAuthenticated: !!token, login, logout }}>
+        <AuthContext.Provider value={{
+            token,
+            role,
+            loading,
+            isAuthenticated: !!token,
+            isAdmin,
+            login,
+            logout }}>
             {children}
         </AuthContext.Provider>
     );
